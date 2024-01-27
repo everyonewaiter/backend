@@ -1,4 +1,4 @@
-package com.handwoong.everyonewaiter.common.controller.response;
+package com.handwoong.everyonewaiter.common.dto;
 
 import lombok.Builder;
 
@@ -21,11 +21,16 @@ public record ApiResponse<T>(
             .build();
     }
 
-    public static <U> ApiResponse<U> of(final U data) {
+    public static <U> ApiResponse<U> success(final U data) {
         return of(ResultCode.SUCCESS, null, data);
     }
 
-    public static <U> ApiResponse<U> of(final String message) {
+    public static <U> ApiResponse<U> error(final String message) {
         return of(ResultCode.FAIL, message, null);
+    }
+
+    public enum ResultCode {
+        SUCCESS,
+        FAIL,
     }
 }
