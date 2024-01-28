@@ -1,7 +1,11 @@
 package com.handwoong.everyonewaiter.user.infrastructure;
 
+import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
+import com.handwoong.everyonewaiter.user.domain.Password;
+import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.UserRole;
 import com.handwoong.everyonewaiter.user.domain.UserStatus;
+import com.handwoong.everyonewaiter.user.domain.Username;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,9 +16,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @Table(name = "user")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEntity {
 
     @Id
@@ -39,6 +48,28 @@ public class UserEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     private UserStatus status;
+
+    public static UserEntity from(final User user) {
+        final UserEntity userEntity = new UserEntity();
+        userEntity.id = user.getId();
+        userEntity.username = user.getUsername().toString();
+        userEntity.password = user.getPassword().toString();
+        userEntity.phoneNumber = user.getPhoneNumber().toString();
+        userEntity.role = user.getRole();
+        userEntity.status = user.getStatus();
+        return userEntity;
+    }
+
+    public User toModel() {
+        return User.builder()
+            .id(id)
+            .username(new Username(username))
+            .password(new Password(password))
+            .phoneNumber(new PhoneNumber(phoneNumber))
+            .role(role)
+            .status(status)
+            .build();
+    }
 
     @Override
     public boolean equals(final Object o) {
