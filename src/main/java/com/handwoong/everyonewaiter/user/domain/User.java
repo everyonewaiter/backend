@@ -35,8 +35,8 @@ public class User {
             .username(username)
             .password(password)
             .phoneNumber(phoneNumber)
-            .role(UserRole.ROLE_USER)
-            .status(UserStatus.ACTIVE)
+            .role(role)
+            .status(status)
             .lastLoggedIn(timeHolder.millis())
             .build();
     }
