@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class UserExceptionHandler {
 
     @ExceptionHandler({AlreadyExistsUsernameException.class})
-    public ResponseEntity<ApiResponse<Object>> alreadyExistsUsername(
+    public ResponseEntity<ApiResponse<Void>> alreadyExistsUsername(
         final AlreadyExistsUsernameException exception,
         final HttpServletRequest request
     ) {
@@ -29,7 +29,7 @@ public class UserExceptionHandler {
     }
 
     @ExceptionHandler({InvalidUsernameFormatException.class})
-    public ResponseEntity<ApiResponse<Object>> invalidUsernameFormat(
+    public ResponseEntity<ApiResponse<Void>> invalidUsernameFormat(
         final InvalidUsernameFormatException exception,
         final HttpServletRequest request
     ) {
@@ -41,7 +41,7 @@ public class UserExceptionHandler {
     }
 
     @ExceptionHandler({InvalidPasswordFormatException.class})
-    public ResponseEntity<ApiResponse<Object>> invalidPasswordFormat(
+    public ResponseEntity<ApiResponse<Void>> invalidPasswordFormat(
         final InvalidPasswordFormatException exception,
         final HttpServletRequest request
     ) {
@@ -53,7 +53,7 @@ public class UserExceptionHandler {
     }
 
     @ExceptionHandler({UnauthorizedAccessException.class})
-    public ResponseEntity<ApiResponse<Object>> unauthorizedAccess(
+    public ResponseEntity<ApiResponse<Void>> unauthorizedAccess(
         final UnauthorizedAccessException exception,
         final HttpServletRequest request
     ) {
@@ -65,7 +65,7 @@ public class UserExceptionHandler {
     }
 
     @ExceptionHandler({UserNotFoundException.class})
-    public ResponseEntity<ApiResponse<Object>> userNotFound(
+    public ResponseEntity<ApiResponse<Void>> userNotFound(
         final UserNotFoundException exception,
         final HttpServletRequest request
     ) {

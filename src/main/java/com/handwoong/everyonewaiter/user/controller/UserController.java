@@ -22,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Object>> join(@RequestBody @Valid final UserJoinRequest request) {
+    public ResponseEntity<ApiResponse<Void>> join(@RequestBody @Valid final UserJoinRequest request) {
         final Long userId = userService.join(request.toDomainDto());
         return ResponseEntity
             .created(URI.create(userId.toString()))

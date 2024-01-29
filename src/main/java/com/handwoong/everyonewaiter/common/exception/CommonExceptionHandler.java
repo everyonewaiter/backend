@@ -25,7 +25,7 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 public class CommonExceptionHandler {
 
     @ExceptionHandler({InvalidPhoneNumberFormatException.class})
-    public ResponseEntity<ApiResponse<Object>> invalidPhoneNumberFormat(
+    public ResponseEntity<ApiResponse<Void>> invalidPhoneNumberFormat(
         final InvalidPhoneNumberFormatException exception,
         final HttpServletRequest request
     ) {
@@ -37,7 +37,7 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler({InvalidJwtTokenException.class})
-    public ResponseEntity<ApiResponse<Object>> invalidJwtToken(
+    public ResponseEntity<ApiResponse<Void>> invalidJwtToken(
         final InvalidJwtTokenException exception,
         final HttpServletRequest request
     ) {
@@ -49,7 +49,7 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
-    public ResponseEntity<ApiResponse<Object>> methodArgumentNotValid(
+    public ResponseEntity<ApiResponse<Void>> methodArgumentNotValid(
         final MethodArgumentNotValidException exception,
         final HttpServletRequest request
     ) {
@@ -69,7 +69,7 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
-    public ResponseEntity<ApiResponse<Object>> methodNotSupported(
+    public ResponseEntity<ApiResponse<Void>> methodNotSupported(
         final HttpRequestMethodNotSupportedException exception,
         final HttpServletRequest request
     ) {
@@ -83,7 +83,7 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler({HttpMessageNotReadableException.class})
-    public ResponseEntity<ApiResponse<Object>> httpMessageNotReadable(
+    public ResponseEntity<ApiResponse<Void>> httpMessageNotReadable(
         final HttpMessageNotReadableException exception,
         final HttpServletRequest request
     ) {
@@ -94,7 +94,7 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class, ConversionFailedException.class})
-    public ResponseEntity<ApiResponse<Object>> invalidPathValue(
+    public ResponseEntity<ApiResponse<Void>> invalidPathValue(
         final Exception exception,
         final HttpServletRequest request
     ) {
@@ -105,7 +105,7 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler({MissingServletRequestPartException.class})
-    public ResponseEntity<ApiResponse<Object>> missingServletRequestPart(
+    public ResponseEntity<ApiResponse<Void>> missingServletRequestPart(
         final MissingServletRequestPartException exception,
         final HttpServletRequest request
     ) {
@@ -116,7 +116,7 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler({MultipartException.class, FileUploadException.class})
-    public ResponseEntity<ApiResponse<Object>> multipart(
+    public ResponseEntity<ApiResponse<Void>> multipart(
         final Exception exception,
         final HttpServletRequest request
     ) {
@@ -127,7 +127,7 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler({Exception.class})
-    public ResponseEntity<ApiResponse<Object>> exception(
+    public ResponseEntity<ApiResponse<Void>> exception(
         final Exception exception,
         final HttpServletRequest request
     ) {
