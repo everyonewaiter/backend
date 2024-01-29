@@ -24,6 +24,30 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 @RestControllerAdvice
 public class CommonExceptionHandler {
 
+    @ExceptionHandler({InvalidPhoneNumberFormatException.class})
+    public ResponseEntity<ApiResponse<Object>> invalidPhoneNumberFormat(
+        final InvalidPhoneNumberFormatException exception,
+        final HttpServletRequest request
+    ) {
+        final String errorMessage = exception.getMessage();
+        ExceptionLogger.warn(BAD_REQUEST, request.getRequestURI(), errorMessage, exception.getPhoneNumber());
+        return ResponseEntity
+            .badRequest()
+            .body(ApiResponse.error(errorMessage));
+    }
+
+    @ExceptionHandler({InvalidJwtTokenException.class})
+    public ResponseEntity<ApiResponse<Object>> invalidJwtToken(
+        final InvalidJwtTokenException exception,
+        final HttpServletRequest request
+    ) {
+        final String errorMessage = exception.getMessage();
+        ExceptionLogger.warn(BAD_REQUEST, request.getRequestURI(), errorMessage);
+        return ResponseEntity
+            .badRequest()
+            .body(ApiResponse.error(errorMessage));
+    }
+
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<ApiResponse<Object>> methodArgumentNotValid(
         final MethodArgumentNotValidException exception,
