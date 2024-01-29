@@ -21,6 +21,10 @@ public record ApiResponse<T>(
             .build();
     }
 
+    public static <U> ApiResponse<U> success() {
+        return success(null);
+    }
+
     public static <U> ApiResponse<U> success(final U data) {
         return of(ResultCode.SUCCESS, null, data);
     }

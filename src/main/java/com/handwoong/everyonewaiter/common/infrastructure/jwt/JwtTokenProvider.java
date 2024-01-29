@@ -20,16 +20,18 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generate(final TokenInfo tokenInfo) {
-        return Jwts.builder()
-            .subject(tokenInfo.subject())
-            .claim(tokenInfo.claimKey(), tokenInfo.claimValue())
-            .expiration(tokenInfo.expire())
-            .signWith(key)
-            .compact();
+    public JwtToken createToken(final TokenInfo tokenInfo) {
+        return new JwtToken(
+            Jwts.builder()
+                .subject(tokenInfo.subject())
+                .claim(tokenInfo.claimKey(), tokenInfo.claimValue())
+                .expiration(tokenInfo.expire())
+                .signWith(key)
+                .compact()
+        );
     }
 
-    public TokenInfo parse(final String token, final String claimKey) {
+    public TokenInfo parseToken(final String token, final String claimKey) {
         final Claims claims = decode(token);
         return TokenInfo.builder()
             .subject(claims.getSubject())

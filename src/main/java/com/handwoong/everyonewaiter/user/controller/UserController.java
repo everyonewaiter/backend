@@ -1,7 +1,10 @@
 package com.handwoong.everyonewaiter.user.controller;
 
+import com.handwoong.everyonewaiter.common.dto.ApiResponse;
+import com.handwoong.everyonewaiter.common.infrastructure.jwt.JwtToken;
 import com.handwoong.everyonewaiter.user.controller.port.UserService;
 import com.handwoong.everyonewaiter.user.controller.request.UserJoinRequest;
+import com.handwoong.everyonewaiter.user.controller.request.UserLoginRequest;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +22,16 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<Void> join(@RequestBody @Valid final UserJoinRequest request) {
+    public ResponseEntity<ApiResponse<Object>> join(@RequestBody @Valid final UserJoinRequest request) {
         final Long userId = userService.join(request.toDomainDto());
-        return ResponseEntity.created(URI.create(userId.toString())).build();
+        return ResponseEntity
+            .created(URI.create(userId.toString()))
+            .body(ApiResponse.success());
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<JwtToken>> login(@RequestBody @Valid final UserLoginRequest request) {
+        final JwtToken accessToken = userService.login(request.toDomainDto());
+        return ResponseEntity.ok(ApiResponse.success(accessToken));
     }
 }

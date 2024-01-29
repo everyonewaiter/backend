@@ -1,6 +1,7 @@
 package com.handwoong.everyonewaiter.user.domain;
 
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
+import com.handwoong.everyonewaiter.common.service.port.TimeHolder;
 import com.handwoong.everyonewaiter.user.dto.UserJoin;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class User {
     private final PhoneNumber phoneNumber;
     private final UserRole role;
     private final UserStatus status;
+    private final Long lastLoggedIn;
 
     public static User create(final UserJoin userJoin, final PasswordEncoder passwordEncoder) {
         return User.builder()
@@ -25,5 +27,21 @@ public class User {
             .role(UserRole.ROLE_USER)
             .status(UserStatus.ACTIVE)
             .build();
+    }
+
+    public User login(final TimeHolder timeHolder) {
+        return User.builder()
+            .id(id)
+            .username(username)
+            .password(password)
+            .phoneNumber(phoneNumber)
+            .role(UserRole.ROLE_USER)
+            .status(UserStatus.ACTIVE)
+            .lastLoggedIn(timeHolder.millis())
+            .build();
+    }
+
+    public boolean checkStatusDifference(final UserStatus status) {
+        return this.status != status;
     }
 }
