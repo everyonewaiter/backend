@@ -1,0 +1,5 @@
+== 회원
+
+=== 가입
+
+operation::user-controller-test/should_-join_-when_-valid-request[snippets='http-request,request-fields,http-response']
