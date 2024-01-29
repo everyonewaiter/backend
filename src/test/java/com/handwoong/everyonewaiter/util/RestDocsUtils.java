@@ -4,6 +4,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
+import static org.springframework.restdocs.snippet.Attributes.key;
 
 import io.restassured.specification.RequestSpecification;
 import org.springframework.restdocs.operation.preprocess.HeadersModifyingOperationPreprocessor;
@@ -12,6 +13,7 @@ import org.springframework.restdocs.operation.preprocess.OperationRequestPreproc
 import org.springframework.restdocs.operation.preprocess.OperationResponsePreprocessor;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
+import org.springframework.restdocs.snippet.Attributes.Attribute;
 
 public class RestDocsUtils {
 
@@ -50,5 +52,9 @@ public class RestDocsUtils {
 
     public static void setSpecification(final RequestSpecification specification) {
         RestDocsUtils.specification = specification;
+    }
+
+    public static Attribute constraints(final String value) {
+        return key("constraints").value(value);
     }
 }
