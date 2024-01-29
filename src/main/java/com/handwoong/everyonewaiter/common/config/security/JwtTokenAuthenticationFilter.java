@@ -48,7 +48,7 @@ public class JwtTokenAuthenticationFilter extends GenericFilter {
 
     private void saveAuthentication(final String token) {
         try {
-            final TokenInfo tokenInfo = jwtTokenProvider.parse(token, "roles");
+            final TokenInfo tokenInfo = jwtTokenProvider.parseToken(token, "roles");
             final Authentication authentication = createAuthenticationFromTokenInfo(tokenInfo);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (final InvalidJwtTokenException exception) {

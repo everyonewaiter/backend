@@ -6,6 +6,7 @@ import com.handwoong.everyonewaiter.user.service.port.UserRepository;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 public class FakeUserRepository implements UserRepository {
 
@@ -28,6 +29,14 @@ public class FakeUserRepository implements UserRepository {
             .filter(user -> user.getUsername().equals(username))
             .toList()
             .isEmpty();
+    }
+
+    @Override
+    public Optional<User> findByUsername(final Username username) {
+        return database.values()
+            .stream()
+            .filter(user -> user.getUsername().equals(username))
+            .findAny();
     }
 
     private User create(final Long id, final User user) {
