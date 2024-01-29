@@ -49,6 +49,8 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
+    private Long lastLoggedIn;
+
     public static UserEntity from(final User user) {
         final UserEntity userEntity = new UserEntity();
         userEntity.id = user.getId();
@@ -57,6 +59,7 @@ public class UserEntity {
         userEntity.phoneNumber = user.getPhoneNumber().toString();
         userEntity.role = user.getRole();
         userEntity.status = user.getStatus();
+        userEntity.lastLoggedIn = user.getLastLoggedIn();
         return userEntity;
     }
 
@@ -68,6 +71,7 @@ public class UserEntity {
             .phoneNumber(new PhoneNumber(phoneNumber))
             .role(role)
             .status(status)
+            .lastLoggedIn(lastLoggedIn)
             .build();
     }
 
