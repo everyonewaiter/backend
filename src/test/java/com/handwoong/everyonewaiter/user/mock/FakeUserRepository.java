@@ -1,6 +1,7 @@
 package com.handwoong.everyonewaiter.user.mock;
 
 import com.handwoong.everyonewaiter.user.domain.User;
+import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.service.port.UserRepository;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,15 @@ public class FakeUserRepository implements UserRepository {
         final User newUser = create(id, user);
         database.put(id, newUser);
         return newUser;
+    }
+
+    @Override
+    public boolean existsByUsername(final Username username) {
+        return !database.values()
+            .stream()
+            .filter(user -> user.getUsername().equals(username))
+            .toList()
+            .isEmpty();
     }
 
     private User create(final Long id, final User user) {
