@@ -70,7 +70,7 @@ public class UserExceptionHandler {
         final HttpServletRequest request
     ) {
         final String errorMessage = exception.getMessage();
-        ExceptionLogger.warn(NOT_FOUND, request.getRequestURI(), errorMessage);
+        ExceptionLogger.warn(NOT_FOUND, request.getRequestURI(), errorMessage, exception.getResource());
         return ResponseEntity
             .status(NOT_FOUND.value())
             .body(ApiResponse.error(errorMessage));
