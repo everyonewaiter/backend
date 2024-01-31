@@ -1,4 +1,4 @@
-package com.handwoong.everyonewaiter.util;
+package com.handwoong.everyonewaiter.medium;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;

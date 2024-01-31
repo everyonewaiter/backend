@@ -1,4 +1,4 @@
-package com.handwoong.everyonewaiter.util;
+package com.handwoong.everyonewaiter.medium;
 
 import jakarta.persistence.EntityManager;
 import java.sql.Connection;

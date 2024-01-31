@@ -1,4 +1,4 @@
-package com.handwoong.everyonewaiter.util;
+package com.handwoong.everyonewaiter.medium;
 
 import java.util.Arrays;
 import java.util.List;

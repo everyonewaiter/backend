@@ -1,8 +1,8 @@
-package com.handwoong.everyonewaiter.user.controller.snippet;
+package com.handwoong.everyonewaiter.medium.user.snippet;
 
-import static com.handwoong.everyonewaiter.util.RestDocsUtils.COMMON_API_RESPONSE_DATA;
-import static com.handwoong.everyonewaiter.util.RestDocsUtils.COMMON_API_RESPONSE_MESSAGE;
-import static com.handwoong.everyonewaiter.util.RestDocsUtils.COMMON_API_RESPONSE_RESULT_CODE;
+import static com.handwoong.everyonewaiter.medium.RestDocsUtils.COMMON_API_RESPONSE_DATA;
+import static com.handwoong.everyonewaiter.medium.RestDocsUtils.COMMON_API_RESPONSE_MESSAGE;
+import static com.handwoong.everyonewaiter.medium.RestDocsUtils.COMMON_API_RESPONSE_RESULT_CODE;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 

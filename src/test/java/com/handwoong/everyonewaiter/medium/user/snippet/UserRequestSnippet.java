@@ -1,6 +1,6 @@
-package com.handwoong.everyonewaiter.user.controller.snippet;
+package com.handwoong.everyonewaiter.medium.user.snippet;
 
-import static com.handwoong.everyonewaiter.util.RestDocsUtils.constraints;
+import static com.handwoong.everyonewaiter.medium.RestDocsUtils.constraints;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 

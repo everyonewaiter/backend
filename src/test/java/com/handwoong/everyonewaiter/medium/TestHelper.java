@@ -1,7 +1,7 @@
-package com.handwoong.everyonewaiter.util;
+package com.handwoong.everyonewaiter.medium;
 
-import static com.handwoong.everyonewaiter.util.RestDocsUtils.getSpecification;
-import static com.handwoong.everyonewaiter.util.RestDocsUtils.setSpecification;
+import static com.handwoong.everyonewaiter.medium.RestDocsUtils.getSpecification;
+import static com.handwoong.everyonewaiter.medium.RestDocsUtils.setSpecification;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
 
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;

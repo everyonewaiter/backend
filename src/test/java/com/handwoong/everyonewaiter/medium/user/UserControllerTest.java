@@ -1,19 +1,19 @@
-package com.handwoong.everyonewaiter.user.controller;
+package com.handwoong.everyonewaiter.medium.user;
 
-import static com.handwoong.everyonewaiter.user.controller.snippet.UserRequestSnippet.JOIN_REQUEST;
-import static com.handwoong.everyonewaiter.user.controller.snippet.UserRequestSnippet.LOGIN_REQUEST;
-import static com.handwoong.everyonewaiter.user.controller.snippet.UserResponseSnippet.JOIN_RESPONSE;
-import static com.handwoong.everyonewaiter.user.controller.snippet.UserResponseSnippet.LOGIN_RESPONSE;
-import static com.handwoong.everyonewaiter.util.RestDocsUtils.getFilter;
-import static com.handwoong.everyonewaiter.util.RestDocsUtils.getSpecification;
+import static com.handwoong.everyonewaiter.medium.RestDocsUtils.getFilter;
+import static com.handwoong.everyonewaiter.medium.RestDocsUtils.getSpecification;
+import static com.handwoong.everyonewaiter.medium.user.snippet.UserRequestSnippet.JOIN_REQUEST;
+import static com.handwoong.everyonewaiter.medium.user.snippet.UserRequestSnippet.LOGIN_REQUEST;
+import static com.handwoong.everyonewaiter.medium.user.snippet.UserResponseSnippet.JOIN_RESPONSE;
+import static com.handwoong.everyonewaiter.medium.user.snippet.UserResponseSnippet.LOGIN_RESPONSE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.handwoong.everyonewaiter.common.dto.ApiResponse;
 import com.handwoong.everyonewaiter.common.dto.ApiResponse.ResultCode;
 import com.handwoong.everyonewaiter.common.infrastructure.jwt.JwtToken;
+import com.handwoong.everyonewaiter.medium.TestHelper;
 import com.handwoong.everyonewaiter.user.controller.request.UserJoinRequest;
 import com.handwoong.everyonewaiter.user.controller.request.UserLoginRequest;
-import com.handwoong.everyonewaiter.util.TestHelper;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
