@@ -6,6 +6,9 @@ import org.springframework.util.StringUtils;
 
 public record Password(String password) {
 
+    public static final String PASSWORD_FORMAT_MESSAGE = "비밀번호는 6자리 숫자로 입력해주세요.";
+    public static final String PASSWORD_REGEX = "^\\d{6}$";
+
     public Password {
         validateNotEmpty(password);
     }

@@ -1,5 +1,8 @@
 package com.handwoong.everyonewaiter.user.controller.request;
 
+import static com.handwoong.everyonewaiter.user.domain.Password.PASSWORD_REGEX;
+import static com.handwoong.everyonewaiter.user.domain.Username.MAX_LENGTH;
+
 import com.handwoong.everyonewaiter.user.domain.Password;
 import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.dto.UserLogin;
@@ -9,11 +12,11 @@ import jakarta.validation.constraints.Size;
 
 public record UserLoginRequest(
     @NotBlank(message = LOGIN_MESSAGE)
-    @Size(max = 30, message = LOGIN_MESSAGE)
+    @Size(max = MAX_LENGTH, message = LOGIN_MESSAGE)
     String username,
 
     @NotBlank(message = LOGIN_MESSAGE)
-    @Pattern(regexp = "^\\d{6}$", message = LOGIN_MESSAGE)
+    @Pattern(regexp = PASSWORD_REGEX, message = LOGIN_MESSAGE)
     String password
 ) {
 
