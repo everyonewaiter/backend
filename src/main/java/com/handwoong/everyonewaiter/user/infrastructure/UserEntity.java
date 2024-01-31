@@ -3,6 +3,7 @@ package com.handwoong.everyonewaiter.user.infrastructure;
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.user.domain.Password;
 import com.handwoong.everyonewaiter.user.domain.User;
+import com.handwoong.everyonewaiter.user.domain.UserId;
 import com.handwoong.everyonewaiter.user.domain.UserRole;
 import com.handwoong.everyonewaiter.user.domain.UserStatus;
 import com.handwoong.everyonewaiter.user.domain.Username;
@@ -53,7 +54,7 @@ public class UserEntity {
 
     public static UserEntity from(final User user) {
         final UserEntity userEntity = new UserEntity();
-        userEntity.id = user.getId();
+        userEntity.id = Objects.isNull(user.getId()) ? null : user.getId().value();
         userEntity.username = user.getUsername().toString();
         userEntity.password = user.getPassword().toString();
         userEntity.phoneNumber = user.getPhoneNumber().toString();
@@ -65,7 +66,7 @@ public class UserEntity {
 
     public User toModel() {
         return User.builder()
-            .id(id)
+            .id(new UserId(id))
             .username(new Username(username))
             .password(new Password(password))
             .phoneNumber(new PhoneNumber(phoneNumber))

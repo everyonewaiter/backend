@@ -1,6 +1,7 @@
 package com.handwoong.everyonewaiter.user.mock;
 
 import com.handwoong.everyonewaiter.user.domain.User;
+import com.handwoong.everyonewaiter.user.domain.UserId;
 import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.exception.UserNotFoundException;
 import com.handwoong.everyonewaiter.user.service.port.UserRepository;
@@ -17,7 +18,7 @@ public class FakeUserRepository implements UserRepository {
 
     @Override
     public User save(final User user) {
-        final Long id = Objects.nonNull(user.getId()) ? user.getId() : sequence++;
+        final Long id = Objects.nonNull(user.getId()) ? user.getId().value() : sequence++;
         final User newUser = create(id, user);
         database.put(id, newUser);
         return newUser;
@@ -51,7 +52,7 @@ public class FakeUserRepository implements UserRepository {
 
     private User create(final Long id, final User user) {
         return User.builder()
-            .id(id)
+            .id(new UserId(id))
             .username(user.getUsername())
             .password(user.getPassword())
             .phoneNumber(user.getPhoneNumber())

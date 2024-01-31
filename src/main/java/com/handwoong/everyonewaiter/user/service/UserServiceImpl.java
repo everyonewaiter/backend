@@ -4,6 +4,7 @@ import com.handwoong.everyonewaiter.common.infrastructure.jwt.JwtToken;
 import com.handwoong.everyonewaiter.common.service.port.TimeHolder;
 import com.handwoong.everyonewaiter.user.controller.port.UserService;
 import com.handwoong.everyonewaiter.user.domain.User;
+import com.handwoong.everyonewaiter.user.domain.UserId;
 import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.dto.UserJoin;
 import com.handwoong.everyonewaiter.user.dto.UserLogin;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Long join(final UserJoin userJoin) {
+    public UserId join(final UserJoin userJoin) {
         validateUsername(userJoin.username());
         final User user = User.create(userJoin, passwordEncoder);
         final User joinedUser = userRepository.save(user);

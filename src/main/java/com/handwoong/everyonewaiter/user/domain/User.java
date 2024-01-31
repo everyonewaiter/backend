@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Builder
 public class User {
 
-    private final Long id;
+    private final UserId id;
     private final Username username;
     private final Password password;
     private final PhoneNumber phoneNumber;

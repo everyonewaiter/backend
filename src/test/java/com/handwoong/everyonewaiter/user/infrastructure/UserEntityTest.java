@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.user.domain.Password;
 import com.handwoong.everyonewaiter.user.domain.User;
+import com.handwoong.everyonewaiter.user.domain.UserId;
 import com.handwoong.everyonewaiter.user.domain.UserRole;
 import com.handwoong.everyonewaiter.user.domain.UserStatus;
 import com.handwoong.everyonewaiter.user.domain.Username;
@@ -17,7 +18,7 @@ class UserEntityTest {
     void Should_CreateEntity_When_FromModel() {
         // given
         final User user = User.builder()
-            .id(1L)
+            .id(new UserId(1L))
             .username(new Username("handwoong"))
             .password(new Password("password"))
             .phoneNumber(new PhoneNumber("01012345678"))
@@ -36,7 +37,7 @@ class UserEntityTest {
     void Should_CreateDomain_When_ToModel() {
         // given
         final User user = User.builder()
-            .id(1L)
+            .id(new UserId(1L))
             .username(new Username("handwoong"))
             .password(new Password("password"))
             .phoneNumber(new PhoneNumber("01012345678"))
@@ -49,14 +50,14 @@ class UserEntityTest {
         final User result = userEntity.toModel();
 
         // then
-        assertThat(result).extracting("id").isEqualTo(1L);
+        assertThat(result.getId().value()).isEqualTo(1L);
     }
 
     @Test
     void Should_ThrowException_When_FromModelUsernameIsNull() {
         // given
         final User user = User.builder()
-            .id(1L)
+            .id(new UserId(1L))
             .password(new Password("password"))
             .phoneNumber(new PhoneNumber("01012345678"))
             .role(UserRole.ROLE_USER)
@@ -72,7 +73,7 @@ class UserEntityTest {
     void Should_ThrowException_When_FromModelPasswordIsNull() {
         // given
         final User user = User.builder()
-            .id(1L)
+            .id(new UserId(1L))
             .username(new Username("handwoong"))
             .phoneNumber(new PhoneNumber("01012345678"))
             .role(UserRole.ROLE_USER)
@@ -88,7 +89,7 @@ class UserEntityTest {
     void Should_ThrowException_When_FromModelPhoneNumberIsNull() {
         // given
         final User user = User.builder()
-            .id(1L)
+            .id(new UserId(1L))
             .username(new Username("handwoong"))
             .password(new Password("password"))
             .role(UserRole.ROLE_USER)

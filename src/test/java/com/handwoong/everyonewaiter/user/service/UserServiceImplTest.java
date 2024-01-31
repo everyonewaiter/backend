@@ -7,6 +7,7 @@ import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.common.infrastructure.jwt.JwtToken;
 import com.handwoong.everyonewaiter.user.domain.Password;
 import com.handwoong.everyonewaiter.user.domain.User;
+import com.handwoong.everyonewaiter.user.domain.UserId;
 import com.handwoong.everyonewaiter.user.domain.UserRole;
 import com.handwoong.everyonewaiter.user.domain.UserStatus;
 import com.handwoong.everyonewaiter.user.domain.Username;
@@ -30,10 +31,10 @@ class UserServiceImplTest {
             .build();
 
         // when
-        final Long userId = testContainer.userService.join(userJoin);
+        final UserId userId = testContainer.userService.join(userJoin);
 
         // then
-        assertThat(userId).isEqualTo(1L);
+        assertThat(userId.value()).isEqualTo(1L);
     }
 
     @Test
