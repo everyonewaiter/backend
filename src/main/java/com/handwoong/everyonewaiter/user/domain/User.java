@@ -1,5 +1,6 @@
 package com.handwoong.everyonewaiter.user.domain;
 
+import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.common.service.port.TimeHolder;
 import com.handwoong.everyonewaiter.user.dto.UserJoin;
@@ -18,6 +19,7 @@ public class User {
     private final UserRole role;
     private final UserStatus status;
     private final Long lastLoggedIn;
+    private final DomainTimestamp timestamp;
 
     public static User create(final UserJoin userJoin, final PasswordEncoder passwordEncoder) {
         return User.builder()
@@ -38,6 +40,7 @@ public class User {
             .role(role)
             .status(status)
             .lastLoggedIn(timeHolder.millis())
+            .timestamp(timestamp)
             .build();
     }
 

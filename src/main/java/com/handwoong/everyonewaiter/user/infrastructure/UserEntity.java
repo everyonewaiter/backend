@@ -1,6 +1,7 @@
 package com.handwoong.everyonewaiter.user.infrastructure;
 
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
+import com.handwoong.everyonewaiter.common.infrastructure.BaseEntity;
 import com.handwoong.everyonewaiter.user.domain.Password;
 import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.UserId;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserEntity {
+public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,6 +74,7 @@ public class UserEntity {
             .role(role)
             .status(status)
             .lastLoggedIn(lastLoggedIn)
+            .timestamp(getDomainTimestamp())
             .build();
     }
 
