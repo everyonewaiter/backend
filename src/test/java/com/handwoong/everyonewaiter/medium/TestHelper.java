@@ -7,13 +7,13 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.common.dto.ApiResponse;
 import com.handwoong.everyonewaiter.common.infrastructure.jwt.JwtToken;
+import com.handwoong.everyonewaiter.user.application.port.UserRepository;
 import com.handwoong.everyonewaiter.user.controller.request.UserLoginRequest;
 import com.handwoong.everyonewaiter.user.domain.Password;
 import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.UserRole;
 import com.handwoong.everyonewaiter.user.domain.UserStatus;
 import com.handwoong.everyonewaiter.user.domain.Username;
-import com.handwoong.everyonewaiter.user.service.port.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.common.mapper.TypeRef;

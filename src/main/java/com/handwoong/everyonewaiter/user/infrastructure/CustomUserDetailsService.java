@@ -1,8 +1,8 @@
 package com.handwoong.everyonewaiter.user.infrastructure;
 
+import com.handwoong.everyonewaiter.user.application.port.UserRepository;
 import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.Username;
-import com.handwoong.everyonewaiter.user.service.port.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

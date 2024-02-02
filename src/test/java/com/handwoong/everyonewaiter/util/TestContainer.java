@@ -3,13 +3,13 @@ package com.handwoong.everyonewaiter.util;
 import com.handwoong.everyonewaiter.common.mock.FakePasswordEncoder;
 import com.handwoong.everyonewaiter.common.mock.FakeTimeHolder;
 import com.handwoong.everyonewaiter.common.service.port.TimeHolder;
+import com.handwoong.everyonewaiter.user.application.UserServiceImpl;
+import com.handwoong.everyonewaiter.user.application.port.UserLoginService;
+import com.handwoong.everyonewaiter.user.application.port.UserRepository;
 import com.handwoong.everyonewaiter.user.controller.UserController;
 import com.handwoong.everyonewaiter.user.controller.port.UserService;
 import com.handwoong.everyonewaiter.user.mock.FakeUserLoginService;
 import com.handwoong.everyonewaiter.user.mock.FakeUserRepository;
-import com.handwoong.everyonewaiter.user.service.UserServiceImpl;
-import com.handwoong.everyonewaiter.user.service.port.UserLoginService;
-import com.handwoong.everyonewaiter.user.service.port.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class TestContainer {

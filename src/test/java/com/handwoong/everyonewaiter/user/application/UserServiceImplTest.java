@@ -1,4 +1,4 @@
-package com.handwoong.everyonewaiter.user.service;
+package com.handwoong.everyonewaiter.user.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

@@ -1,7 +1,9 @@
-package com.handwoong.everyonewaiter.user.service;
+package com.handwoong.everyonewaiter.user.application;
 
 import com.handwoong.everyonewaiter.common.infrastructure.jwt.JwtToken;
 import com.handwoong.everyonewaiter.common.service.port.TimeHolder;
+import com.handwoong.everyonewaiter.user.application.port.UserLoginService;
+import com.handwoong.everyonewaiter.user.application.port.UserRepository;
 import com.handwoong.everyonewaiter.user.controller.port.UserService;
 import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.UserId;
@@ -9,8 +11,6 @@ import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.dto.UserJoin;
 import com.handwoong.everyonewaiter.user.dto.UserLogin;
 import com.handwoong.everyonewaiter.user.exception.AlreadyExistsUsernameException;
-import com.handwoong.everyonewaiter.user.service.port.UserLoginService;
-import com.handwoong.everyonewaiter.user.service.port.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

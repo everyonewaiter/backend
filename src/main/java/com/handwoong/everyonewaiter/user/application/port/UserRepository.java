@@ -1,4 +1,4 @@
-package com.handwoong.everyonewaiter.user.service.port;
+package com.handwoong.everyonewaiter.user.application.port;
 
 import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.Username;
