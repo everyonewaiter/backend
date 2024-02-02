@@ -1,8 +1,8 @@
 package com.handwoong.everyonewaiter.user.domain;
 
+import com.handwoong.everyonewaiter.common.application.port.TimeHolder;
 import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
-import com.handwoong.everyonewaiter.common.service.port.TimeHolder;
 import com.handwoong.everyonewaiter.user.dto.UserJoin;
 import lombok.Builder;
 import lombok.Getter;

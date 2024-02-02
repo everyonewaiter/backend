@@ -1,6 +1,6 @@
 package com.handwoong.everyonewaiter.common.mock;
 
-import com.handwoong.everyonewaiter.common.service.port.TimeHolder;
+import com.handwoong.everyonewaiter.common.application.port.TimeHolder;
 
 public class FakeTimeHolder implements TimeHolder {
 

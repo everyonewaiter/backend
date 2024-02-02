@@ -1,7 +1,7 @@
 package com.handwoong.everyonewaiter.user.application;
 
+import com.handwoong.everyonewaiter.common.application.port.TimeHolder;
 import com.handwoong.everyonewaiter.common.infrastructure.jwt.JwtToken;
-import com.handwoong.everyonewaiter.common.service.port.TimeHolder;
 import com.handwoong.everyonewaiter.user.application.port.UserLoginService;
 import com.handwoong.everyonewaiter.user.application.port.UserRepository;
 import com.handwoong.everyonewaiter.user.controller.port.UserService;

@@ -1,8 +1,8 @@
 package com.handwoong.everyonewaiter.util;
 
+import com.handwoong.everyonewaiter.common.application.port.TimeHolder;
 import com.handwoong.everyonewaiter.common.mock.FakePasswordEncoder;
 import com.handwoong.everyonewaiter.common.mock.FakeTimeHolder;
-import com.handwoong.everyonewaiter.common.service.port.TimeHolder;
 import com.handwoong.everyonewaiter.user.application.UserServiceImpl;
 import com.handwoong.everyonewaiter.user.application.port.UserLoginService;
 import com.handwoong.everyonewaiter.user.application.port.UserRepository;
