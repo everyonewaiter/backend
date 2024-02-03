@@ -5,6 +5,7 @@ import com.handwoong.everyonewaiter.common.mock.FakePasswordEncoder;
 import com.handwoong.everyonewaiter.common.mock.FakeTimeHolder;
 import com.handwoong.everyonewaiter.store.application.StoreServiceImpl;
 import com.handwoong.everyonewaiter.store.application.port.StoreRepository;
+import com.handwoong.everyonewaiter.store.controller.StoreController;
 import com.handwoong.everyonewaiter.store.controller.port.StoreService;
 import com.handwoong.everyonewaiter.store.mock.FakeStoreRepository;
 import com.handwoong.everyonewaiter.user.application.UserServiceImpl;
@@ -12,8 +13,11 @@ import com.handwoong.everyonewaiter.user.application.port.UserLoginService;
 import com.handwoong.everyonewaiter.user.application.port.UserRepository;
 import com.handwoong.everyonewaiter.user.controller.UserController;
 import com.handwoong.everyonewaiter.user.controller.port.UserService;
+import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.mock.FakeUserLoginService;
 import com.handwoong.everyonewaiter.user.mock.FakeUserRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class TestContainer {
@@ -28,6 +32,7 @@ public class TestContainer {
 
     public final StoreRepository storeRepository;
     public final StoreService storeService;
+    public final StoreController storeController;
 
     public TestContainer() {
         this.passwordEncoder = new FakePasswordEncoder("encode");
@@ -40,5 +45,12 @@ public class TestContainer {
 
         this.storeRepository = new FakeStoreRepository();
         this.storeService = new StoreServiceImpl(userRepository, storeRepository);
+        this.storeController = new StoreController(storeService);
+    }
+
+    public void setSecurityContextAuthentication(final Username username) {
+        final UsernamePasswordAuthenticationToken authenticationToken =
+            new UsernamePasswordAuthenticationToken(username, "");
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
 }

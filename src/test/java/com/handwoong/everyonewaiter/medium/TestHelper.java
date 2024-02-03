@@ -4,6 +4,9 @@ import static com.handwoong.everyonewaiter.medium.RestDocsUtils.getSpecification
 import static com.handwoong.everyonewaiter.medium.RestDocsUtils.setSpecification;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.common.dto.ApiResponse;
 import com.handwoong.everyonewaiter.common.infrastructure.jwt.JwtToken;
@@ -41,9 +44,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @AutoConfigureRestDocs
 public class TestHelper {
 
+    public static final ObjectMapper objectMapper = new ObjectMapper()
+        .registerModule(new JavaTimeModule())
+        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
     public static String userAccessToken;
     public static String adminAccessToken;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
