@@ -6,6 +6,8 @@ import org.springframework.util.StringUtils;
 
 public record PhoneNumber(String phoneNumber) {
 
+    public static final String PHONE_NUMBER_EMPTY_MESSAGE = "휴대폰 번호를 입력해주세요.";
+    public static final String PHONE_NUMBER_FORMAT_MESSAGE = "휴대폰 번호의 형식이 옳바르지 않습니다.";
     public static final String PHONE_NUMBER_REGEX = "^01[016789]\\d{7,8}$";
 
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile(PHONE_NUMBER_REGEX);
@@ -17,13 +19,13 @@ public record PhoneNumber(String phoneNumber) {
 
     private void validateNotEmpty(final String phoneNumber) {
         if (!StringUtils.hasText(phoneNumber)) {
-            throw new InvalidPhoneNumberFormatException("휴대폰 번호를 입력해주세요.", phoneNumber);
+            throw new InvalidPhoneNumberFormatException(PHONE_NUMBER_EMPTY_MESSAGE, phoneNumber);
         }
     }
 
     private void validateFormat(final String phoneNumber) {
         if (!PHONE_NUMBER_PATTERN.matcher(phoneNumber).matches()) {
-            throw new InvalidPhoneNumberFormatException("휴대폰 번호의 형식이 옳바르지 않습니다.", phoneNumber);
+            throw new InvalidPhoneNumberFormatException(PHONE_NUMBER_FORMAT_MESSAGE, phoneNumber);
         }
     }
 

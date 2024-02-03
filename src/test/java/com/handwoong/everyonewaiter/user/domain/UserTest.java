@@ -37,7 +37,7 @@ class UserTest {
         // given
         final FakeTimeHolder timeHolder = new FakeTimeHolder(948920669L);
         final User user = User.builder()
-            .id(1L)
+            .id(new UserId(1L))
             .username(new Username("handwoong"))
             .password(new Password("password"))
             .phoneNumber(new PhoneNumber("01012345678"))

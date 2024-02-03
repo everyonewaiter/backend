@@ -1,9 +1,9 @@
 package com.handwoong.everyonewaiter.user.infrastructure;
 
+import com.handwoong.everyonewaiter.user.application.port.UserRepository;
 import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.exception.UserNotFoundException;
-import com.handwoong.everyonewaiter.user.service.port.UserRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

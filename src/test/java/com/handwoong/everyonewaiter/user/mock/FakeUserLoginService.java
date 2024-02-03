@@ -1,10 +1,10 @@
 package com.handwoong.everyonewaiter.user.mock;
 
 import com.handwoong.everyonewaiter.common.infrastructure.jwt.JwtToken;
+import com.handwoong.everyonewaiter.user.application.port.UserLoginService;
+import com.handwoong.everyonewaiter.user.application.port.UserRepository;
 import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.dto.UserLogin;
-import com.handwoong.everyonewaiter.user.service.port.UserLoginService;
-import com.handwoong.everyonewaiter.user.service.port.UserRepository;
 import org.springframework.security.authentication.BadCredentialsException;
 
 public class FakeUserLoginService implements UserLoginService {

@@ -1,5 +1,6 @@
 package com.handwoong.everyonewaiter.common.infrastructure;
 
+import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
@@ -20,4 +21,11 @@ public class BaseEntity {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    protected DomainTimestamp getDomainTimestamp() {
+        return DomainTimestamp.builder()
+            .createdAt(createdAt)
+            .updatedAt(updatedAt)
+            .build();
+    }
 }

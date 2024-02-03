@@ -5,6 +5,7 @@ import com.handwoong.everyonewaiter.common.infrastructure.jwt.JwtToken;
 import com.handwoong.everyonewaiter.user.controller.port.UserService;
 import com.handwoong.everyonewaiter.user.controller.request.UserJoinRequest;
 import com.handwoong.everyonewaiter.user.controller.request.UserLoginRequest;
+import com.handwoong.everyonewaiter.user.domain.UserId;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Object>> join(@RequestBody @Valid final UserJoinRequest request) {
-        final Long userId = userService.join(request.toDomainDto());
+    public ResponseEntity<ApiResponse<Void>> join(@RequestBody @Valid final UserJoinRequest request) {
+        final UserId userId = userService.join(request.toDomainDto());
         return ResponseEntity
             .created(URI.create(userId.toString()))
             .body(ApiResponse.success());

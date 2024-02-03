@@ -1,6 +1,6 @@
 package com.handwoong.everyonewaiter.common.infrastructure;
 
-import com.handwoong.everyonewaiter.common.service.port.TimeHolder;
+import com.handwoong.everyonewaiter.common.application.port.TimeHolder;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,73 +1,126 @@
 package com.handwoong.everyonewaiter.user.controller;
 
-import static com.handwoong.everyonewaiter.user.controller.snippet.UserRequestSnippet.JOIN_REQUEST;
-import static com.handwoong.everyonewaiter.user.controller.snippet.UserRequestSnippet.LOGIN_REQUEST;
-import static com.handwoong.everyonewaiter.user.controller.snippet.UserResponseSnippet.JOIN_RESPONSE;
-import static com.handwoong.everyonewaiter.user.controller.snippet.UserResponseSnippet.LOGIN_RESPONSE;
-import static com.handwoong.everyonewaiter.util.RestDocsUtils.getFilter;
-import static com.handwoong.everyonewaiter.util.RestDocsUtils.getSpecification;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.common.dto.ApiResponse;
 import com.handwoong.everyonewaiter.common.dto.ApiResponse.ResultCode;
 import com.handwoong.everyonewaiter.common.infrastructure.jwt.JwtToken;
 import com.handwoong.everyonewaiter.user.controller.request.UserJoinRequest;
 import com.handwoong.everyonewaiter.user.controller.request.UserLoginRequest;
-import com.handwoong.everyonewaiter.util.TestHelper;
-import io.restassured.RestAssured;
-import io.restassured.common.mapper.TypeRef;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
+import com.handwoong.everyonewaiter.user.domain.Password;
+import com.handwoong.everyonewaiter.user.domain.User;
+import com.handwoong.everyonewaiter.user.domain.UserRole;
+import com.handwoong.everyonewaiter.user.domain.UserStatus;
+import com.handwoong.everyonewaiter.user.domain.Username;
+import com.handwoong.everyonewaiter.user.exception.AlreadyExistsUsernameException;
+import com.handwoong.everyonewaiter.util.TestContainer;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 
-class UserControllerTest extends TestHelper {
+class UserControllerTest {
 
     @Test
     void Should_Join_When_ValidRequest() {
         // given
-        final UserJoinRequest request = new UserJoinRequest("username", "123456", "01012345678");
+        final TestContainer testContainer = new TestContainer();
+        final UserJoinRequest request = new UserJoinRequest("handwoong", "123456", "01012345678");
 
         // when
-        final ExtractableResponse<Response> response = join(request);
+        final ResponseEntity<ApiResponse<Void>> response = testContainer.userController.join(request);
+        final ApiResponse<Void> result = response.getBody();
 
         // then
-        assertThat(response).extracting("statusCode").isEqualTo(201);
+        assertThat(response.getStatusCode().value()).isEqualTo(201);
+        assertThat(result).extracting("resultCode").isEqualTo(ResultCode.SUCCESS);
     }
 
-    private ExtractableResponse<Response> join(final UserJoinRequest request) {
-        return RestAssured
-            .given(getSpecification()).log().all()
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .body(request)
-            .filter(getFilter().document(JOIN_REQUEST, JOIN_RESPONSE))
-            .when().post("/api/users")
-            .then().log().all().extract();
+    @Test
+    void Should_ThrowException_When_JoinDuplicateUsername() {
+        // given
+        final TestContainer testContainer = new TestContainer();
+        final User user = User.builder()
+            .username(new Username("handwoong"))
+            .password(new Password("password"))
+            .phoneNumber(new PhoneNumber("01012345678"))
+            .role(UserRole.ROLE_USER)
+            .status(UserStatus.ACTIVE)
+            .build();
+        testContainer.userRepository.save(user);
+
+        final UserJoinRequest request = new UserJoinRequest("handwoong", "123456", "01012345678");
+
+        // expect
+        assertThatThrownBy(() -> testContainer.userController.join(request))
+            .isInstanceOf(AlreadyExistsUsernameException.class)
+            .hasMessage("이미 존재하는 사용자 아이디입니다.");
     }
 
     @Test
     void Should_Login_When_ValidRequest() {
         // given
-        final UserLoginRequest request = new UserLoginRequest("handwoong", "123456");
+        final TestContainer testContainer = new TestContainer();
+        final User user = User.builder()
+            .username(new Username("handwoong"))
+            .password(new Password("password"))
+            .phoneNumber(new PhoneNumber("01012345678"))
+            .role(UserRole.ROLE_USER)
+            .status(UserStatus.ACTIVE)
+            .build();
+        testContainer.userRepository.save(user);
+
+        final UserLoginRequest request = new UserLoginRequest("handwoong", "password");
 
         // when
-        final ExtractableResponse<Response> response = login(request);
-        final TypeRef<ApiResponse<JwtToken>> typeRef = new TypeRef<>() {
-        };
-        final ApiResponse<JwtToken> result = response.body().as(typeRef);
+        final ResponseEntity<ApiResponse<JwtToken>> response = testContainer.userController.login(request);
+        final ApiResponse<JwtToken> result = response.getBody();
 
         // then
-        assertThat(response).extracting("statusCode").isEqualTo(200);
+        assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(result).extracting("resultCode").isEqualTo(ResultCode.SUCCESS);
     }
 
-    private ExtractableResponse<Response> login(final UserLoginRequest request) {
-        return RestAssured
-            .given(getSpecification()).log().all()
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .body(request)
-            .filter(getFilter().document(LOGIN_REQUEST, LOGIN_RESPONSE))
-            .when().post("/api/users/login")
-            .then().log().all().extract();
+    @Test
+    void Should_ThrowException_When_LoginInvalidUsername() {
+        // given
+        final TestContainer testContainer = new TestContainer();
+        final User user = User.builder()
+            .username(new Username("handwoong"))
+            .password(new Password("password"))
+            .phoneNumber(new PhoneNumber("01012345678"))
+            .role(UserRole.ROLE_USER)
+            .status(UserStatus.ACTIVE)
+            .build();
+        testContainer.userRepository.save(user);
+
+        final UserLoginRequest request = new UserLoginRequest("invalidUsername", "password");
+
+        // expect
+        assertThatThrownBy(() -> testContainer.userController.login(request))
+            .isInstanceOf(BadCredentialsException.class)
+            .hasMessage("자격 증명에 실패하였습니다.");
+    }
+
+    @Test
+    void Should_ThrowException_When_LoginInvalidPassword() {
+        // given
+        final TestContainer testContainer = new TestContainer();
+        final User user = User.builder()
+            .username(new Username("handwoong"))
+            .password(new Password("password"))
+            .phoneNumber(new PhoneNumber("01012345678"))
+            .role(UserRole.ROLE_USER)
+            .status(UserStatus.ACTIVE)
+            .build();
+        testContainer.userRepository.save(user);
+
+        final UserLoginRequest request = new UserLoginRequest("handwoong", "invalidPassword");
+
+        // expect
+        assertThatThrownBy(() -> testContainer.userController.login(request))
+            .isInstanceOf(BadCredentialsException.class)
+            .hasMessage("자격 증명에 실패하였습니다.");
     }
 }
