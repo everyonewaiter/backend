@@ -1,6 +1,5 @@
 package com.handwoong.everyonewaiter.store.infrastructure;
 
-import com.handwoong.everyonewaiter.common.infrastructure.BaseEntity;
 import com.handwoong.everyonewaiter.store.domain.StoreBusinessTime;
 import com.handwoong.everyonewaiter.store.domain.StoreBusinessTimeId;
 import com.handwoong.everyonewaiter.store.domain.StoreDaysOfWeek;
@@ -21,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "store_business_time")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StoreBusinessTimeEntity extends BaseEntity {
+public class StoreBusinessTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,7 +52,6 @@ public class StoreBusinessTimeEntity extends BaseEntity {
             .open(open)
             .close(close)
             .daysOfWeek(daysOfWeek)
-            .timestamp(getDomainTimestamp())
             .build();
     }
 

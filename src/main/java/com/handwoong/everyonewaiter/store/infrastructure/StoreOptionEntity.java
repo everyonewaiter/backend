@@ -1,6 +1,5 @@
 package com.handwoong.everyonewaiter.store.infrastructure;
 
-import com.handwoong.everyonewaiter.common.infrastructure.BaseEntity;
 import com.handwoong.everyonewaiter.store.domain.StoreOption;
 import com.handwoong.everyonewaiter.store.domain.StoreOptionId;
 import jakarta.persistence.Entity;
@@ -18,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "store_option")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StoreOptionEntity extends BaseEntity {
+public class StoreOptionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +47,6 @@ public class StoreOptionEntity extends BaseEntity {
             .useBreakTime(useBreakTime)
             .useWaiting(useWaiting)
             .useOrder(useOrder)
-            .timestamp(getDomainTimestamp())
             .build();
     }
 
