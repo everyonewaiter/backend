@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.handwoong.everyonewaiter.store.domain.DayOfWeek;
-import com.handwoong.everyonewaiter.store.domain.StoreEventDaysOfWeek;
+import com.handwoong.everyonewaiter.store.domain.StoreDaysOfWeek;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -14,12 +14,12 @@ class DaysOfWeekConverterTest {
     void Should_ConvertString_When_InputStoreEventDaysOfWeek() {
         // given
         final DaysOfWeekConverter converter = new DaysOfWeekConverter();
-        final StoreEventDaysOfWeek storeEventDaysOfWeek = new StoreEventDaysOfWeek(
+        final StoreDaysOfWeek storeDaysOfWeek = new StoreDaysOfWeek(
             List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY)
         );
 
         // when
-        final String convertedDaysOfWeek = converter.convertToDatabaseColumn(storeEventDaysOfWeek);
+        final String convertedDaysOfWeek = converter.convertToDatabaseColumn(storeDaysOfWeek);
 
         // then
         assertThat(convertedDaysOfWeek).isEqualTo("월,화,수,목,금");
@@ -32,10 +32,10 @@ class DaysOfWeekConverterTest {
         final String daysOfWeek = "월,화";
 
         // when
-        final StoreEventDaysOfWeek storeEventDaysOfWeek = converter.convertToEntityAttribute(daysOfWeek);
+        final StoreDaysOfWeek storeDaysOfWeek = converter.convertToEntityAttribute(daysOfWeek);
 
         // then
-        assertThat(storeEventDaysOfWeek)
+        assertThat(storeDaysOfWeek)
             .extracting("daysOfWeek")
             .isEqualTo(List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY));
     }
