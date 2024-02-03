@@ -3,7 +3,9 @@ package com.handwoong.everyonewaiter.util;
 import com.handwoong.everyonewaiter.common.application.port.TimeHolder;
 import com.handwoong.everyonewaiter.common.mock.FakePasswordEncoder;
 import com.handwoong.everyonewaiter.common.mock.FakeTimeHolder;
+import com.handwoong.everyonewaiter.store.application.StoreServiceImpl;
 import com.handwoong.everyonewaiter.store.application.port.StoreRepository;
+import com.handwoong.everyonewaiter.store.controller.port.StoreService;
 import com.handwoong.everyonewaiter.store.mock.FakeStoreRepository;
 import com.handwoong.everyonewaiter.user.application.UserServiceImpl;
 import com.handwoong.everyonewaiter.user.application.port.UserLoginService;
@@ -25,6 +27,7 @@ public class TestContainer {
     public final UserController userController;
 
     public final StoreRepository storeRepository;
+    public final StoreService storeService;
 
     public TestContainer() {
         this.passwordEncoder = new FakePasswordEncoder("encode");
@@ -36,5 +39,6 @@ public class TestContainer {
         this.userController = new UserController(userService);
 
         this.storeRepository = new FakeStoreRepository();
+        this.storeService = new StoreServiceImpl(userRepository, storeRepository);
     }
 }
