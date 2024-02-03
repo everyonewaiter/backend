@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode
 public class StoreDaysOfWeek {
 
     private final List<DayOfWeek> daysOfWeek;
