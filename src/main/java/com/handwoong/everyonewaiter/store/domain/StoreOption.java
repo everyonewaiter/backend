@@ -9,7 +9,6 @@ import lombok.Getter;
 public class StoreOption {
 
     private final StoreOptionId id;
-    private final boolean useBusinessTime;
     private final boolean useBreakTime;
     private final boolean useWaiting;
     private final boolean useOrder;

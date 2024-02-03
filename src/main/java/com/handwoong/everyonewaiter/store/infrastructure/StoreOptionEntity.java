@@ -25,9 +25,6 @@ public class StoreOptionEntity extends BaseEntity {
     private Long id;
 
     @NotNull
-    private boolean useBusinessTime;
-
-    @NotNull
     private boolean useBreakTime;
 
     @NotNull
@@ -39,7 +36,6 @@ public class StoreOptionEntity extends BaseEntity {
     public static StoreOptionEntity from(final StoreOption storeOption) {
         final StoreOptionEntity storeOptionEntity = new StoreOptionEntity();
         storeOptionEntity.id = Objects.isNull(storeOption.getId()) ? null : storeOption.getId().value();
-        storeOptionEntity.useBusinessTime = storeOption.isUseBusinessTime();
         storeOptionEntity.useBreakTime = storeOption.isUseBreakTime();
         storeOptionEntity.useWaiting = storeOption.isUseWaiting();
         storeOptionEntity.useOrder = storeOption.isUseOrder();
@@ -49,7 +45,6 @@ public class StoreOptionEntity extends BaseEntity {
     public StoreOption toModel() {
         return StoreOption.builder()
             .id(new StoreOptionId(id))
-            .useBusinessTime(useBusinessTime)
             .useBreakTime(useBreakTime)
             .useWaiting(useWaiting)
             .useOrder(useOrder)

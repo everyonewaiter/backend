@@ -84,7 +84,6 @@ class StoreEntityTest {
             .option(
                 StoreOption.builder()
                     .id(new StoreOptionId(1L))
-                    .useBusinessTime(true)
                     .useBreakTime(true)
                     .useWaiting(true)
                     .useOrder(true)
@@ -156,7 +155,6 @@ class StoreEntityTest {
             .option(
                 StoreOption.builder()
                     .id(new StoreOptionId(1L))
-                    .useBusinessTime(true)
                     .useBreakTime(true)
                     .useWaiting(true)
                     .useOrder(true)

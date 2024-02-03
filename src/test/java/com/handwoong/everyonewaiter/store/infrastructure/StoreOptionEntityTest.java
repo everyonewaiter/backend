@@ -13,7 +13,6 @@ class StoreOptionEntityTest {
         // given
         final StoreOption storeOption = StoreOption.builder()
             .id(new StoreOptionId(1L))
-            .useBusinessTime(true)
             .useBreakTime(true)
             .useOrder(true)
             .useWaiting(true)
@@ -31,7 +30,6 @@ class StoreOptionEntityTest {
         // given
         final StoreOption storeOption = StoreOption.builder()
             .id(new StoreOptionId(1L))
-            .useBusinessTime(true)
             .useBreakTime(true)
             .useOrder(true)
             .useWaiting(true)
