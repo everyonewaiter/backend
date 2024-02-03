@@ -3,7 +3,10 @@ package com.handwoong.everyonewaiter.store.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.Map;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class DayOfWeekTest {
@@ -26,5 +29,26 @@ class DayOfWeekTest {
         assertThatThrownBy(() -> DayOfWeek.from(value))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage(value + "(은)는 유효하지 않은 요일입니다.");
+    }
+
+    @Test
+    void Should_7_When_Size() {
+        // given
+        // when
+        final int size = DayOfWeek.size();
+
+        // then
+        assertThat(size).isEqualTo(7);
+    }
+
+    @ParameterizedTest(name = "요일 {index} : {0}")
+    @EnumSource
+    void Should_HasKey_When_DayOfWeekCounter(final DayOfWeek dayOfWeek) {
+        // given
+        // when
+        final Map<DayOfWeek, Integer> counter = DayOfWeek.dayOfWeekCounter();
+
+        // then
+        assertThat(counter).containsEntry(dayOfWeek, 0);
     }
 }

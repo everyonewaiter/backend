@@ -3,7 +3,7 @@ package com.handwoong.everyonewaiter.store.infrastructure;
 import com.handwoong.everyonewaiter.common.infrastructure.BaseEntity;
 import com.handwoong.everyonewaiter.store.domain.StoreBreakTime;
 import com.handwoong.everyonewaiter.store.domain.StoreBreakTimeId;
-import com.handwoong.everyonewaiter.store.domain.StoreEventDaysOfWeek;
+import com.handwoong.everyonewaiter.store.domain.StoreDaysOfWeek;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +35,7 @@ public class StoreBreakTimeEntity extends BaseEntity {
 
     @NotNull
     @Convert(converter = DaysOfWeekConverter.class)
-    private StoreEventDaysOfWeek daysOfWeek;
+    private StoreDaysOfWeek daysOfWeek;
 
     public static StoreBreakTimeEntity from(final StoreBreakTime storeBreakTime) {
         final StoreBreakTimeEntity storeBreakTimeEntity = new StoreBreakTimeEntity();
