@@ -1,7 +1,6 @@
 package com.handwoong.everyonewaiter.store.controller.request;
 
 import static com.handwoong.everyonewaiter.store.controller.request.StoreBusinessTimeRequest.MIN_BUSINESS_TIME_MESSAGE;
-import static com.handwoong.everyonewaiter.store.domain.LandlineNumber.LANDLINE_NUMBER_EMPTY_MESSAGE;
 import static com.handwoong.everyonewaiter.store.domain.LandlineNumber.LANDLINE_NUMBER_FORMAT_MESSAGE;
 import static com.handwoong.everyonewaiter.store.domain.LandlineNumber.LANDLINE_NUMBER_REGEX;
 import static com.handwoong.everyonewaiter.store.domain.StoreName.MAX_LENGTH;
@@ -26,7 +25,7 @@ public record StoreCreateRequest(
     @Size(max = MAX_LENGTH, message = STORE_NAME_MAX_LENGTH_MESSAGE)
     String name,
 
-    @NotBlank(message = LANDLINE_NUMBER_EMPTY_MESSAGE)
+    @NotBlank(message = LANDLINE_NUMBER_FORMAT_MESSAGE)
     @Pattern(regexp = LANDLINE_NUMBER_REGEX, message = LANDLINE_NUMBER_FORMAT_MESSAGE)
     String landlineNumber,
 
