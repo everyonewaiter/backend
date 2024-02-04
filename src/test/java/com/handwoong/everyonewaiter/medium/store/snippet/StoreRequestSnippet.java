@@ -100,4 +100,21 @@ public class StoreRequestSnippet {
             .description("영업 요일")
             .attributes(constraints("MONDAY | TUESDAY | WEDNESDAY | THURSDAY | FRIDAY | SATURDAY | SUNDAY"))
     );
+    public static final Snippet UPDATE_OPTION_REQUEST = requestFields(
+        fieldWithPath("storeId")
+            .type(JsonFieldType.NUMBER)
+            .description("매장 ID"),
+        fieldWithPath("useBreakTime")
+            .type(JsonFieldType.BOOLEAN)
+            .description("브레이크 타임에 웨이팅 및 주문 사용 불가 여부")
+            .attributes(constraints("true 불가 | false 허용")),
+        fieldWithPath("useWaiting")
+            .type(JsonFieldType.BOOLEAN)
+            .description("웨이팅 기능 사용 여부")
+            .attributes(constraints("true 사용 | false 미사용")),
+        fieldWithPath("useOrder")
+            .type(JsonFieldType.BOOLEAN)
+            .description("주문 기능 사용 여부")
+            .attributes(constraints("true 사용 | false 미사용"))
+    );
 }

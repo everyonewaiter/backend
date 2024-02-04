@@ -16,6 +16,7 @@ import com.handwoong.everyonewaiter.store.controller.request.StoreBreakTimeReque
 import com.handwoong.everyonewaiter.store.controller.request.StoreBusinessTimeRequest;
 import com.handwoong.everyonewaiter.store.controller.request.StoreCreateOptionRequest;
 import com.handwoong.everyonewaiter.store.controller.request.StoreCreateRequest;
+import com.handwoong.everyonewaiter.store.controller.request.StoreOptionUpdateRequest;
 import com.handwoong.everyonewaiter.store.controller.request.StoreUpdateRequest;
 import com.handwoong.everyonewaiter.store.domain.LandlineNumber;
 import com.handwoong.everyonewaiter.store.domain.Store;
@@ -48,7 +49,6 @@ import org.springframework.http.ResponseEntity;
 class StoreControllerTest {
 
     private TestContainer testContainer;
-    private Store store;
 
     @BeforeEach
     void setUp() {
@@ -63,7 +63,7 @@ class StoreControllerTest {
             .build();
         testContainer.userRepository.save(user);
 
-        store = Store.builder()
+        final Store store = Store.builder()
             .id(new StoreId(1L))
             .userId(new UserId(1L))
             .name(new StoreName("나루"))
@@ -182,6 +182,33 @@ class StoreControllerTest {
         final List<StoreBusinessTimeRequest> businessTimes = getBusinessTimeRequests();
         final StoreUpdateRequest request =
             new StoreUpdateRequest(1L, "나루 레스토랑", "021234567", breakTimes, businessTimes);
+
+        // expect
+        assertThatThrownBy(() -> testContainer.storeController.update(request))
+            .isInstanceOf(UserNotFoundException.class)
+            .hasMessage("사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void Should_UpdateOption_When_ValidRequest() {
+        // given
+        testContainer.setSecurityContextAuthentication(new Username("handwoong"));
+        final StoreOptionUpdateRequest request = new StoreOptionUpdateRequest(1L, false, false, false);
+
+        // when
+        final ResponseEntity<ApiResponse<Void>> response = testContainer.storeController.update(request);
+        final ApiResponse<Void> result = response.getBody();
+
+        // then
+        assertThat(response.getStatusCode().value()).isEqualTo(200);
+        assertThat(result).extracting("resultCode").isEqualTo(ResultCode.SUCCESS);
+    }
+
+    @Test
+    void Should_ThrowException_When_UpdateOptionUsernameNotFound() {
+        // given
+        testContainer.setSecurityContextAuthentication(new Username("notfound"));
+        final StoreOptionUpdateRequest request = new StoreOptionUpdateRequest(1L, false, false, false);
 
         // expect
         assertThatThrownBy(() -> testContainer.storeController.update(request))

@@ -6,6 +6,7 @@ import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSn
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER_KEY;
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER_TYPE;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreRequestSnippet.CREATE_REQUEST;
+import static com.handwoong.everyonewaiter.medium.store.snippet.StoreRequestSnippet.UPDATE_OPTION_REQUEST;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreRequestSnippet.UPDATE_REQUEST;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreResponseSnippet.CREATE_RESPONSE;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreResponseSnippet.UPDATE_RESPONSE;
@@ -27,6 +28,7 @@ import com.handwoong.everyonewaiter.store.controller.request.StoreBreakTimeReque
 import com.handwoong.everyonewaiter.store.controller.request.StoreBusinessTimeRequest;
 import com.handwoong.everyonewaiter.store.controller.request.StoreCreateOptionRequest;
 import com.handwoong.everyonewaiter.store.controller.request.StoreCreateRequest;
+import com.handwoong.everyonewaiter.store.controller.request.StoreOptionUpdateRequest;
 import com.handwoong.everyonewaiter.store.controller.request.StoreUpdateRequest;
 import com.handwoong.everyonewaiter.store.domain.DayOfWeek;
 import io.restassured.RestAssured;
@@ -373,6 +375,30 @@ class StoreControllerTest extends TestHelper {
             .body(body)
             .filter(getFilter().document(AUTHORIZATION_HEADER, UPDATE_REQUEST, UPDATE_RESPONSE))
             .when().put("/api/stores")
+            .then().log().all().extract();
+    }
+
+    @Test
+    void Should_UpdateOption_When_ValidRequest() {
+        // given
+        final String token = userAccessToken;
+        final StoreOptionUpdateRequest request = new StoreOptionUpdateRequest(1L, false, false, false);
+
+        // when
+        final ExtractableResponse<Response> response = update(token, request);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(200);
+    }
+
+    private ExtractableResponse<Response> update(final String token, final StoreOptionUpdateRequest request) {
+        return RestAssured
+            .given(getSpecification()).log().all()
+            .header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_TYPE + " " + token)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .body(request)
+            .filter(getFilter().document(AUTHORIZATION_HEADER, UPDATE_OPTION_REQUEST, UPDATE_RESPONSE))
+            .when().put("/api/stores/option")
             .then().log().all().extract();
     }
 
