@@ -5,6 +5,7 @@ import com.handwoong.everyonewaiter.store.controller.port.StoreService;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.store.dto.StoreCreate;
+import com.handwoong.everyonewaiter.store.dto.StoreOptionUpdate;
 import com.handwoong.everyonewaiter.store.dto.StoreUpdate;
 import com.handwoong.everyonewaiter.user.application.port.UserRepository;
 import com.handwoong.everyonewaiter.user.domain.User;
@@ -35,6 +36,14 @@ public class StoreServiceImpl implements StoreService {
     public void update(final Username username, final StoreUpdate storeUpdate) {
         final Store store = findStoreByIdAndUsername(storeUpdate.id(), username);
         final Store updatedStore = store.update(storeUpdate);
+        storeRepository.save(updatedStore);
+    }
+
+    @Override
+    @Transactional
+    public void update(final Username username, final StoreOptionUpdate storeOptionUpdate) {
+        final Store store = findStoreByIdAndUsername(storeOptionUpdate.storeId(), username);
+        final Store updatedStore = store.update(storeOptionUpdate);
         storeRepository.save(updatedStore);
     }
 

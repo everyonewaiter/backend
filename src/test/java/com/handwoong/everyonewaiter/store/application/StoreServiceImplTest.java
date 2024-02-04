@@ -12,6 +12,7 @@ import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.store.domain.StoreName;
 import com.handwoong.everyonewaiter.store.domain.StoreOption;
 import com.handwoong.everyonewaiter.store.dto.StoreCreate;
+import com.handwoong.everyonewaiter.store.dto.StoreOptionUpdate;
 import com.handwoong.everyonewaiter.store.dto.StoreUpdate;
 import com.handwoong.everyonewaiter.store.exception.StoreNotFoundException;
 import com.handwoong.everyonewaiter.user.domain.Password;
@@ -124,6 +125,55 @@ class StoreServiceImplTest {
 
         // expect
         assertThatThrownBy(() -> testContainer.storeService.update(username, storeUpdate))
+            .isInstanceOf(StoreNotFoundException.class)
+            .hasMessage("매장을 찾을 수 없습니다.");
+    }
+
+    @Test
+    void Should_UpdateOption_When_ValidStoreUpdateOption() {
+        // given
+        final Username username = new Username("handwoong");
+        testContainer.storeService.create(username, storeCreate);
+
+        final StoreOptionUpdate storeOptionUpdate = StoreOptionUpdate.builder()
+            .storeId(new StoreId(1L))
+            .useBreakTime(false)
+            .useWaiting(false)
+            .useOrder(false)
+            .build();
+
+        // when
+        testContainer.storeService.update(username, storeOptionUpdate);
+        final Store result =
+            testContainer.storeRepository.findByIdAndUserIdOrElseThrow(new StoreId(1L), new UserId(1L));
+
+        // then
+        assertThat(result.getOption().isUseBreakTime()).isFalse();
+        assertThat(result.getOption().isUseWaiting()).isFalse();
+        assertThat(result.getOption().isUseOrder()).isFalse();
+    }
+
+    @Test
+    void Should_ThrowException_When_UpdateOptionUserNotFound() {
+        // given
+        final Username username = new Username("username");
+        testContainer.storeService.create(new Username("handwoong"), storeCreate);
+        final StoreOptionUpdate storeOptionUpdate = StoreOptionUpdate.builder().build();
+
+        // expect
+        assertThatThrownBy(() -> testContainer.storeService.update(username, storeOptionUpdate))
+            .isInstanceOf(UserNotFoundException.class)
+            .hasMessage("사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void Should_ThrowException_When_UpdateOptionStoreNotFound() {
+        // given
+        final Username username = new Username("handwoong");
+        final StoreOptionUpdate storeOptionUpdate = StoreOptionUpdate.builder().storeId(new StoreId(1L)).build();
+
+        // expect
+        assertThatThrownBy(() -> testContainer.storeService.update(username, storeOptionUpdate))
             .isInstanceOf(StoreNotFoundException.class)
             .hasMessage("매장을 찾을 수 없습니다.");
     }
