@@ -9,6 +9,7 @@ import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.WEDNESDAY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.handwoong.everyonewaiter.store.dto.StoreCreate;
+import com.handwoong.everyonewaiter.store.dto.StoreOptionUpdate;
 import com.handwoong.everyonewaiter.store.dto.StoreUpdate;
 import com.handwoong.everyonewaiter.user.domain.UserId;
 import java.time.LocalTime;
@@ -123,5 +124,21 @@ class StoreTest {
         assertThat(result.getOption())
             .extracting("useBreakTime", "useWaiting", "useOrder")
             .containsExactly(true, true, true);
+    }
+
+    @Test
+    void shouldUpdateStoreUsingStoreOptionUpdate() {
+        //given
+        final UserId userId = new UserId(1L);
+        final Store store = Store.create(userId, storeCreate);
+        final StoreOptionUpdate optionUpdate = new StoreOptionUpdate(store.getId(), false, false, false);
+
+        //when
+        final Store updatedStore = store.update(optionUpdate);
+
+        //then
+        assertThat(updatedStore.getOption().isUseBreakTime()).isFalse();
+        assertThat(updatedStore.getOption().isUseWaiting()).isFalse();
+        assertThat(updatedStore.getOption().isUseOrder()).isFalse();
     }
 }
