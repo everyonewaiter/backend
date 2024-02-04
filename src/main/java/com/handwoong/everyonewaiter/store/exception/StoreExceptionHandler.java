@@ -38,4 +38,16 @@ public class StoreExceptionHandler {
             .badRequest()
             .body(ApiResponse.error(errorMessage));
     }
+
+    @ExceptionHandler({StoreNotFoundException.class})
+    public ResponseEntity<ApiResponse<Void>> storeNotFound(
+        final StoreNotFoundException exception,
+        final HttpServletRequest request
+    ) {
+        final String errorMessage = exception.getMessage();
+        ExceptionLogger.warn(BAD_REQUEST, request.getRequestURI(), errorMessage, exception.getResource());
+        return ResponseEntity
+            .badRequest()
+            .body(ApiResponse.error(errorMessage));
+    }
 }
