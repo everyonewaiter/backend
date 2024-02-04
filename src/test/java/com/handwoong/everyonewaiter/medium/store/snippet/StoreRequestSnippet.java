@@ -59,4 +59,45 @@ public class StoreRequestSnippet {
             .description("주문 기능 사용 여부")
             .attributes(constraints("true 사용 | false 미사용"))
     );
+    public static final Snippet UPDATE_REQUEST = requestFields(
+        fieldWithPath("id")
+            .type(JsonFieldType.NUMBER)
+            .description("매장 ID"),
+        fieldWithPath("name")
+            .type(JsonFieldType.STRING)
+            .description("매장명")
+            .attributes(constraints("50자 이하")),
+        fieldWithPath("landlineNumber")
+            .type(JsonFieldType.STRING)
+            .description("매장 전화번호")
+            .attributes(constraints("ex) 0551234567")),
+        fieldWithPath("breakTimes[]")
+            .type(JsonFieldType.ARRAY)
+            .description("브레이크 타임 시작 시간")
+            .optional(),
+        fieldWithPath("breakTimes[].start")
+            .type(JsonFieldType.STRING)
+            .description("브레이크 타임 시작 시간")
+            .attributes(constraints("HH:mm")),
+        fieldWithPath("breakTimes[].end")
+            .type(JsonFieldType.STRING)
+            .description("브레이크 타임 종료 시간")
+            .attributes(constraints("HH:mm")),
+        fieldWithPath("breakTimes[].daysOfWeek")
+            .type(JsonFieldType.ARRAY)
+            .description("브레이크 타임 요일")
+            .attributes(constraints("MONDAY | TUESDAY | WEDNESDAY | THURSDAY | FRIDAY | SATURDAY | SUNDAY")),
+        fieldWithPath("businessTimes[].open")
+            .type(JsonFieldType.STRING)
+            .description("영업 시작 시간")
+            .attributes(constraints("HH:mm")),
+        fieldWithPath("businessTimes[].close")
+            .type(JsonFieldType.STRING)
+            .description("영업 종료 시간")
+            .attributes(constraints("HH:mm")),
+        fieldWithPath("businessTimes[].daysOfWeek")
+            .type(JsonFieldType.ARRAY)
+            .description("영업 요일")
+            .attributes(constraints("MONDAY | TUESDAY | WEDNESDAY | THURSDAY | FRIDAY | SATURDAY | SUNDAY"))
+    );
 }
