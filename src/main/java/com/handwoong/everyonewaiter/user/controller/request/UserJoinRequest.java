@@ -1,6 +1,5 @@
 package com.handwoong.everyonewaiter.user.controller.request;
 
-import static com.handwoong.everyonewaiter.common.domain.PhoneNumber.PHONE_NUMBER_EMPTY_MESSAGE;
 import static com.handwoong.everyonewaiter.common.domain.PhoneNumber.PHONE_NUMBER_FORMAT_MESSAGE;
 import static com.handwoong.everyonewaiter.common.domain.PhoneNumber.PHONE_NUMBER_REGEX;
 import static com.handwoong.everyonewaiter.user.domain.Password.PASSWORD_FORMAT_MESSAGE;
@@ -26,7 +25,7 @@ public record UserJoinRequest(
     @Pattern(regexp = PASSWORD_REGEX, message = PASSWORD_FORMAT_MESSAGE)
     String password,
 
-    @NotBlank(message = PHONE_NUMBER_EMPTY_MESSAGE)
+    @NotBlank(message = PHONE_NUMBER_FORMAT_MESSAGE)
     @Pattern(regexp = PHONE_NUMBER_REGEX, message = PHONE_NUMBER_FORMAT_MESSAGE)
     String phoneNumber
 ) {
