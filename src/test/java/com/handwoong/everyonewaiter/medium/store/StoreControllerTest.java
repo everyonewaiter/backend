@@ -13,19 +13,27 @@ import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.SUNDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.THURSDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.TUESDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.WEDNESDAY;
+import static com.handwoong.everyonewaiter.store.domain.LandlineNumber.LANDLINE_NUMBER_FORMAT_MESSAGE;
+import static com.handwoong.everyonewaiter.store.domain.StoreName.STORE_NAME_EMPTY_MESSAGE;
+import static com.handwoong.everyonewaiter.store.domain.StoreName.STORE_NAME_MAX_LENGTH_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.handwoong.everyonewaiter.common.dto.ApiResponse;
+import com.handwoong.everyonewaiter.common.dto.ApiResponse.ResultCode;
 import com.handwoong.everyonewaiter.medium.TestHelper;
 import com.handwoong.everyonewaiter.store.controller.request.StoreBreakTimeRequest;
 import com.handwoong.everyonewaiter.store.controller.request.StoreBusinessTimeRequest;
 import com.handwoong.everyonewaiter.store.controller.request.StoreCreateOptionRequest;
 import com.handwoong.everyonewaiter.store.controller.request.StoreCreateRequest;
 import io.restassured.RestAssured;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.MediaType;
 
 class StoreControllerTest extends TestHelper {
@@ -61,7 +69,183 @@ class StoreControllerTest extends TestHelper {
         final ExtractableResponse<Response> response = create(token, request);
 
         // then
-        assertThat(response).extracting("statusCode").isEqualTo(201);
+        assertThat(response.statusCode()).isEqualTo(201);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " "})
+    void Should_CreateStatus400_When_StoreNameBlank(final String storeName) throws Exception {
+        // given
+        final String token = userAccessToken;
+        final StoreCreateRequest request = new StoreCreateRequest(storeName, "0551234567",
+            List.of(),
+            List.of(
+                new StoreBusinessTimeRequest(
+                    LocalTime.of(11, 0, 0),
+                    LocalTime.of(21, 0, 0),
+                    List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
+                )
+            ),
+            new StoreCreateOptionRequest(true, true, true)
+        );
+
+        // when
+        final ExtractableResponse<Response> response = create(token, request);
+        final TypeRef<ApiResponse<Void>> typeRef = new TypeRef<>() {
+        };
+        final ApiResponse<Void> result = response.body().as(typeRef);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(400);
+        assertThat(result.resultCode()).isEqualTo(ResultCode.FAIL);
+        assertThat(result.message()).isEqualTo(STORE_NAME_EMPTY_MESSAGE);
+    }
+
+    @Test
+    void Should_CreateStatus400_When_StoreNameLengthGreaterThan50() throws Exception {
+        // given
+        final String token = userAccessToken;
+        final StoreCreateRequest request = new StoreCreateRequest("나루 레스토랑".repeat(8), "0551234567",
+            List.of(),
+            List.of(
+                new StoreBusinessTimeRequest(
+                    LocalTime.of(11, 0, 0),
+                    LocalTime.of(21, 0, 0),
+                    List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
+                )
+            ),
+            new StoreCreateOptionRequest(true, true, true)
+        );
+
+        // when
+        final ExtractableResponse<Response> response = create(token, request);
+        final TypeRef<ApiResponse<Void>> typeRef = new TypeRef<>() {
+        };
+        final ApiResponse<Void> result = response.body().as(typeRef);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(400);
+        assertThat(result.resultCode()).isEqualTo(ResultCode.FAIL);
+        assertThat(result.message()).isEqualTo(STORE_NAME_MAX_LENGTH_MESSAGE);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " "})
+    void Should_CreateStatus400_When_LandlineNumberBlank(final String landlineNumber) throws Exception {
+        // given
+        final String token = userAccessToken;
+        final StoreCreateRequest request = new StoreCreateRequest("나루", landlineNumber,
+            List.of(),
+            List.of(
+                new StoreBusinessTimeRequest(
+                    LocalTime.of(11, 0, 0),
+                    LocalTime.of(21, 0, 0),
+                    List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
+                )
+            ),
+            new StoreCreateOptionRequest(true, true, true)
+        );
+
+        // when
+        final ExtractableResponse<Response> response = create(token, request);
+        final TypeRef<ApiResponse<Void>> typeRef = new TypeRef<>() {
+        };
+        final ApiResponse<Void> result = response.body().as(typeRef);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(400);
+        assertThat(result.resultCode()).isEqualTo(ResultCode.FAIL);
+        assertThat(result.message()).isEqualTo(LANDLINE_NUMBER_FORMAT_MESSAGE);
+    }
+
+    @Test
+    void Should_CreateStatus400_When_InvalidLandlineNumberFormat() throws Exception {
+        // given
+        final String token = userAccessToken;
+        final StoreCreateRequest request = new StoreCreateRequest("나루", "055-123-4567",
+            List.of(),
+            List.of(
+                new StoreBusinessTimeRequest(
+                    LocalTime.of(11, 0, 0),
+                    LocalTime.of(21, 0, 0),
+                    List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
+                )
+            ),
+            new StoreCreateOptionRequest(true, true, true)
+        );
+
+        // when
+        final ExtractableResponse<Response> response = create(token, request);
+        final TypeRef<ApiResponse<Void>> typeRef = new TypeRef<>() {
+        };
+        final ApiResponse<Void> result = response.body().as(typeRef);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(400);
+        assertThat(result.resultCode()).isEqualTo(ResultCode.FAIL);
+        assertThat(result.message()).isEqualTo(LANDLINE_NUMBER_FORMAT_MESSAGE);
+    }
+
+    @Test
+    void Should_CreateStatus400_When_BreakTimesDayOfWeekEmpty() throws Exception {
+        // given
+        final String token = userAccessToken;
+        final StoreCreateRequest request = new StoreCreateRequest("나루", "0551234567",
+            List.of(
+                new StoreBreakTimeRequest(
+                    LocalTime.of(15, 0, 0),
+                    LocalTime.of(16, 30, 0),
+                    List.of()
+                )
+            ),
+            List.of(
+                new StoreBusinessTimeRequest(
+                    LocalTime.of(11, 0, 0),
+                    LocalTime.of(21, 0, 0),
+                    List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
+                )
+            ),
+            new StoreCreateOptionRequest(true, true, true)
+        );
+
+        // when
+        final ExtractableResponse<Response> response = create(token, request);
+        final TypeRef<ApiResponse<Void>> typeRef = new TypeRef<>() {
+        };
+        final ApiResponse<Void> result = response.body().as(typeRef);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(400);
+        assertThat(result.resultCode()).isEqualTo(ResultCode.FAIL);
+        assertThat(result.message()).isEqualTo("브레이크 타임의 요일을 하나 이상 등록해주세요.");
+    }
+
+    @Test
+    void Should_CreateStatus400_When_BusinessTimesDayOfWeekEmpty() throws Exception {
+        // given
+        final String token = userAccessToken;
+        final StoreCreateRequest request = new StoreCreateRequest("나루", "0551234567",
+            List.of(),
+            List.of(
+                new StoreBusinessTimeRequest(
+                    LocalTime.of(11, 0, 0),
+                    LocalTime.of(21, 0, 0),
+                    List.of()
+                )
+            ),
+            new StoreCreateOptionRequest(true, true, true)
+        );
+
+        // when
+        final ExtractableResponse<Response> response = create(token, request);
+        final TypeRef<ApiResponse<Void>> typeRef = new TypeRef<>() {
+        };
+        final ApiResponse<Void> result = response.body().as(typeRef);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(400);
+        assertThat(result.resultCode()).isEqualTo(ResultCode.FAIL);
+        assertThat(result.message()).isEqualTo("영업 시간의 요일을 하나 이상 등록해주세요.");
     }
 
     private ExtractableResponse<Response> create(

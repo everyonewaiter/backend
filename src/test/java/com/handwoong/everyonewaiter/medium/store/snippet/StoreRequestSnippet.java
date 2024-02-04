@@ -18,6 +18,10 @@ public class StoreRequestSnippet {
             .type(JsonFieldType.STRING)
             .description("매장 전화번호")
             .attributes(constraints("ex) 0551234567")),
+        fieldWithPath("breakTimes[]")
+            .type(JsonFieldType.ARRAY)
+            .description("브레이크 타임 시작 시간")
+            .optional(),
         fieldWithPath("breakTimes[].start")
             .type(JsonFieldType.STRING)
             .description("브레이크 타임 시작 시간")
