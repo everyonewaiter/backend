@@ -20,7 +20,7 @@ public record UserLoginRequest(
     String password
 ) {
 
-    private static final String LOGIN_MESSAGE = "아이디 및 비밀번호를 확인 해주세요.";
+    public static final String LOGIN_MESSAGE = "아이디 및 비밀번호를 확인 해주세요.";
 
     public UserLogin toDomainDto() {
         return UserLogin.builder()

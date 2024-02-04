@@ -1,9 +1,8 @@
 package com.handwoong.everyonewaiter.store.infrastructure;
 
-import com.handwoong.everyonewaiter.common.infrastructure.BaseEntity;
 import com.handwoong.everyonewaiter.store.domain.StoreBusinessTime;
 import com.handwoong.everyonewaiter.store.domain.StoreBusinessTimeId;
-import com.handwoong.everyonewaiter.store.domain.StoreEventDaysOfWeek;
+import com.handwoong.everyonewaiter.store.domain.StoreDaysOfWeek;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "store_business_time")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StoreBusinessTimeEntity extends BaseEntity {
+public class StoreBusinessTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +34,7 @@ public class StoreBusinessTimeEntity extends BaseEntity {
 
     @NotNull
     @Convert(converter = DaysOfWeekConverter.class)
-    private StoreEventDaysOfWeek daysOfWeek;
+    private StoreDaysOfWeek daysOfWeek;
 
     public static StoreBusinessTimeEntity from(final StoreBusinessTime storeBusinessTime) {
         final StoreBusinessTimeEntity storeBusinessTimeEntity = new StoreBusinessTimeEntity();
@@ -53,7 +52,6 @@ public class StoreBusinessTimeEntity extends BaseEntity {
             .open(open)
             .close(close)
             .daysOfWeek(daysOfWeek)
-            .timestamp(getDomainTimestamp())
             .build();
     }
 

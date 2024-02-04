@@ -17,7 +17,7 @@ import com.handwoong.everyonewaiter.store.domain.StoreBreakTimes;
 import com.handwoong.everyonewaiter.store.domain.StoreBusinessTime;
 import com.handwoong.everyonewaiter.store.domain.StoreBusinessTimeId;
 import com.handwoong.everyonewaiter.store.domain.StoreBusinessTimes;
-import com.handwoong.everyonewaiter.store.domain.StoreEventDaysOfWeek;
+import com.handwoong.everyonewaiter.store.domain.StoreDaysOfWeek;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.store.domain.StoreName;
 import com.handwoong.everyonewaiter.store.domain.StoreOption;
@@ -47,7 +47,7 @@ class StoreEntityTest {
                             .open(LocalTime.of(11, 0, 0))
                             .close(LocalTime.of(21, 0, 0))
                             .daysOfWeek(
-                                new StoreEventDaysOfWeek(
+                                new StoreDaysOfWeek(
                                     List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
                                 )
                             )
@@ -63,7 +63,7 @@ class StoreEntityTest {
                             .start(LocalTime.of(15, 0, 0))
                             .end(LocalTime.of(16, 30, 0))
                             .daysOfWeek(
-                                new StoreEventDaysOfWeek(
+                                new StoreDaysOfWeek(
                                     List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
                                 )
                             )
@@ -73,7 +73,7 @@ class StoreEntityTest {
                             .start(LocalTime.of(15, 30, 0))
                             .end(LocalTime.of(17, 0, 0))
                             .daysOfWeek(
-                                new StoreEventDaysOfWeek(
+                                new StoreDaysOfWeek(
                                     List.of(SATURDAY, SUNDAY)
                                 )
                             )
@@ -118,7 +118,7 @@ class StoreEntityTest {
                             .open(LocalTime.of(11, 0, 0))
                             .close(LocalTime.of(21, 0, 0))
                             .daysOfWeek(
-                                new StoreEventDaysOfWeek(
+                                new StoreDaysOfWeek(
                                     List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
                                 )
                             )
@@ -134,7 +134,7 @@ class StoreEntityTest {
                             .start(LocalTime.of(15, 0, 0))
                             .end(LocalTime.of(16, 30, 0))
                             .daysOfWeek(
-                                new StoreEventDaysOfWeek(
+                                new StoreDaysOfWeek(
                                     List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
                                 )
                             )
@@ -144,7 +144,7 @@ class StoreEntityTest {
                             .start(LocalTime.of(15, 30, 0))
                             .end(LocalTime.of(17, 0, 0))
                             .daysOfWeek(
-                                new StoreEventDaysOfWeek(
+                                new StoreDaysOfWeek(
                                     List.of(SATURDAY, SUNDAY)
                                 )
                             )

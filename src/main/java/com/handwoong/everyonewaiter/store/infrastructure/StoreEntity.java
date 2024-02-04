@@ -60,11 +60,11 @@ public class StoreEntity extends BaseEntity {
     private LocalDateTime lastClosedAt;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "store_id", nullable = false, updatable = false)
     private List<StoreBusinessTimeEntity> businessTimeEntities = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "store_id", nullable = false, updatable = false)
     private List<StoreBreakTimeEntity> breakTimeEntities = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)

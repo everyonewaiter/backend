@@ -1,6 +1,7 @@
 package com.handwoong.everyonewaiter.store.domain;
 
 import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
+import com.handwoong.everyonewaiter.store.dto.StoreCreate;
 import com.handwoong.everyonewaiter.user.domain.UserId;
 import java.time.LocalDateTime;
 import lombok.Builder;
@@ -21,4 +22,16 @@ public class Store {
     private final StoreBusinessTimes businessTimes;
     private final StoreOption option;
     private final DomainTimestamp timestamp;
+
+    public static Store create(final UserId userId, final StoreCreate storeCreate) {
+        return Store.builder()
+            .userId(userId)
+            .name(storeCreate.name())
+            .landlineNumber(storeCreate.landlineNumber())
+            .status(StoreStatus.CLOSE)
+            .breakTimes(storeCreate.breakTimes())
+            .businessTimes(storeCreate.businessTimes())
+            .option(storeCreate.option())
+            .build();
+    }
 }
