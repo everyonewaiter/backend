@@ -1,16 +1,14 @@
 package com.handwoong.everyonewaiter.store.domain;
 
 import com.handwoong.everyonewaiter.store.infrastructure.StoreBusinessTimeEntity;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class StoreBusinessTimes {
+public record StoreBusinessTimes(List<StoreBusinessTime> businessTimes) {
 
-    private final List<StoreBusinessTime> businessTimes;
-
-    public StoreBusinessTimes(final List<StoreBusinessTime> businessTimes) {
+    public StoreBusinessTimes {
         validate(businessTimes);
-        this.businessTimes = businessTimes;
     }
 
     private void validate(final List<StoreBusinessTime> businessTimes) {
@@ -38,5 +36,10 @@ public class StoreBusinessTimes {
         return businessTimes.stream()
             .map(StoreBusinessTimeEntity::from)
             .toList();
+    }
+
+    @Override
+    public List<StoreBusinessTime> businessTimes() {
+        return Collections.unmodifiableList(businessTimes);
     }
 }
