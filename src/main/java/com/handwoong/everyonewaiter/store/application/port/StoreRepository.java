@@ -9,4 +9,6 @@ public interface StoreRepository {
     Store save(Store store);
 
     Store findByIdAndUserIdOrElseThrow(StoreId storeId, UserId userId);
+
+    void delete(Store store);
 }
