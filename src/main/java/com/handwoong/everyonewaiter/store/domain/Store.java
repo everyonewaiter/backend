@@ -2,6 +2,8 @@ package com.handwoong.everyonewaiter.store.domain;
 
 import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
 import com.handwoong.everyonewaiter.store.dto.StoreCreate;
+import com.handwoong.everyonewaiter.store.dto.StoreOptionUpdate;
+import com.handwoong.everyonewaiter.store.dto.StoreUpdate;
 import com.handwoong.everyonewaiter.user.domain.UserId;
 import java.time.LocalDateTime;
 import lombok.Builder;
@@ -32,6 +34,38 @@ public class Store {
             .breakTimes(storeCreate.breakTimes())
             .businessTimes(storeCreate.businessTimes())
             .option(storeCreate.option())
+            .build();
+    }
+
+    public Store update(final StoreUpdate storeUpdate) {
+        return Store.builder()
+            .id(id)
+            .userId(userId)
+            .name(storeUpdate.name())
+            .landlineNumber(storeUpdate.landlineNumber())
+            .status(status)
+            .lastOpenedAt(lastOpenedAt)
+            .lastClosedAt(lastClosedAt)
+            .breakTimes(storeUpdate.breakTimes())
+            .businessTimes(storeUpdate.businessTimes())
+            .option(option)
+            .timestamp(timestamp)
+            .build();
+    }
+
+    public Store update(final StoreOptionUpdate storeOptionUpdate) {
+        return Store.builder()
+            .id(id)
+            .userId(userId)
+            .name(name)
+            .landlineNumber(landlineNumber)
+            .status(status)
+            .lastOpenedAt(lastOpenedAt)
+            .lastClosedAt(lastClosedAt)
+            .breakTimes(breakTimes)
+            .businessTimes(businessTimes)
+            .option(option.update(storeOptionUpdate))
+            .timestamp(timestamp)
             .build();
     }
 }

@@ -3,9 +3,12 @@ package com.handwoong.everyonewaiter.store.mock;
 import com.handwoong.everyonewaiter.store.application.port.StoreRepository;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
+import com.handwoong.everyonewaiter.store.exception.StoreNotFoundException;
+import com.handwoong.everyonewaiter.user.domain.UserId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 public class FakeStoreRepository implements StoreRepository {
 
@@ -19,6 +22,16 @@ public class FakeStoreRepository implements StoreRepository {
         final Store newStore = create(id, store);
         database.put(id, newStore);
         return newStore;
+    }
+
+    @Override
+    public Store findByIdAndUserIdOrElseThrow(final StoreId storeId, final UserId userId) {
+        return Optional.ofNullable(database.get(storeId.value()))
+            .stream()
+            .filter(store -> store.getUserId().equals(userId))
+            .findAny()
+            .orElseThrow(() ->
+                new StoreNotFoundException("매장을 찾을 수 없습니다.", "storeId : [" + storeId + "] userId : [" + userId + "]"));
     }
 
     private Store create(final Long id, final Store store) {

@@ -14,4 +14,9 @@ public class StoreResponseSnippet {
         COMMON_API_RESPONSE_MESSAGE.optional(),
         COMMON_API_RESPONSE_DATA.optional()
     );
+    public static final Snippet UPDATE_RESPONSE = responseFields(
+        COMMON_API_RESPONSE_RESULT_CODE,
+        COMMON_API_RESPONSE_MESSAGE.optional(),
+        COMMON_API_RESPONSE_DATA.optional()
+    );
 }
