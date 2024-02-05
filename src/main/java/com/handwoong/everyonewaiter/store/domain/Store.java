@@ -1,5 +1,6 @@
 package com.handwoong.everyonewaiter.store.domain;
 
+import com.handwoong.everyonewaiter.common.domain.AggregateRoot;
 import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
 import com.handwoong.everyonewaiter.store.dto.StoreCreate;
 import com.handwoong.everyonewaiter.store.dto.StoreOptionUpdate;
@@ -11,7 +12,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class Store {
+public class Store extends AggregateRoot {
 
     private final StoreId id;
     private final UserId userId;

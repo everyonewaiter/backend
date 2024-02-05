@@ -1,6 +1,7 @@
 package com.handwoong.everyonewaiter.user.domain;
 
 import com.handwoong.everyonewaiter.common.application.port.TimeHolder;
+import com.handwoong.everyonewaiter.common.domain.AggregateRoot;
 import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.user.dto.UserJoin;
@@ -10,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @Builder
-public class User {
+public class User extends AggregateRoot {
 
     private final UserId id;
     private final Username username;
