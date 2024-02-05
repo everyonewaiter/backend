@@ -13,4 +13,6 @@ public interface StoreService {
     void update(Username username, StoreUpdate storeUpdate);
 
     void update(Username username, StoreOptionUpdate storeOptionUpdate);
+
+    void delete(Username username, StoreId storeId);
 }

@@ -34,6 +34,11 @@ public class FakeStoreRepository implements StoreRepository {
                 new StoreNotFoundException("매장을 찾을 수 없습니다.", "storeId : [" + storeId + "] userId : [" + userId + "]"));
     }
 
+    @Override
+    public void delete(final Store store) {
+        database.remove(store.getId().value());
+    }
+
     private Store create(final Long id, final Store store) {
         return Store.builder()
             .id(new StoreId(id))

@@ -32,6 +32,7 @@ import com.handwoong.everyonewaiter.store.domain.StoreName;
 import com.handwoong.everyonewaiter.store.domain.StoreOption;
 import com.handwoong.everyonewaiter.store.domain.StoreOptionId;
 import com.handwoong.everyonewaiter.store.domain.StoreStatus;
+import com.handwoong.everyonewaiter.store.exception.StoreNotFoundException;
 import com.handwoong.everyonewaiter.user.domain.Password;
 import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.UserId;
@@ -214,6 +215,21 @@ class StoreControllerTest {
         assertThatThrownBy(() -> testContainer.storeController.update(request))
             .isInstanceOf(UserNotFoundException.class)
             .hasMessage("사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void Should_DeleteStore_When_ValidStoreId() {
+        // given
+        testContainer.setSecurityContextAuthentication(new Username("handwoong"));
+        final UserId userId = new UserId(1L);
+        final StoreId storeId = new StoreId(1L);
+
+        // when
+        testContainer.storeController.delete(1L);
+
+        // then
+        assertThatThrownBy(() -> testContainer.storeRepository.findByIdAndUserIdOrElseThrow(storeId, userId))
+            .isInstanceOf(StoreNotFoundException.class);
     }
 
     private List<StoreBusinessTimeRequest> getBusinessTimeRequests() {

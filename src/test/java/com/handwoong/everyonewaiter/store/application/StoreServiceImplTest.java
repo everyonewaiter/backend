@@ -177,4 +177,20 @@ class StoreServiceImplTest {
             .isInstanceOf(StoreNotFoundException.class)
             .hasMessage("매장을 찾을 수 없습니다.");
     }
+
+    @Test
+    void Should_DeleteStore_When_StoreId() {
+        // given
+        final Username username = new Username("handwoong");
+        final StoreId storeId = new StoreId(1L);
+        final UserId userId = new UserId(1L);
+        testContainer.storeRepository.save(Store.create(userId, storeCreate));
+
+        // when
+        testContainer.storeService.delete(username, storeId);
+
+        // then
+        assertThatThrownBy(() -> testContainer.storeRepository.findByIdAndUserIdOrElseThrow(storeId, userId))
+            .isInstanceOf(StoreNotFoundException.class);
+    }
 }

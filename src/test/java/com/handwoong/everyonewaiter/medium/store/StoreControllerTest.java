@@ -6,10 +6,10 @@ import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSn
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER_KEY;
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER_TYPE;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreRequestSnippet.CREATE_REQUEST;
+import static com.handwoong.everyonewaiter.medium.store.snippet.StoreRequestSnippet.PATH_PARAM_STORE_ID;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreRequestSnippet.UPDATE_OPTION_REQUEST;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreRequestSnippet.UPDATE_REQUEST;
-import static com.handwoong.everyonewaiter.medium.store.snippet.StoreResponseSnippet.CREATE_RESPONSE;
-import static com.handwoong.everyonewaiter.medium.store.snippet.StoreResponseSnippet.UPDATE_RESPONSE;
+import static com.handwoong.everyonewaiter.medium.store.snippet.StoreResponseSnippet.CUD_RESPONSE;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.FRIDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.SATURDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.SUNDAY;
@@ -221,7 +221,7 @@ class StoreControllerTest extends TestHelper {
             .header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_TYPE + " " + token)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(body)
-            .filter(getFilter().document(AUTHORIZATION_HEADER, CREATE_REQUEST, CREATE_RESPONSE))
+            .filter(getFilter().document(AUTHORIZATION_HEADER, CREATE_REQUEST, CUD_RESPONSE))
             .when().post("/api/stores")
             .then().log().all().extract();
     }
@@ -373,7 +373,7 @@ class StoreControllerTest extends TestHelper {
             .header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_TYPE + " " + token)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(body)
-            .filter(getFilter().document(AUTHORIZATION_HEADER, UPDATE_REQUEST, UPDATE_RESPONSE))
+            .filter(getFilter().document(AUTHORIZATION_HEADER, UPDATE_REQUEST, CUD_RESPONSE))
             .when().put("/api/stores")
             .then().log().all().extract();
     }
@@ -397,8 +397,30 @@ class StoreControllerTest extends TestHelper {
             .header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_TYPE + " " + token)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(request)
-            .filter(getFilter().document(AUTHORIZATION_HEADER, UPDATE_OPTION_REQUEST, UPDATE_RESPONSE))
+            .filter(getFilter().document(AUTHORIZATION_HEADER, UPDATE_OPTION_REQUEST, CUD_RESPONSE))
             .when().put("/api/stores/option")
+            .then().log().all().extract();
+    }
+
+    @Test
+    void Should_DeleteStore_When_ValidRequest() {
+        // given
+        final String token = userAccessToken;
+
+        // when
+        final ExtractableResponse<Response> response = delete(token);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(200);
+    }
+
+    private ExtractableResponse<Response> delete(final String token) {
+        return RestAssured
+            .given(getSpecification()).log().all()
+            .header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_TYPE + " " + token)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .filter(getFilter().document(AUTHORIZATION_HEADER, PATH_PARAM_STORE_ID, CUD_RESPONSE))
+            .when().delete("/api/stores/{id}", 1L)
             .then().log().all().extract();
     }
 

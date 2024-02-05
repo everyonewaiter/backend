@@ -26,4 +26,9 @@ public class StoreRepositoryImpl implements StoreRepository {
                 new StoreNotFoundException("매장을 찾을 수 없습니다.", "storeId : [" + storeId + "] userId : [" + userId + "]"))
             .toModel();
     }
+
+    @Override
+    public void delete(final Store store) {
+        storeJpaRepository.delete(StoreEntity.from(store));
+    }
 }
