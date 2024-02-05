@@ -12,6 +12,8 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,6 +47,13 @@ public class StoreController {
     public ResponseEntity<ApiResponse<Void>> update(@RequestBody @Valid final StoreOptionUpdateRequest request) {
         final Username username = SecurityUtils.getAuthenticationUsername();
         storeService.update(username, request.toDomainDto());
+        return ResponseEntity.ok(ApiResponse.success());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable("id") final Long id) {
+        final Username username = SecurityUtils.getAuthenticationUsername();
+        storeService.delete(username, new StoreId(id));
         return ResponseEntity.ok(ApiResponse.success());
     }
 }

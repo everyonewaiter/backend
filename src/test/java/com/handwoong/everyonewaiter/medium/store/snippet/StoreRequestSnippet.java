@@ -3,12 +3,17 @@ package com.handwoong.everyonewaiter.medium.store.snippet;
 import static com.handwoong.everyonewaiter.medium.RestDocsUtils.constraints;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.snippet.Snippet;
 
 public class StoreRequestSnippet {
 
+    public static final Snippet PATH_PARAM_STORE_ID = pathParameters(
+        parameterWithName("id").description("매장 ID")
+    );
     public static final Snippet CREATE_REQUEST = requestFields(
         fieldWithPath("name")
             .type(JsonFieldType.STRING)
