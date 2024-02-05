@@ -47,6 +47,13 @@ public class StoreServiceImpl implements StoreService {
         storeRepository.save(updatedStore);
     }
 
+    @Override
+    @Transactional
+    public void delete(final Username username, final StoreId storeId) {
+        final Store store = findStoreByIdAndUsername(storeId, username);
+        storeRepository.delete(store);
+    }
+
     private Store findStoreByIdAndUsername(final StoreId storeId, final Username username) {
         final User user = userRepository.findByUsernameOrElseThrow(username);
         return storeRepository.findByIdAndUserIdOrElseThrow(storeId, user.getId());
