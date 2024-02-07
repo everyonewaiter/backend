@@ -10,7 +10,9 @@ import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.WEDNESDAY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.handwoong.everyonewaiter.common.mock.FakeTimeHolder;
 import com.handwoong.everyonewaiter.store.infrastructure.StoreBusinessTimeEntity;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -107,5 +109,83 @@ class StoreBusinessTimesTest {
         assertThatThrownBy(() -> new StoreBusinessTimes(businessTimes))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("영업 시간에 중복된 요일이 있습니다.");
+    }
+
+    @Test
+    void Should_True_When_IsWithinTime() {
+        // given
+        final FakeTimeHolder timeHolder = new FakeTimeHolder();
+        final LocalDateTime mockTime = LocalDateTime.of(2024, 2, 7, 18, 0, 0); // 수요일 18시 0분
+        timeHolder.setMillis(mockTime);
+
+        final StoreBusinessTimes storeBusinessTimes = new StoreBusinessTimes(
+            List.of(
+                StoreBusinessTime.builder()
+                    .id(new StoreBusinessTimeId(1L))
+                    .open(LocalTime.of(11, 0, 0))
+                    .close(LocalTime.of(21, 0, 0))
+                    .daysOfWeek(
+                        new StoreDaysOfWeek(
+                            List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
+                        )
+                    )
+                    .build(),
+                StoreBusinessTime.builder()
+                    .id(new StoreBusinessTimeId(2L))
+                    .open(LocalTime.of(9, 0, 0))
+                    .close(LocalTime.of(21, 0, 0))
+                    .daysOfWeek(
+                        new StoreDaysOfWeek(
+                            List.of(SATURDAY, SUNDAY)
+                        )
+                    )
+                    .build()
+            )
+        );
+
+        // when
+        final boolean result = storeBusinessTimes.isWithinBusinessTime(timeHolder);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void Should_False_When_IsWithinTime() {
+        // given
+        final FakeTimeHolder timeHolder = new FakeTimeHolder();
+        final LocalDateTime mockTime = LocalDateTime.of(2024, 2, 7, 22, 0, 0); // 수요일 22시 0분
+        timeHolder.setMillis(mockTime);
+
+        final StoreBusinessTimes storeBusinessTimes = new StoreBusinessTimes(
+            List.of(
+                StoreBusinessTime.builder()
+                    .id(new StoreBusinessTimeId(1L))
+                    .open(LocalTime.of(11, 0, 0))
+                    .close(LocalTime.of(21, 0, 0))
+                    .daysOfWeek(
+                        new StoreDaysOfWeek(
+                            List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
+                        )
+                    )
+                    .build(),
+                StoreBusinessTime.builder()
+                    .id(new StoreBusinessTimeId(2L))
+                    .open(LocalTime.of(9, 0, 0))
+                    .close(LocalTime.of(21, 0, 0))
+                    .daysOfWeek(
+                        new StoreDaysOfWeek(
+                            List.of(SATURDAY, SUNDAY)
+                        )
+                    )
+                    .build()
+            )
+        );
+
+        // when
+        final boolean result = storeBusinessTimes.isWithinBusinessTime(timeHolder);
+
+        // then
+        assertThat(result).isFalse();
     }
 }

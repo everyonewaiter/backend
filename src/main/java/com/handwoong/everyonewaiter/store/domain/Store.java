@@ -1,5 +1,6 @@
 package com.handwoong.everyonewaiter.store.domain;
 
+import com.handwoong.everyonewaiter.common.application.port.TimeHolder;
 import com.handwoong.everyonewaiter.common.domain.AggregateRoot;
 import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
 import com.handwoong.everyonewaiter.store.dto.StoreCreate;
@@ -68,5 +69,25 @@ public class Store extends AggregateRoot {
             .option(option.update(storeOptionUpdate))
             .timestamp(timestamp)
             .build();
+    }
+
+    public boolean isOpen() {
+        return status == StoreStatus.OPEN;
+    }
+
+    public boolean isWithinBusinessTime(final TimeHolder timeHolder) {
+        return businessTimes.isWithinBusinessTime(timeHolder);
+    }
+
+    public boolean isWithinBreakTime(final TimeHolder timeHolder) {
+        return breakTimes.isWithinBreakTime(timeHolder);
+    }
+
+    public boolean isUseWaiting() {
+        return option.isUseWaiting();
+    }
+
+    public boolean isUseBreakTime() {
+        return option.isUseBreakTime();
     }
 }

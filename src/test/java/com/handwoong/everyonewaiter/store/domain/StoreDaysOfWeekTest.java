@@ -14,6 +14,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class StoreDaysOfWeekTest {
 
@@ -73,5 +75,35 @@ class StoreDaysOfWeekTest {
             .containsEntry(FRIDAY, 1)
             .containsEntry(SATURDAY, 0)
             .containsEntry(SUNDAY, 0);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"월", "화", "수", "목", "금", "토", "일"})
+    void Should_True_When_Contains(final String value) {
+        // given
+        final DayOfWeek dayOfWeek = DayOfWeek.from(value);
+        final StoreDaysOfWeek storeDaysOfWeek =
+            new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY));
+
+        // when
+        final boolean result = storeDaysOfWeek.contains(dayOfWeek);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"화", "수", "목", "금", "토", "일"})
+    void Should_False_When_Contains(final String value) {
+        // given
+        final DayOfWeek dayOfWeek = DayOfWeek.from(value);
+        final StoreDaysOfWeek storeDaysOfWeek =
+            new StoreDaysOfWeek(List.of(MONDAY));
+
+        // when
+        final boolean result = storeDaysOfWeek.contains(dayOfWeek);
+
+        // then
+        assertThat(result).isFalse();
     }
 }

@@ -31,6 +31,10 @@ public class StoreDaysOfWeek {
         return daysOfWeek.size();
     }
 
+    public boolean contains(final DayOfWeek dayOfWeek) {
+        return daysOfWeek.contains(dayOfWeek);
+    }
+
     public String toString(final String delimiter) {
         return daysOfWeek.stream()
             .map(DayOfWeek::toString)
