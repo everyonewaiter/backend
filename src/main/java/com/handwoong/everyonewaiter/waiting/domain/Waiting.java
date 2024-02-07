@@ -16,7 +16,6 @@ public class Waiting {
     private final WaitingAdult adult;
     private final WaitingChildren children;
     private final WaitingNumber number;
-    private final WaitingTurn turn;
     private final PhoneNumber phoneNumber;
     private final WaitingStatus status;
     private final WaitingNotificationType notificationType;

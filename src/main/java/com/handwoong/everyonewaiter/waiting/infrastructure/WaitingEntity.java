@@ -10,7 +10,6 @@ import com.handwoong.everyonewaiter.waiting.domain.WaitingId;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingNotificationType;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingNumber;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingStatus;
-import com.handwoong.everyonewaiter.waiting.domain.WaitingTurn;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -49,9 +48,6 @@ public class WaitingEntity extends BaseEntity {
     private int number;
 
     @NotNull
-    private int turn;
-
-    @NotNull
     @Column(length = 20)
     private String phoneNumber;
 
@@ -73,7 +69,6 @@ public class WaitingEntity extends BaseEntity {
         waitingEntity.adult = waiting.getAdult().value();
         waitingEntity.children = waiting.getChildren().value();
         waitingEntity.number = waiting.getNumber().value();
-        waitingEntity.turn = waiting.getTurn().value();
         waitingEntity.phoneNumber = waiting.getPhoneNumber().toString();
         waitingEntity.status = waiting.getStatus();
         waitingEntity.notificationType = waiting.getNotificationType();
@@ -88,7 +83,6 @@ public class WaitingEntity extends BaseEntity {
             .adult(new WaitingAdult(adult))
             .children(new WaitingChildren(children))
             .number(new WaitingNumber(number))
-            .turn(new WaitingTurn(turn))
             .phoneNumber(new PhoneNumber(phoneNumber))
             .status(status)
             .notificationType(notificationType)

@@ -12,7 +12,6 @@ import com.handwoong.everyonewaiter.waiting.domain.WaitingId;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingNotificationType;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingNumber;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingStatus;
-import com.handwoong.everyonewaiter.waiting.domain.WaitingTurn;
 import org.junit.jupiter.api.Test;
 
 class WaitingEntityTest {
@@ -27,7 +26,6 @@ class WaitingEntityTest {
             .adult(new WaitingAdult(2))
             .children(new WaitingChildren(0))
             .number(new WaitingNumber(10))
-            .turn(new WaitingTurn(9))
             .phoneNumber(new PhoneNumber("01012345678"))
             .status(WaitingStatus.WAIT)
             .notificationType(WaitingNotificationType.REGISTER)
@@ -52,7 +50,6 @@ class WaitingEntityTest {
             .adult(new WaitingAdult(2))
             .children(new WaitingChildren(0))
             .number(new WaitingNumber(10))
-            .turn(new WaitingTurn(9))
             .phoneNumber(new PhoneNumber("01012345678"))
             .status(WaitingStatus.WAIT)
             .notificationType(WaitingNotificationType.REGISTER)
