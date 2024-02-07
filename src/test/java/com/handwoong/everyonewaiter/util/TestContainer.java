@@ -16,7 +16,9 @@ import com.handwoong.everyonewaiter.user.controller.port.UserService;
 import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.mock.FakeUserLoginService;
 import com.handwoong.everyonewaiter.user.mock.FakeUserRepository;
+import com.handwoong.everyonewaiter.waiting.application.WaitingServiceImpl;
 import com.handwoong.everyonewaiter.waiting.application.port.WaitingRepository;
+import com.handwoong.everyonewaiter.waiting.controller.port.WaitingService;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingGenerator;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingValidator;
 import com.handwoong.everyonewaiter.waiting.mock.FakeWaitingRepository;
@@ -43,6 +45,7 @@ public class TestContainer {
     public final WaitingRepository waitingRepository;
     public final WaitingValidator waitingValidator;
     public final WaitingGenerator waitingGenerator;
+    public final WaitingService waitingService;
 
     public TestContainer() {
         this.passwordEncoder = new FakePasswordEncoder("encode");
@@ -61,6 +64,7 @@ public class TestContainer {
         this.waitingRepository = new FakeWaitingRepository();
         this.waitingValidator = new WaitingValidator(userRepository, storeRepository, timeHolder);
         this.waitingGenerator = new WaitingGenerator(userRepository, storeRepository, waitingRepository);
+        this.waitingService = new WaitingServiceImpl(waitingRepository, waitingValidator, waitingGenerator, uuidHolder);
     }
 
     public void setSecurityContextAuthentication(final Username username) {

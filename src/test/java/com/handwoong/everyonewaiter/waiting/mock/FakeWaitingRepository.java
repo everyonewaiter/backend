@@ -1,5 +1,6 @@
 package com.handwoong.everyonewaiter.waiting.mock;
 
+import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.waiting.application.port.WaitingRepository;
 import com.handwoong.everyonewaiter.waiting.domain.Waiting;
@@ -22,6 +23,14 @@ public class FakeWaitingRepository implements WaitingRepository {
         final Waiting newWaiting = create(id, waiting);
         database.put(id, newWaiting);
         return newWaiting;
+    }
+
+    @Override
+    public boolean existsByPhoneNumber(final PhoneNumber phoneNumber) {
+        return database.values()
+            .stream()
+            .filter(waiting -> waiting.getStatus().equals(WaitingStatus.WAIT))
+            .anyMatch(waiting -> waiting.getPhoneNumber().equals(phoneNumber));
     }
 
     @Override

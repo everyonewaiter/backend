@@ -2,6 +2,7 @@ package com.handwoong.everyonewaiter.waiting.infrastructure;
 
 import static com.handwoong.everyonewaiter.waiting.infrastructure.QWaitingEntity.waitingEntity;
 
+import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.waiting.application.port.WaitingRepository;
 import com.handwoong.everyonewaiter.waiting.domain.Waiting;
@@ -23,6 +24,19 @@ public class WaitingRepositoryImpl implements WaitingRepository {
     @Override
     public Waiting save(final Waiting waiting) {
         return waitingJpaRepository.save(WaitingEntity.from(waiting)).toModel();
+    }
+
+    @Override
+    public boolean existsByPhoneNumber(final PhoneNumber phoneNumber) {
+        return Objects.nonNull(
+            queryFactory.selectOne()
+                .from(waitingEntity)
+                .where(
+                    statusEq(WaitingStatus.WAIT),
+                    phoneNumberEq(phoneNumber)
+                )
+                .fetchFirst()
+        );
     }
 
     @Override
@@ -53,5 +67,9 @@ public class WaitingRepositoryImpl implements WaitingRepository {
 
     private BooleanExpression afterCreatedAt(final LocalDateTime timestamp) {
         return Objects.isNull(timestamp) ? null : waitingEntity.createdAt.after(timestamp);
+    }
+
+    private BooleanExpression phoneNumberEq(final PhoneNumber phoneNumber) {
+        return Objects.isNull(phoneNumber) ? null : waitingEntity.phoneNumber.eq(phoneNumber.toString());
     }
 }
