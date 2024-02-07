@@ -1,6 +1,5 @@
 package com.handwoong.everyonewaiter.util;
 
-import com.handwoong.everyonewaiter.common.application.port.TimeHolder;
 import com.handwoong.everyonewaiter.common.mock.FakePasswordEncoder;
 import com.handwoong.everyonewaiter.common.mock.FakeTimeHolder;
 import com.handwoong.everyonewaiter.store.application.StoreServiceImpl;
@@ -16,6 +15,8 @@ import com.handwoong.everyonewaiter.user.controller.port.UserService;
 import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.mock.FakeUserLoginService;
 import com.handwoong.everyonewaiter.user.mock.FakeUserRepository;
+import com.handwoong.everyonewaiter.waiting.domain.WaitingValidator;
+import java.time.LocalDateTime;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class TestContainer {
 
     public final PasswordEncoder passwordEncoder;
-    public final TimeHolder timeHolder;
+    public final FakeTimeHolder timeHolder;
 
     public final UserRepository userRepository;
     public final UserLoginService userLoginService;
@@ -34,9 +35,11 @@ public class TestContainer {
     public final StoreService storeService;
     public final StoreController storeController;
 
+    public final WaitingValidator waitingValidator;
+
     public TestContainer() {
         this.passwordEncoder = new FakePasswordEncoder("encode");
-        this.timeHolder = new FakeTimeHolder(123456789L);
+        this.timeHolder = new FakeTimeHolder();
 
         this.userRepository = new FakeUserRepository();
         this.userLoginService = new FakeUserLoginService(userRepository);
@@ -46,11 +49,17 @@ public class TestContainer {
         this.storeRepository = new FakeStoreRepository();
         this.storeService = new StoreServiceImpl(userRepository, storeRepository);
         this.storeController = new StoreController(storeService);
+
+        this.waitingValidator = new WaitingValidator(userRepository, storeRepository, timeHolder);
     }
 
     public void setSecurityContextAuthentication(final Username username) {
         final UsernamePasswordAuthenticationToken authenticationToken =
             new UsernamePasswordAuthenticationToken(username, "");
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+    }
+
+    public void setTimeHolder(final LocalDateTime fixedTime) {
+        this.timeHolder.setMillis(fixedTime);
     }
 }
