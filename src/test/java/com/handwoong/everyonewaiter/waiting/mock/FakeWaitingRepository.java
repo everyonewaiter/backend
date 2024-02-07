@@ -1,8 +1,11 @@
 package com.handwoong.everyonewaiter.waiting.mock;
 
+import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.waiting.application.port.WaitingRepository;
 import com.handwoong.everyonewaiter.waiting.domain.Waiting;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingId;
+import com.handwoong.everyonewaiter.waiting.domain.WaitingStatus;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -21,6 +24,22 @@ public class FakeWaitingRepository implements WaitingRepository {
         return newWaiting;
     }
 
+    @Override
+    public int countByAfterStoreOpen(
+        final StoreId storeId,
+        final WaitingStatus status,
+        final LocalDateTime lastOpenedAt
+    ) {
+        return Math.toIntExact(
+            database.values()
+                .stream()
+                .filter(waiting -> waiting.getStoreId().equals(storeId))
+                .filter(waiting -> Objects.isNull(status) || waiting.getStatus().equals(status))
+                .filter(waiting -> waiting.getTimestamp().getCreatedAt().isAfter(lastOpenedAt))
+                .count()
+        );
+    }
+
     private Waiting create(final Long id, final Waiting waiting) {
         return Waiting.builder()
             .id(new WaitingId(id))
@@ -28,11 +47,11 @@ public class FakeWaitingRepository implements WaitingRepository {
             .adult(waiting.getAdult())
             .children(waiting.getChildren())
             .number(waiting.getNumber())
-            .turn(waiting.getTurn())
             .phoneNumber(waiting.getPhoneNumber())
             .status(waiting.getStatus())
             .notificationType(waiting.getNotificationType())
             .uniqueCode(waiting.getUniqueCode())
+            .timestamp(waiting.getTimestamp())
             .build();
     }
 }

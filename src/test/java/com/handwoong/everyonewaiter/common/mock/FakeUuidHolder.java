@@ -5,7 +5,11 @@ import java.util.UUID;
 
 public class FakeUuidHolder implements UuidHolder {
 
-    private final String uuidInput;
+    private String uuidInput;
+
+    public FakeUuidHolder() {
+        this("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+    }
 
     public FakeUuidHolder(final String uuidInput) {
         this.uuidInput = uuidInput;
@@ -14,5 +18,9 @@ public class FakeUuidHolder implements UuidHolder {
     @Override
     public UUID generate() {
         return UUID.fromString(uuidInput);
+    }
+
+    public void setUuidInput(final String uuidInput) {
+        this.uuidInput = uuidInput;
     }
 }
