@@ -1,9 +1,10 @@
 package com.handwoong.everyonewaiter.store.application;
 
+import static com.handwoong.everyonewaiter.util.Fixtures.aStore;
+import static com.handwoong.everyonewaiter.util.Fixtures.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.store.domain.LandlineNumber;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.StoreBreakTimes;
@@ -15,11 +16,8 @@ import com.handwoong.everyonewaiter.store.dto.StoreCreate;
 import com.handwoong.everyonewaiter.store.dto.StoreOptionUpdate;
 import com.handwoong.everyonewaiter.store.dto.StoreUpdate;
 import com.handwoong.everyonewaiter.store.exception.StoreNotFoundException;
-import com.handwoong.everyonewaiter.user.domain.Password;
 import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.UserId;
-import com.handwoong.everyonewaiter.user.domain.UserRole;
-import com.handwoong.everyonewaiter.user.domain.UserStatus;
 import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.exception.UserNotFoundException;
 import com.handwoong.everyonewaiter.util.TestContainer;
@@ -29,23 +27,23 @@ import org.junit.jupiter.api.Test;
 
 class StoreServiceImplTest {
 
-    private StoreCreate storeCreate;
     private TestContainer testContainer;
 
     @BeforeEach
     void setUp() {
         testContainer = new TestContainer();
-        final User user = User.builder()
-            .id(new UserId(1L))
-            .username(new Username("handwoong"))
-            .password(new Password("password"))
-            .phoneNumber(new PhoneNumber("01012345678"))
-            .role(UserRole.ROLE_USER)
-            .status(UserStatus.ACTIVE)
-            .build();
+
+        final User user = aUser().build();
         testContainer.userRepository.save(user);
 
-        storeCreate = StoreCreate.builder()
+        final Store store = aStore().build();
+        testContainer.storeRepository.save(store);
+    }
+
+    @Test
+    void Should_Create_When_ValidStoreCreate() {
+        // given
+        final StoreCreate storeCreate = StoreCreate.builder()
             .name(new StoreName("나루"))
             .landlineNumber(new LandlineNumber("0551234567"))
             .businessTimes(new StoreBusinessTimes(List.of()))
@@ -58,11 +56,7 @@ class StoreServiceImplTest {
                     .build()
             )
             .build();
-    }
 
-    @Test
-    void Should_Create_When_ValidStoreCreate() {
-        // given
         // when
         final StoreId storeId = testContainer.storeService.create(new Username("handwoong"), storeCreate);
 
@@ -74,6 +68,7 @@ class StoreServiceImplTest {
     void Should_ThrowException_When_CreateUserNotFound() {
         // given
         final Username username = new Username("username");
+        final StoreCreate storeCreate = StoreCreate.builder().build();
 
         // expect
         assertThatThrownBy(() -> testContainer.storeService.create(username, storeCreate))
@@ -85,7 +80,6 @@ class StoreServiceImplTest {
     void Should_Update_When_ValidStoreUpdate() {
         // given
         final Username username = new Username("handwoong");
-        testContainer.storeService.create(username, storeCreate);
 
         final StoreUpdate storeUpdate = StoreUpdate.builder()
             .id(new StoreId(1L))
@@ -108,7 +102,6 @@ class StoreServiceImplTest {
     void Should_ThrowException_When_UpdateUserNotFound() {
         // given
         final Username username = new Username("username");
-        testContainer.storeService.create(new Username("handwoong"), storeCreate);
         final StoreUpdate storeUpdate = StoreUpdate.builder().build();
 
         // expect
@@ -121,7 +114,7 @@ class StoreServiceImplTest {
     void Should_ThrowException_When_UpdateStoreNotFound() {
         // given
         final Username username = new Username("handwoong");
-        final StoreUpdate storeUpdate = StoreUpdate.builder().id(new StoreId(1L)).build();
+        final StoreUpdate storeUpdate = StoreUpdate.builder().id(new StoreId(10L)).build();
 
         // expect
         assertThatThrownBy(() -> testContainer.storeService.update(username, storeUpdate))
@@ -133,7 +126,6 @@ class StoreServiceImplTest {
     void Should_UpdateOption_When_ValidStoreUpdateOption() {
         // given
         final Username username = new Username("handwoong");
-        testContainer.storeService.create(username, storeCreate);
 
         final StoreOptionUpdate storeOptionUpdate = StoreOptionUpdate.builder()
             .storeId(new StoreId(1L))
@@ -157,7 +149,6 @@ class StoreServiceImplTest {
     void Should_ThrowException_When_UpdateOptionUserNotFound() {
         // given
         final Username username = new Username("username");
-        testContainer.storeService.create(new Username("handwoong"), storeCreate);
         final StoreOptionUpdate storeOptionUpdate = StoreOptionUpdate.builder().build();
 
         // expect
@@ -170,7 +161,7 @@ class StoreServiceImplTest {
     void Should_ThrowException_When_UpdateOptionStoreNotFound() {
         // given
         final Username username = new Username("handwoong");
-        final StoreOptionUpdate storeOptionUpdate = StoreOptionUpdate.builder().storeId(new StoreId(1L)).build();
+        final StoreOptionUpdate storeOptionUpdate = StoreOptionUpdate.builder().storeId(new StoreId(10L)).build();
 
         // expect
         assertThatThrownBy(() -> testContainer.storeService.update(username, storeOptionUpdate))
@@ -184,7 +175,6 @@ class StoreServiceImplTest {
         final Username username = new Username("handwoong");
         final StoreId storeId = new StoreId(1L);
         final UserId userId = new UserId(1L);
-        testContainer.storeRepository.save(Store.create(userId, storeCreate));
 
         // when
         testContainer.storeService.delete(username, storeId);

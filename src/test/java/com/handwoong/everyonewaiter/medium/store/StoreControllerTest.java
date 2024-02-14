@@ -30,40 +30,47 @@ import com.handwoong.everyonewaiter.store.controller.request.StoreCreateOptionRe
 import com.handwoong.everyonewaiter.store.controller.request.StoreCreateRequest;
 import com.handwoong.everyonewaiter.store.controller.request.StoreOptionUpdateRequest;
 import com.handwoong.everyonewaiter.store.controller.request.StoreUpdateRequest;
-import com.handwoong.everyonewaiter.store.domain.DayOfWeek;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.time.LocalTime;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 
+@Sql({"classpath:sql/user.sql", "classpath:sql/store.sql"})
 class StoreControllerTest extends TestHelper {
 
-    @BeforeEach
-    void setUp() throws Exception {
-        final StoreCreateRequest request = new StoreCreateRequest("나루", "0551234567",
-            getBreakTimeRequests(),
-            getBusinessTimeRequests(List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)),
-            new StoreCreateOptionRequest(true, true, true)
-        );
-        create(userAccessToken, request);
-    }
+    private final List<StoreBusinessTimeRequest> businessTimes = List.of(
+        new StoreBusinessTimeRequest(
+            LocalTime.of(11, 0, 0),
+            LocalTime.of(21, 0, 0),
+            List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
+        )
+    );
+    private final List<StoreBreakTimeRequest> breakTimes = List.of(
+        new StoreBreakTimeRequest(
+            LocalTime.of(15, 0, 0),
+            LocalTime.of(16, 30, 0),
+            List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
+        ),
+        new StoreBreakTimeRequest(
+            LocalTime.of(15, 30, 0),
+            LocalTime.of(17, 0, 0),
+            List.of(SATURDAY, SUNDAY)
+        )
+    );
 
     @Test
     void Should_Create_When_ValidRequest() throws Exception {
         // given
         final String token = userAccessToken;
-        final StoreCreateRequest request = new StoreCreateRequest("나루", "0551234567",
-            getBreakTimeRequests(),
-            getBusinessTimeRequests(List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)),
-            new StoreCreateOptionRequest(true, true, true)
-        );
+        final StoreCreateRequest request = new StoreCreateRequest(
+            "나루", "0551234567", breakTimes, businessTimes, new StoreCreateOptionRequest(true, true, true));
 
         // when
         final ExtractableResponse<Response> response = create(token, request);
@@ -77,11 +84,8 @@ class StoreControllerTest extends TestHelper {
     void Should_CreateStatus400_When_StoreNameBlank(final String storeName) throws Exception {
         // given
         final String token = userAccessToken;
-        final StoreCreateRequest request = new StoreCreateRequest(storeName, "0551234567",
-            List.of(),
-            getBusinessTimeRequests(List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)),
-            new StoreCreateOptionRequest(true, true, true)
-        );
+        final StoreCreateRequest request = new StoreCreateRequest(
+            storeName, "0551234567", breakTimes, businessTimes, new StoreCreateOptionRequest(true, true, true));
 
         // when
         final ExtractableResponse<Response> response = create(token, request);
@@ -99,11 +103,9 @@ class StoreControllerTest extends TestHelper {
     void Should_CreateStatus400_When_StoreNameLengthGreaterThan50() throws Exception {
         // given
         final String token = userAccessToken;
-        final StoreCreateRequest request = new StoreCreateRequest("나루 레스토랑".repeat(8), "0551234567",
-            List.of(),
-            getBusinessTimeRequests(List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)),
-            new StoreCreateOptionRequest(true, true, true)
-        );
+        final StoreCreateRequest request = new StoreCreateRequest(
+            "나루 레스토랑".repeat(8), "0551234567", breakTimes, businessTimes,
+            new StoreCreateOptionRequest(true, true, true));
 
         // when
         final ExtractableResponse<Response> response = create(token, request);
@@ -122,11 +124,8 @@ class StoreControllerTest extends TestHelper {
     void Should_CreateStatus400_When_LandlineNumberBlank(final String landlineNumber) throws Exception {
         // given
         final String token = userAccessToken;
-        final StoreCreateRequest request = new StoreCreateRequest("나루", landlineNumber,
-            List.of(),
-            getBusinessTimeRequests(List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)),
-            new StoreCreateOptionRequest(true, true, true)
-        );
+        final StoreCreateRequest request = new StoreCreateRequest(
+            "나루", landlineNumber, breakTimes, businessTimes, new StoreCreateOptionRequest(true, true, true));
 
         // when
         final ExtractableResponse<Response> response = create(token, request);
@@ -144,11 +143,8 @@ class StoreControllerTest extends TestHelper {
     void Should_CreateStatus400_When_InvalidLandlineNumberFormat() throws Exception {
         // given
         final String token = userAccessToken;
-        final StoreCreateRequest request = new StoreCreateRequest("나루", "055-123-4567",
-            List.of(),
-            getBusinessTimeRequests(List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)),
-            new StoreCreateOptionRequest(true, true, true)
-        );
+        final StoreCreateRequest request = new StoreCreateRequest(
+            "나루", "055-123-4567", breakTimes, businessTimes, new StoreCreateOptionRequest(true, true, true));
 
         // when
         final ExtractableResponse<Response> response = create(token, request);
@@ -166,17 +162,14 @@ class StoreControllerTest extends TestHelper {
     void Should_CreateStatus400_When_BreakTimesDayOfWeekEmpty() throws Exception {
         // given
         final String token = userAccessToken;
-        final StoreCreateRequest request = new StoreCreateRequest("나루", "0551234567",
-            List.of(
-                new StoreBreakTimeRequest(
-                    LocalTime.of(15, 0, 0),
-                    LocalTime.of(16, 30, 0),
-                    List.of()
-                )
-            ),
-            getBusinessTimeRequests(List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)),
-            new StoreCreateOptionRequest(true, true, true)
-        );
+        final StoreCreateRequest request = new StoreCreateRequest(
+            "나루", "0551234567", List.of(
+            new StoreBreakTimeRequest(
+                LocalTime.of(15, 0, 0),
+                LocalTime.of(16, 30, 0),
+                List.of()
+            )
+        ), businessTimes, new StoreCreateOptionRequest(true, true, true));
 
         // when
         final ExtractableResponse<Response> response = create(token, request);
@@ -195,9 +188,13 @@ class StoreControllerTest extends TestHelper {
         // given
         final String token = userAccessToken;
         final StoreCreateRequest request = new StoreCreateRequest(
-            "나루", "0551234567", List.of(), getBusinessTimeRequests(List.of()),
-            new StoreCreateOptionRequest(true, true, true)
-        );
+            "나루", "0551234567", breakTimes, List.of(
+            new StoreBusinessTimeRequest(
+                LocalTime.of(11, 0, 0),
+                LocalTime.of(21, 0, 0),
+                List.of()
+            )
+        ), new StoreCreateOptionRequest(true, true, true));
 
         // when
         final ExtractableResponse<Response> response = create(token, request);
@@ -231,7 +228,7 @@ class StoreControllerTest extends TestHelper {
         // given
         final String token = userAccessToken;
         final StoreUpdateRequest request = new StoreUpdateRequest(
-            1L, "나루 레스토랑", "021234567", getBreakTimeRequests(), getBusinessTimeRequests(List.of(SATURDAY, SUNDAY)));
+            1L, "나루 레스토랑", "021234567", breakTimes, businessTimes);
 
         // when
         final ExtractableResponse<Response> response = update(token, request);
@@ -246,7 +243,7 @@ class StoreControllerTest extends TestHelper {
         // given
         final String token = userAccessToken;
         final StoreUpdateRequest request = new StoreUpdateRequest(
-            1L, storeName, "021234567", getBreakTimeRequests(), getBusinessTimeRequests(List.of(SATURDAY, SUNDAY)));
+            1L, storeName, "021234567", breakTimes, businessTimes);
 
         // when
         final ExtractableResponse<Response> response = update(token, request);
@@ -266,7 +263,7 @@ class StoreControllerTest extends TestHelper {
         final String token = userAccessToken;
         final String storeName = "나루 레스토랑".repeat(8);
         final StoreUpdateRequest request = new StoreUpdateRequest(
-            1L, storeName, "021234567", getBreakTimeRequests(), getBusinessTimeRequests(List.of(SATURDAY, SUNDAY)));
+            1L, storeName, "021234567", breakTimes, businessTimes);
 
         // when
         final ExtractableResponse<Response> response = update(token, request);
@@ -286,7 +283,7 @@ class StoreControllerTest extends TestHelper {
         // given
         final String token = userAccessToken;
         final StoreUpdateRequest request = new StoreUpdateRequest(
-            1L, "나루 레스토랑", landlineNumber, getBreakTimeRequests(), getBusinessTimeRequests(List.of(SATURDAY, SUNDAY)));
+            1L, "나루 레스토랑", landlineNumber, breakTimes, businessTimes);
 
         // when
         final ExtractableResponse<Response> response = update(token, request);
@@ -305,7 +302,7 @@ class StoreControllerTest extends TestHelper {
         // given
         final String token = userAccessToken;
         final StoreUpdateRequest request = new StoreUpdateRequest(
-            1L, "나루 레스토랑", "055-123-4567", getBreakTimeRequests(), getBusinessTimeRequests(List.of(SATURDAY, SUNDAY)));
+            1L, "나루 레스토랑", "055-123-4567", breakTimes, businessTimes);
 
         // when
         final ExtractableResponse<Response> response = update(token, request);
@@ -330,7 +327,7 @@ class StoreControllerTest extends TestHelper {
                 LocalTime.of(16, 30, 0),
                 List.of()
             )
-        ), getBusinessTimeRequests(List.of(SATURDAY, SUNDAY)));
+        ), businessTimes);
 
         // when
         final ExtractableResponse<Response> response = update(token, request);
@@ -349,7 +346,13 @@ class StoreControllerTest extends TestHelper {
         // given
         final String token = userAccessToken;
         final StoreUpdateRequest request = new StoreUpdateRequest(
-            1L, "나루 레스토랑", "021234567", getBreakTimeRequests(), getBusinessTimeRequests(List.of()));
+            1L, "나루 레스토랑", "021234567", breakTimes, List.of(
+            new StoreBusinessTimeRequest(
+                LocalTime.of(11, 0, 0),
+                LocalTime.of(21, 0, 0),
+                List.of()
+            )
+        ));
 
         // when
         final ExtractableResponse<Response> response = update(token, request);
@@ -422,30 +425,5 @@ class StoreControllerTest extends TestHelper {
             .filter(getFilter().document(AUTHORIZATION_HEADER, PATH_PARAM_STORE_ID, CUD_RESPONSE))
             .when().delete("/api/stores/{id}", 1L)
             .then().log().all().extract();
-    }
-
-    private List<StoreBreakTimeRequest> getBreakTimeRequests() {
-        return List.of(
-            new StoreBreakTimeRequest(
-                LocalTime.of(15, 0, 0),
-                LocalTime.of(16, 30, 0),
-                List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
-            ),
-            new StoreBreakTimeRequest(
-                LocalTime.of(15, 30, 0),
-                LocalTime.of(17, 0, 0),
-                List.of(SATURDAY, SUNDAY)
-            )
-        );
-    }
-
-    private List<StoreBusinessTimeRequest> getBusinessTimeRequests(final List<DayOfWeek> dayOfWeeks) {
-        return List.of(
-            new StoreBusinessTimeRequest(
-                LocalTime.of(11, 0, 0),
-                LocalTime.of(21, 0, 0),
-                dayOfWeeks
-            )
-        );
     }
 }

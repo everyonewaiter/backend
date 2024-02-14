@@ -1,17 +1,13 @@
 package com.handwoong.everyonewaiter.store.domain;
 
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.FRIDAY;
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.MONDAY;
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.SATURDAY;
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.SUNDAY;
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.THURSDAY;
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.TUESDAY;
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.WEDNESDAY;
+import static com.handwoong.everyonewaiter.util.Fixtures.aStoreBreakTime;
+import static com.handwoong.everyonewaiter.util.Fixtures.aWeekend;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.handwoong.everyonewaiter.common.mock.FakeTimeHolder;
 import com.handwoong.everyonewaiter.store.infrastructure.StoreBreakTimeEntity;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -22,27 +18,8 @@ class StoreBreakTimesTest {
         // given
         final StoreBreakTimes storeBreakTimes = new StoreBreakTimes(
             List.of(
-                StoreBreakTime.builder()
-                    .id(new StoreBreakTimeId(1L))
-                    .start(LocalTime.of(15, 0, 0))
-                    .end(LocalTime.of(16, 30, 0))
-                    .daysOfWeek(
-                        new StoreDaysOfWeek(
-                            List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
-                        )
-                    )
-                    .build(),
-                StoreBreakTime.builder()
-                    .id(new StoreBreakTimeId(2L))
-                    .start(LocalTime.of(15, 30, 0))
-                    .end(LocalTime.of(17, 0, 0))
-                    .daysOfWeek(
-                        new StoreDaysOfWeek(
-                            List.of(SATURDAY, SUNDAY)
-                        )
-                    )
-                    .build()
-            )
+                aStoreBreakTime().build(),
+                aStoreBreakTime().id(new StoreBreakTimeId(2L)).daysOfWeek(aWeekend()).build())
         );
 
         // when
@@ -57,26 +34,8 @@ class StoreBreakTimesTest {
     void Should_ThrowException_When_DaysSizeGreaterThanDaysOfWeekSize() {
         // given
         final List<StoreBreakTime> breakTimes = List.of(
-            StoreBreakTime.builder()
-                .id(new StoreBreakTimeId(1L))
-                .start(LocalTime.of(15, 0, 0))
-                .end(LocalTime.of(16, 30, 0))
-                .daysOfWeek(
-                    new StoreDaysOfWeek(
-                        List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
-                    )
-                )
-                .build(),
-            StoreBreakTime.builder()
-                .id(new StoreBreakTimeId(2L))
-                .start(LocalTime.of(15, 30, 0))
-                .end(LocalTime.of(17, 0, 0))
-                .daysOfWeek(
-                    new StoreDaysOfWeek(
-                        List.of(MONDAY, SATURDAY, SUNDAY)
-                    )
-                )
-                .build()
+            aStoreBreakTime().build(),
+            aStoreBreakTime().build()
         );
 
         // expect
@@ -89,23 +48,45 @@ class StoreBreakTimesTest {
     void Should_ThrowException_When_DuplicateDays() {
         // given
         final List<StoreBreakTime> breakTimes = List.of(
-            StoreBreakTime.builder()
-                .id(new StoreBreakTimeId(1L))
-                .start(LocalTime.of(15, 0, 0))
-                .end(LocalTime.of(16, 30, 0))
-                .daysOfWeek(new StoreDaysOfWeek(List.of(MONDAY)))
-                .build(),
-            StoreBreakTime.builder()
-                .id(new StoreBreakTimeId(2L))
-                .start(LocalTime.of(15, 30, 0))
-                .end(LocalTime.of(17, 0, 0))
-                .daysOfWeek(new StoreDaysOfWeek(List.of(MONDAY)))
-                .build()
+            aStoreBreakTime().daysOfWeek(aWeekend()).build(),
+            aStoreBreakTime().daysOfWeek(aWeekend()).build()
         );
 
         // expect
         assertThatThrownBy(() -> new StoreBreakTimes(breakTimes))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("브레이크 타임에 중복된 요일이 있습니다.");
+    }
+
+    @Test
+    void Should_True_When_IsWithinTime() {
+        // given
+        final FakeTimeHolder timeHolder = new FakeTimeHolder();
+        final LocalDateTime mockTime = LocalDateTime.of(2024, 2, 7, 15, 50, 0); // 수요일 15시 50분
+        timeHolder.setMillis(mockTime);
+
+        final StoreBreakTimes storeBreakTimes = new StoreBreakTimes(List.of(aStoreBreakTime().build()));
+
+        // when
+        final boolean result = storeBreakTimes.isWithinBreakTime(timeHolder);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void Should_False_When_IsWithinTime() {
+        // given
+        final FakeTimeHolder timeHolder = new FakeTimeHolder();
+        final LocalDateTime mockTime = LocalDateTime.of(2024, 2, 7, 16, 40, 0); // 수요일 16시 40분
+        timeHolder.setMillis(mockTime);
+
+        final StoreBreakTimes storeBreakTimes = new StoreBreakTimes(List.of(aStoreBreakTime().build()));
+
+        // when
+        final boolean result = storeBreakTimes.isWithinBreakTime(timeHolder);
+
+        // then
+        assertThat(result).isFalse();
     }
 }

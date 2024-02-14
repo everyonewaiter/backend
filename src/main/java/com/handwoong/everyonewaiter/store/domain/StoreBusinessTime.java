@@ -21,4 +21,11 @@ public class StoreBusinessTime {
     public int getDaysSize() {
         return daysOfWeek.getDaysSize();
     }
+
+    public boolean compareCurrentTime(final DayOfWeek dayOfWeek, final LocalTime currentTime) {
+        if (daysOfWeek.contains(dayOfWeek)) {
+            return currentTime.isAfter(open) && currentTime.isBefore(close);
+        }
+        return false;
+    }
 }

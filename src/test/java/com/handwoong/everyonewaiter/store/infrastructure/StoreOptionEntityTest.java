@@ -1,9 +1,9 @@
 package com.handwoong.everyonewaiter.store.infrastructure;
 
+import static com.handwoong.everyonewaiter.util.Fixtures.aStoreOption;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.handwoong.everyonewaiter.store.domain.StoreOption;
-import com.handwoong.everyonewaiter.store.domain.StoreOptionId;
 import org.junit.jupiter.api.Test;
 
 class StoreOptionEntityTest {
@@ -11,12 +11,7 @@ class StoreOptionEntityTest {
     @Test
     void Should_CreateEntity_When_FromModel() {
         // given
-        final StoreOption storeOption = StoreOption.builder()
-            .id(new StoreOptionId(1L))
-            .useBreakTime(true)
-            .useOrder(true)
-            .useWaiting(true)
-            .build();
+        final StoreOption storeOption = aStoreOption().build();
 
         // when
         final StoreOptionEntity storeOptionEntity = StoreOptionEntity.from(storeOption);
@@ -28,12 +23,7 @@ class StoreOptionEntityTest {
     @Test
     void Should_CreateDomain_When_ToModel() {
         // given
-        final StoreOption storeOption = StoreOption.builder()
-            .id(new StoreOptionId(1L))
-            .useBreakTime(true)
-            .useOrder(true)
-            .useWaiting(true)
-            .build();
+        final StoreOption storeOption = aStoreOption().build();
         final StoreOptionEntity storeOptionEntity = StoreOptionEntity.from(storeOption);
 
         // when

@@ -8,20 +8,23 @@ import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.THURSDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.TUESDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.WEDNESDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.dayOfWeekCounter;
+import static com.handwoong.everyonewaiter.util.Fixtures.aWeekday;
+import static com.handwoong.everyonewaiter.util.Fixtures.anAllDay;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class StoreDaysOfWeekTest {
 
     @Test
     void Should_JoinString_When_InputDelimiter() {
         // given
-        final StoreDaysOfWeek storeDaysOfWeek =
-            new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY));
+        final StoreDaysOfWeek storeDaysOfWeek = aWeekday();
 
         // when
         final String result = storeDaysOfWeek.toString("::");
@@ -44,8 +47,7 @@ class StoreDaysOfWeekTest {
     @Test
     void Should_5_When_GetDaysSize() {
         // given
-        final StoreDaysOfWeek storeDaysOfWeek =
-            new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY));
+        final StoreDaysOfWeek storeDaysOfWeek = aWeekday();
 
         // when
         final int daysSize = storeDaysOfWeek.getDaysSize();
@@ -58,8 +60,7 @@ class StoreDaysOfWeekTest {
     void Should_IncreaseCount_When_InputCounter() {
         // given
         final Map<DayOfWeek, Integer> counter = dayOfWeekCounter();
-        final StoreDaysOfWeek storeDaysOfWeek =
-            new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY));
+        final StoreDaysOfWeek storeDaysOfWeek = aWeekday();
 
         // when
         storeDaysOfWeek.count(counter);
@@ -73,5 +74,33 @@ class StoreDaysOfWeekTest {
             .containsEntry(FRIDAY, 1)
             .containsEntry(SATURDAY, 0)
             .containsEntry(SUNDAY, 0);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"월", "화", "수", "목", "금", "토", "일"})
+    void Should_True_When_Contains(final String value) {
+        // given
+        final DayOfWeek dayOfWeek = DayOfWeek.from(value);
+        final StoreDaysOfWeek storeDaysOfWeek = anAllDay();
+
+        // when
+        final boolean result = storeDaysOfWeek.contains(dayOfWeek);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"화", "수", "목", "금", "토", "일"})
+    void Should_False_When_Contains(final String value) {
+        // given
+        final DayOfWeek dayOfWeek = DayOfWeek.from(value);
+        final StoreDaysOfWeek storeDaysOfWeek = new StoreDaysOfWeek(List.of(MONDAY));
+
+        // when
+        final boolean result = storeDaysOfWeek.contains(dayOfWeek);
+
+        // then
+        assertThat(result).isFalse();
     }
 }
