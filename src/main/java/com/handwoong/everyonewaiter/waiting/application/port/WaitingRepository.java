@@ -5,6 +5,7 @@ import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.waiting.domain.Waiting;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingStatus;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public interface WaitingRepository {
 
@@ -13,4 +14,6 @@ public interface WaitingRepository {
     boolean existsByPhoneNumber(PhoneNumber phoneNumber);
 
     int countByAfterStoreOpen(StoreId storeId, WaitingStatus status, LocalDateTime lastOpenedAt);
+
+    Waiting findByStoreIdAndUniqueCodeOrElseThrow(StoreId storeId, UUID uniqueCode);
 }

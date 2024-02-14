@@ -6,10 +6,13 @@ import com.handwoong.everyonewaiter.waiting.application.port.WaitingRepository;
 import com.handwoong.everyonewaiter.waiting.domain.Waiting;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingId;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingStatus;
+import com.handwoong.everyonewaiter.waiting.exception.WaitingNotFoundException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 public class FakeWaitingRepository implements WaitingRepository {
 
@@ -47,6 +50,18 @@ public class FakeWaitingRepository implements WaitingRepository {
                 .filter(waiting -> waiting.getTimestamp().getCreatedAt().isAfter(lastOpenedAt))
                 .count()
         );
+    }
+
+    @Override
+    public Waiting findByStoreIdAndUniqueCodeOrElseThrow(final StoreId storeId, final UUID uniqueCode) {
+        return Optional.ofNullable(database.get(storeId.value()))
+            .stream()
+            .filter(waiting -> waiting.getUniqueCode().equals(uniqueCode))
+            .findAny()
+            .orElseThrow(() ->
+                new WaitingNotFoundException("웨이팅을 찾을 수 없습니다.",
+                    "storeId : [" + storeId + "] uniqueCode : [" + uniqueCode + "]")
+            );
     }
 
     private Waiting create(final Long id, final Waiting waiting) {
