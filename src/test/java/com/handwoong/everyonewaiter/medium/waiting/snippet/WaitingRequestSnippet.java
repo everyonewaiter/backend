@@ -26,6 +26,15 @@ public class WaitingRequestSnippet {
             .description("고객 휴대폰 번호")
             .attributes(constraints("01로 시작하는 7~8자리 숫자"))
     );
+    public static final Snippet CANCEL_REQUEST = requestFields(
+        fieldWithPath("storeId")
+            .type(JsonFieldType.NUMBER)
+            .description("매장 ID"),
+        fieldWithPath("uniqueCode")
+            .type(JsonFieldType.STRING)
+            .description("웨이팅 고유 코드")
+            .attributes(constraints("UUID"))
+    );
 
     private WaitingRequestSnippet() {
     }
