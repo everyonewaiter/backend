@@ -1,19 +1,15 @@
 package com.handwoong.everyonewaiter.user.controller;
 
+import static com.handwoong.everyonewaiter.util.Fixtures.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.common.dto.ApiResponse;
 import com.handwoong.everyonewaiter.common.dto.ApiResponse.ResultCode;
 import com.handwoong.everyonewaiter.common.infrastructure.jwt.JwtToken;
 import com.handwoong.everyonewaiter.user.controller.request.UserJoinRequest;
 import com.handwoong.everyonewaiter.user.controller.request.UserLoginRequest;
-import com.handwoong.everyonewaiter.user.domain.Password;
 import com.handwoong.everyonewaiter.user.domain.User;
-import com.handwoong.everyonewaiter.user.domain.UserRole;
-import com.handwoong.everyonewaiter.user.domain.UserStatus;
-import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.exception.AlreadyExistsUsernameException;
 import com.handwoong.everyonewaiter.util.TestContainer;
 import org.junit.jupiter.api.Test;
@@ -41,13 +37,7 @@ class UserControllerTest {
     void Should_ThrowException_When_JoinDuplicateUsername() {
         // given
         final TestContainer testContainer = new TestContainer();
-        final User user = User.builder()
-            .username(new Username("handwoong"))
-            .password(new Password("password"))
-            .phoneNumber(new PhoneNumber("01012345678"))
-            .role(UserRole.ROLE_USER)
-            .status(UserStatus.ACTIVE)
-            .build();
+        final User user = aUser().build();
         testContainer.userRepository.save(user);
 
         final UserJoinRequest request = new UserJoinRequest("handwoong", "123456", "01012345678");
@@ -62,13 +52,7 @@ class UserControllerTest {
     void Should_Login_When_ValidRequest() {
         // given
         final TestContainer testContainer = new TestContainer();
-        final User user = User.builder()
-            .username(new Username("handwoong"))
-            .password(new Password("password"))
-            .phoneNumber(new PhoneNumber("01012345678"))
-            .role(UserRole.ROLE_USER)
-            .status(UserStatus.ACTIVE)
-            .build();
+        final User user = aUser().build();
         testContainer.userRepository.save(user);
 
         final UserLoginRequest request = new UserLoginRequest("handwoong", "password");
@@ -86,13 +70,7 @@ class UserControllerTest {
     void Should_ThrowException_When_LoginInvalidUsername() {
         // given
         final TestContainer testContainer = new TestContainer();
-        final User user = User.builder()
-            .username(new Username("handwoong"))
-            .password(new Password("password"))
-            .phoneNumber(new PhoneNumber("01012345678"))
-            .role(UserRole.ROLE_USER)
-            .status(UserStatus.ACTIVE)
-            .build();
+        final User user = aUser().build();
         testContainer.userRepository.save(user);
 
         final UserLoginRequest request = new UserLoginRequest("invalidUsername", "password");
@@ -107,13 +85,7 @@ class UserControllerTest {
     void Should_ThrowException_When_LoginInvalidPassword() {
         // given
         final TestContainer testContainer = new TestContainer();
-        final User user = User.builder()
-            .username(new Username("handwoong"))
-            .password(new Password("password"))
-            .phoneNumber(new PhoneNumber("01012345678"))
-            .role(UserRole.ROLE_USER)
-            .status(UserStatus.ACTIVE)
-            .build();
+        final User user = aUser().build();
         testContainer.userRepository.save(user);
 
         final UserLoginRequest request = new UserLoginRequest("handwoong", "invalidPassword");

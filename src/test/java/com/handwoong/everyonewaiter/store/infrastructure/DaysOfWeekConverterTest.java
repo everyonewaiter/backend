@@ -1,5 +1,6 @@
 package com.handwoong.everyonewaiter.store.infrastructure;
 
+import static com.handwoong.everyonewaiter.util.Fixtures.aWeekday;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -14,9 +15,7 @@ class DaysOfWeekConverterTest {
     void Should_ConvertString_When_InputStoreEventDaysOfWeek() {
         // given
         final DaysOfWeekConverter converter = new DaysOfWeekConverter();
-        final StoreDaysOfWeek storeDaysOfWeek = new StoreDaysOfWeek(
-            List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY)
-        );
+        final StoreDaysOfWeek storeDaysOfWeek = aWeekday();
 
         // when
         final String convertedDaysOfWeek = converter.convertToDatabaseColumn(storeDaysOfWeek);

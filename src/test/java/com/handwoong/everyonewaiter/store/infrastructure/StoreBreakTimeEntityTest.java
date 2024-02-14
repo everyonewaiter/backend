@@ -1,10 +1,9 @@
 package com.handwoong.everyonewaiter.store.infrastructure;
 
+import static com.handwoong.everyonewaiter.util.Fixtures.aStoreBreakTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.handwoong.everyonewaiter.store.domain.StoreBreakTime;
-import com.handwoong.everyonewaiter.store.domain.StoreBreakTimeId;
-import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
 
 class StoreBreakTimeEntityTest {
@@ -12,11 +11,7 @@ class StoreBreakTimeEntityTest {
     @Test
     void Should_CreateEntity_When_FromModel() {
         // given
-        final StoreBreakTime storeBreakTime = StoreBreakTime.builder()
-            .id(new StoreBreakTimeId(1L))
-            .start(LocalTime.of(15, 0, 0))
-            .end(LocalTime.of(16, 30, 0))
-            .build();
+        final StoreBreakTime storeBreakTime = aStoreBreakTime().build();
 
         // when
         final StoreBreakTimeEntity storeBreakTimeEntity = StoreBreakTimeEntity.from(storeBreakTime);
@@ -28,11 +23,7 @@ class StoreBreakTimeEntityTest {
     @Test
     void Should_CreateDomain_When_ToModel() {
         // given
-        final StoreBreakTime storeBreakTime = StoreBreakTime.builder()
-            .id(new StoreBreakTimeId(1L))
-            .start(LocalTime.of(15, 0, 0))
-            .end(LocalTime.of(16, 30, 0))
-            .build();
+        final StoreBreakTime storeBreakTime = aStoreBreakTime().build();
         final StoreBreakTimeEntity storeBreakTimeEntity = StoreBreakTimeEntity.from(storeBreakTime);
 
         // when

@@ -7,10 +7,11 @@ import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.SUNDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.THURSDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.TUESDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.WEDNESDAY;
+import static com.handwoong.everyonewaiter.util.Fixtures.aStoreBreakTime;
+import static com.handwoong.everyonewaiter.util.Fixtures.anAllDay;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
@@ -20,12 +21,7 @@ class StoreBreakTimeTest {
     void Should_IncreaseCount_When_MatchedDayOfWeek() {
         // given
         final Map<DayOfWeek, Integer> counter = DayOfWeek.dayOfWeekCounter();
-        final StoreBreakTime storeBreakTime = StoreBreakTime.builder()
-            .id(new StoreBreakTimeId(1L))
-            .start(LocalTime.of(15, 0, 0))
-            .end(LocalTime.of(16, 30, 0))
-            .daysOfWeek(new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)))
-            .build();
+        final StoreBreakTime storeBreakTime = aStoreBreakTime().daysOfWeek(anAllDay()).build();
 
         // when
         storeBreakTime.daysCount(counter);
@@ -44,12 +40,7 @@ class StoreBreakTimeTest {
     @Test
     void Should_7_When_GetDaysSize() {
         // given
-        final StoreBreakTime storeBreakTime = StoreBreakTime.builder()
-            .id(new StoreBreakTimeId(1L))
-            .start(LocalTime.of(15, 0, 0))
-            .end(LocalTime.of(16, 30, 0))
-            .daysOfWeek(new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)))
-            .build();
+        final StoreBreakTime storeBreakTime = aStoreBreakTime().daysOfWeek(anAllDay()).build();
 
         // when
         final int result = storeBreakTime.getDaysSize();
@@ -61,12 +52,7 @@ class StoreBreakTimeTest {
     @Test
     void Should_True_When_CompareWithinTime() {
         // given
-        final StoreBreakTime storeBreakTime = StoreBreakTime.builder()
-            .id(new StoreBreakTimeId(1L))
-            .start(LocalTime.of(15, 0, 0))
-            .end(LocalTime.of(16, 30, 0))
-            .daysOfWeek(new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)))
-            .build();
+        final StoreBreakTime storeBreakTime = aStoreBreakTime().build();
 
         // when
         final boolean result = storeBreakTime.compareCurrentTime(MONDAY, LocalTime.of(15, 0, 1));
@@ -78,12 +64,7 @@ class StoreBreakTimeTest {
     @Test
     void Should_False_When_CompareWithinTime() {
         // given
-        final StoreBreakTime storeBreakTime = StoreBreakTime.builder()
-            .id(new StoreBreakTimeId(1L))
-            .start(LocalTime.of(15, 0, 0))
-            .end(LocalTime.of(16, 30, 0))
-            .daysOfWeek(new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)))
-            .build();
+        final StoreBreakTime storeBreakTime = aStoreBreakTime().build();
 
         // when
         final boolean result = storeBreakTime.compareCurrentTime(MONDAY, LocalTime.of(17, 0, 0));

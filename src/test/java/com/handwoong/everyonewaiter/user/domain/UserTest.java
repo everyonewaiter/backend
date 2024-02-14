@@ -1,5 +1,6 @@
 package com.handwoong.everyonewaiter.user.domain;
 
+import static com.handwoong.everyonewaiter.util.Fixtures.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
@@ -36,14 +37,7 @@ class UserTest {
     void Should_SetLastLoggedIn_When_Login() {
         // given
         final FakeTimeHolder timeHolder = new FakeTimeHolder(948920669L);
-        final User user = User.builder()
-            .id(new UserId(1L))
-            .username(new Username("handwoong"))
-            .password(new Password("password"))
-            .phoneNumber(new PhoneNumber("01012345678"))
-            .role(UserRole.ROLE_USER)
-            .status(UserStatus.ACTIVE)
-            .build();
+        final User user = aUser().build();
 
         // when
         final User loggedInUser = user.login(timeHolder);
@@ -56,9 +50,7 @@ class UserTest {
     @EnumSource(mode = Mode.EXCLUDE, names = {"ACTIVE"})
     void Should_False_When_StatusNotMatched(final UserStatus status) {
         // given
-        final User user = User.builder()
-            .status(UserStatus.ACTIVE)
-            .build();
+        final User user = aUser().status(UserStatus.ACTIVE).build();
 
         // when
         final boolean result = user.checkStatusDifference(status);
@@ -71,9 +63,7 @@ class UserTest {
     @EnumSource
     void Should_True_When_StatusMatched(final UserStatus status) {
         // given
-        final User user = User.builder()
-            .status(status)
-            .build();
+        final User user = aUser().status(status).build();
 
         // when
         final boolean result = user.checkStatusDifference(status);

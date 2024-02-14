@@ -1,5 +1,6 @@
 package com.handwoong.everyonewaiter.user.application;
 
+import static com.handwoong.everyonewaiter.util.Fixtures.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -8,8 +9,6 @@ import com.handwoong.everyonewaiter.common.infrastructure.jwt.JwtToken;
 import com.handwoong.everyonewaiter.user.domain.Password;
 import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.UserId;
-import com.handwoong.everyonewaiter.user.domain.UserRole;
-import com.handwoong.everyonewaiter.user.domain.UserStatus;
 import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.dto.UserJoin;
 import com.handwoong.everyonewaiter.user.dto.UserLogin;
@@ -41,13 +40,7 @@ class UserServiceImplTest {
     void Should_ThrowException_When_DuplicateUsername() {
         // given
         final TestContainer testContainer = new TestContainer();
-        final User user = User.builder()
-            .username(new Username("handwoong"))
-            .password(new Password("password"))
-            .phoneNumber(new PhoneNumber("01012345678"))
-            .role(UserRole.ROLE_USER)
-            .status(UserStatus.ACTIVE)
-            .build();
+        final User user = aUser().build();
         testContainer.userRepository.save(user);
 
         final UserJoin userJoin = UserJoin.builder()
@@ -68,13 +61,7 @@ class UserServiceImplTest {
         final TestContainer testContainer = new TestContainer();
         final Username username = new Username("handwoong");
         final Password password = new Password("password");
-        final User user = User.builder()
-            .username(username)
-            .password(password)
-            .phoneNumber(new PhoneNumber("01012345678"))
-            .role(UserRole.ROLE_USER)
-            .status(UserStatus.ACTIVE)
-            .build();
+        final User user = aUser().username(username).password(password).build();
         testContainer.userRepository.save(user);
 
         final UserLogin userLogin = UserLogin.builder()
@@ -109,13 +96,7 @@ class UserServiceImplTest {
         // given
         final TestContainer testContainer = new TestContainer();
         final Username username = new Username("handwoong");
-        final User user = User.builder()
-            .username(username)
-            .password(new Password("password"))
-            .phoneNumber(new PhoneNumber("01012345678"))
-            .role(UserRole.ROLE_USER)
-            .status(UserStatus.ACTIVE)
-            .build();
+        final User user = aUser().username(username).build();
         testContainer.userRepository.save(user);
 
         final UserLogin userLogin = UserLogin.builder()

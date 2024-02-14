@@ -1,19 +1,14 @@
 package com.handwoong.everyonewaiter.store.domain;
 
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.FRIDAY;
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.MONDAY;
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.SATURDAY;
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.SUNDAY;
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.THURSDAY;
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.TUESDAY;
-import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.WEDNESDAY;
+import static com.handwoong.everyonewaiter.util.Fixtures.aStoreBusinessTime;
+import static com.handwoong.everyonewaiter.util.Fixtures.aWeekday;
+import static com.handwoong.everyonewaiter.util.Fixtures.aWeekend;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.handwoong.everyonewaiter.common.mock.FakeTimeHolder;
 import com.handwoong.everyonewaiter.store.infrastructure.StoreBusinessTimeEntity;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -24,25 +19,10 @@ class StoreBusinessTimesTest {
         // given
         final StoreBusinessTimes storeBusinessTimes = new StoreBusinessTimes(
             List.of(
-                StoreBusinessTime.builder()
-                    .id(new StoreBusinessTimeId(1L))
-                    .open(LocalTime.of(11, 0, 0))
-                    .close(LocalTime.of(21, 0, 0))
-                    .daysOfWeek(
-                        new StoreDaysOfWeek(
-                            List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
-                        )
-                    )
-                    .build(),
-                StoreBusinessTime.builder()
+                aStoreBusinessTime().daysOfWeek(aWeekday()).build(),
+                aStoreBusinessTime()
                     .id(new StoreBusinessTimeId(2L))
-                    .open(LocalTime.of(9, 0, 0))
-                    .close(LocalTime.of(21, 0, 0))
-                    .daysOfWeek(
-                        new StoreDaysOfWeek(
-                            List.of(SATURDAY, SUNDAY)
-                        )
-                    )
+                    .daysOfWeek(aWeekend())
                     .build()
             )
         );
@@ -59,25 +39,10 @@ class StoreBusinessTimesTest {
     void Should_ThrowException_When_DaysSizeGreaterThanDaysOfWeekSize() {
         // given
         final List<StoreBusinessTime> businessTimes = List.of(
-            StoreBusinessTime.builder()
-                .id(new StoreBusinessTimeId(1L))
-                .open(LocalTime.of(11, 0, 0))
-                .close(LocalTime.of(21, 0, 0))
-                .daysOfWeek(
-                    new StoreDaysOfWeek(
-                        List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
-                    )
-                )
-                .build(),
-            StoreBusinessTime.builder()
+            aStoreBusinessTime().build(),
+            aStoreBusinessTime()
                 .id(new StoreBusinessTimeId(2L))
-                .open(LocalTime.of(9, 0, 0))
-                .close(LocalTime.of(21, 0, 0))
-                .daysOfWeek(
-                    new StoreDaysOfWeek(
-                        List.of(MONDAY, SATURDAY, SUNDAY)
-                    )
-                )
+                .daysOfWeek(aWeekend())
                 .build()
         );
 
@@ -91,18 +56,8 @@ class StoreBusinessTimesTest {
     void Should_ThrowException_When_DuplicateDays() {
         // given
         final List<StoreBusinessTime> businessTimes = List.of(
-            StoreBusinessTime.builder()
-                .id(new StoreBusinessTimeId(1L))
-                .open(LocalTime.of(11, 0, 0))
-                .close(LocalTime.of(21, 0, 0))
-                .daysOfWeek(new StoreDaysOfWeek(List.of(MONDAY)))
-                .build(),
-            StoreBusinessTime.builder()
-                .id(new StoreBusinessTimeId(2L))
-                .open(LocalTime.of(9, 0, 0))
-                .close(LocalTime.of(21, 0, 0))
-                .daysOfWeek(new StoreDaysOfWeek(List.of(MONDAY)))
-                .build()
+            aStoreBusinessTime().daysOfWeek(aWeekend()).build(),
+            aStoreBusinessTime().daysOfWeek(aWeekend()).build()
         );
 
         // expect
@@ -118,30 +73,7 @@ class StoreBusinessTimesTest {
         final LocalDateTime mockTime = LocalDateTime.of(2024, 2, 7, 18, 0, 0); // 수요일 18시 0분
         timeHolder.setMillis(mockTime);
 
-        final StoreBusinessTimes storeBusinessTimes = new StoreBusinessTimes(
-            List.of(
-                StoreBusinessTime.builder()
-                    .id(new StoreBusinessTimeId(1L))
-                    .open(LocalTime.of(11, 0, 0))
-                    .close(LocalTime.of(21, 0, 0))
-                    .daysOfWeek(
-                        new StoreDaysOfWeek(
-                            List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
-                        )
-                    )
-                    .build(),
-                StoreBusinessTime.builder()
-                    .id(new StoreBusinessTimeId(2L))
-                    .open(LocalTime.of(9, 0, 0))
-                    .close(LocalTime.of(21, 0, 0))
-                    .daysOfWeek(
-                        new StoreDaysOfWeek(
-                            List.of(SATURDAY, SUNDAY)
-                        )
-                    )
-                    .build()
-            )
-        );
+        final StoreBusinessTimes storeBusinessTimes = new StoreBusinessTimes(List.of(aStoreBusinessTime().build()));
 
         // when
         final boolean result = storeBusinessTimes.isWithinBusinessTime(timeHolder);
@@ -157,30 +89,7 @@ class StoreBusinessTimesTest {
         final LocalDateTime mockTime = LocalDateTime.of(2024, 2, 7, 22, 0, 0); // 수요일 22시 0분
         timeHolder.setMillis(mockTime);
 
-        final StoreBusinessTimes storeBusinessTimes = new StoreBusinessTimes(
-            List.of(
-                StoreBusinessTime.builder()
-                    .id(new StoreBusinessTimeId(1L))
-                    .open(LocalTime.of(11, 0, 0))
-                    .close(LocalTime.of(21, 0, 0))
-                    .daysOfWeek(
-                        new StoreDaysOfWeek(
-                            List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
-                        )
-                    )
-                    .build(),
-                StoreBusinessTime.builder()
-                    .id(new StoreBusinessTimeId(2L))
-                    .open(LocalTime.of(9, 0, 0))
-                    .close(LocalTime.of(21, 0, 0))
-                    .daysOfWeek(
-                        new StoreDaysOfWeek(
-                            List.of(SATURDAY, SUNDAY)
-                        )
-                    )
-                    .build()
-            )
-        );
+        final StoreBusinessTimes storeBusinessTimes = new StoreBusinessTimes(List.of(aStoreBusinessTime().build()));
 
         // when
         final boolean result = storeBusinessTimes.isWithinBusinessTime(timeHolder);
