@@ -1,10 +1,14 @@
 package com.handwoong.everyonewaiter.waiting.domain;
 
+import static com.handwoong.everyonewaiter.waiting.domain.WaitingStatus.CANCEL;
+import static com.handwoong.everyonewaiter.waiting.domain.WaitingStatus.WAIT;
+
 import com.handwoong.everyonewaiter.common.application.port.UuidHolder;
 import com.handwoong.everyonewaiter.common.domain.AggregateRoot;
 import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
+import com.handwoong.everyonewaiter.waiting.domain.event.WaitingCancelEvent;
 import com.handwoong.everyonewaiter.waiting.domain.event.WaitingRegisterEvent;
 import com.handwoong.everyonewaiter.waiting.dto.WaitingGenerateInfo;
 import com.handwoong.everyonewaiter.waiting.dto.WaitingRegister;
@@ -46,9 +50,25 @@ public class Waiting extends AggregateRoot {
         this.children = waitingRegister.children();
         this.number = waitingInfo.number();
         this.phoneNumber = waitingRegister.phoneNumber();
-        this.status = WaitingStatus.WAIT;
+        this.status = WAIT;
         this.notificationType = WaitingNotificationType.REGISTER;
         this.uniqueCode = uuidHolder.generate();
         this.timestamp = null;
+    }
+
+    public Waiting cancel() {
+        registerEvent(new WaitingCancelEvent(storeId, WaitingNotificationType.CANCEL, phoneNumber));
+        return Waiting.builder()
+            .id(id)
+            .storeId(storeId)
+            .adult(adult)
+            .children(children)
+            .number(number)
+            .phoneNumber(phoneNumber)
+            .status(CANCEL)
+            .notificationType(WaitingNotificationType.CANCEL)
+            .uniqueCode(uniqueCode)
+            .timestamp(timestamp)
+            .build();
     }
 }

@@ -2,6 +2,7 @@ package com.handwoong.everyonewaiter.waiting.domain;
 
 import static com.handwoong.everyonewaiter.util.Fixtures.aStore;
 import static com.handwoong.everyonewaiter.util.Fixtures.aUser;
+import static com.handwoong.everyonewaiter.util.Fixtures.aWaiting;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
@@ -66,5 +67,18 @@ class WaitingTest {
         assertThat(waiting.getStatus()).isEqualTo(WaitingStatus.WAIT);
         assertThat(waiting.getNotificationType()).isEqualTo(WaitingNotificationType.REGISTER);
         assertThat(waiting.getUniqueCode()).isEqualTo(UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
+    }
+
+    @Test
+    void Should_StatusCancel_When_Cancel() {
+        // given
+        final Waiting waiting = aWaiting().build();
+
+        // when
+        final Waiting canceledWaiting = waiting.cancel();
+
+        // then
+        assertThat(canceledWaiting.getStatus()).isEqualTo(WaitingStatus.CANCEL);
+        assertThat(canceledWaiting.getNotificationType()).isEqualTo(WaitingNotificationType.CANCEL);
     }
 }

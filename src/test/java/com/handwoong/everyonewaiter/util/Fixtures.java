@@ -70,6 +70,7 @@ public class Fixtures {
             .name(new StoreName("나루"))
             .landlineNumber(new LandlineNumber("0551234567"))
             .status(StoreStatus.OPEN)
+            .lastOpenedAt(LocalDateTime.of(1970, 1, 1, 0, 0, 0))
             .businessTimes(new StoreBusinessTimes(List.of(aStoreBusinessTime().build())))
             .breakTimes(
                 new StoreBreakTimes(
