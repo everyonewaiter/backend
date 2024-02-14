@@ -27,7 +27,7 @@ public record StoreBusinessTimeRequest(
     public StoreBusinessTime toDomain() {
         return StoreBusinessTime.builder()
             .open(open)
-            .close(close)
+            .close(close.withSecond(59).withNano(999_000_000))
             .daysOfWeek(new StoreDaysOfWeek(daysOfWeek))
             .build();
     }
