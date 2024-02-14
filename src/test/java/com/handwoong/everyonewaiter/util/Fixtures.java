@@ -8,7 +8,9 @@ import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.THURSDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.TUESDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.WEDNESDAY;
 
+import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
+import com.handwoong.everyonewaiter.common.mock.FakeUuidHolder;
 import com.handwoong.everyonewaiter.store.domain.LandlineNumber;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.Store.StoreBuilder;
@@ -34,6 +36,15 @@ import com.handwoong.everyonewaiter.user.domain.UserId;
 import com.handwoong.everyonewaiter.user.domain.UserRole;
 import com.handwoong.everyonewaiter.user.domain.UserStatus;
 import com.handwoong.everyonewaiter.user.domain.Username;
+import com.handwoong.everyonewaiter.waiting.domain.Waiting;
+import com.handwoong.everyonewaiter.waiting.domain.Waiting.WaitingBuilder;
+import com.handwoong.everyonewaiter.waiting.domain.WaitingAdult;
+import com.handwoong.everyonewaiter.waiting.domain.WaitingChildren;
+import com.handwoong.everyonewaiter.waiting.domain.WaitingId;
+import com.handwoong.everyonewaiter.waiting.domain.WaitingNotificationType;
+import com.handwoong.everyonewaiter.waiting.domain.WaitingNumber;
+import com.handwoong.everyonewaiter.waiting.domain.WaitingStatus;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -58,7 +69,7 @@ public class Fixtures {
             .userId(new UserId(1L))
             .name(new StoreName("나루"))
             .landlineNumber(new LandlineNumber("0551234567"))
-            .status(StoreStatus.CLOSE)
+            .status(StoreStatus.OPEN)
             .businessTimes(new StoreBusinessTimes(List.of(aStoreBusinessTime().build())))
             .breakTimes(
                 new StoreBreakTimes(
@@ -110,5 +121,24 @@ public class Fixtures {
             .useBreakTime(true)
             .useWaiting(true)
             .useOrder(true);
+    }
+
+    public static WaitingBuilder aWaiting() {
+        final FakeUuidHolder uuidHolder = new FakeUuidHolder("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+        return Waiting.builder()
+            .id(new WaitingId(1L))
+            .storeId(new StoreId(1L))
+            .adult(new WaitingAdult(2))
+            .children(new WaitingChildren(0))
+            .number(new WaitingNumber(10))
+            .phoneNumber(new PhoneNumber("01012345678"))
+            .status(WaitingStatus.WAIT)
+            .notificationType(WaitingNotificationType.REGISTER)
+            .uniqueCode(uuidHolder.generate())
+            .timestamp(
+                DomainTimestamp.builder()
+                    .createdAt(LocalDateTime.now())
+                    .build()
+            );
     }
 }
