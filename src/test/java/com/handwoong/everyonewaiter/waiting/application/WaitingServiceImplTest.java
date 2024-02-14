@@ -16,9 +16,14 @@ import com.handwoong.everyonewaiter.waiting.domain.Waiting;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingAdult;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingChildren;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingId;
+import com.handwoong.everyonewaiter.waiting.domain.WaitingNotificationType;
+import com.handwoong.everyonewaiter.waiting.domain.WaitingStatus;
+import com.handwoong.everyonewaiter.waiting.dto.WaitingCancel;
 import com.handwoong.everyonewaiter.waiting.dto.WaitingRegister;
 import com.handwoong.everyonewaiter.waiting.exception.AlreadyExistsPhoneNumberException;
+import com.handwoong.everyonewaiter.waiting.exception.WaitingNotFoundException;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -72,5 +77,66 @@ class WaitingServiceImplTest {
         assertThatThrownBy(() -> testContainer.waitingService.register(waitingRegister))
             .isInstanceOf(AlreadyExistsPhoneNumberException.class)
             .hasMessage("이미 웨이팅에 등록되어 있는 휴대폰 번호입니다.");
+    }
+
+    @Test
+    void Should_Cancel_When_ValidWaitingCancel() {
+        // given
+        final Waiting waiting = aWaiting().build();
+        testContainer.waitingRepository.save(waiting);
+
+        final StoreId storeId = new StoreId(1L);
+        final UUID uniqueCode = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+        final WaitingCancel waitingCancel = WaitingCancel.builder()
+            .storeId(storeId)
+            .uniqueCode(uniqueCode)
+            .build();
+
+        // when
+        testContainer.waitingService.cancel(waitingCancel);
+        final Waiting result =
+            testContainer.waitingRepository.findByStoreIdAndUniqueCodeOrElseThrow(storeId, uniqueCode);
+
+        // then
+        assertThat(result.getStatus()).isEqualTo(WaitingStatus.CANCEL);
+        assertThat(result.getNotificationType()).isEqualTo(WaitingNotificationType.CANCEL);
+    }
+
+    @Test
+    void Should_ThrowException_When_CancelStoreIdNotFound() {
+        // given
+        final Waiting waiting = aWaiting().build();
+        testContainer.waitingRepository.save(waiting);
+
+        final StoreId storeId = new StoreId(2L);
+        final UUID uniqueCode = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+        final WaitingCancel waitingCancel = WaitingCancel.builder()
+            .storeId(storeId)
+            .uniqueCode(uniqueCode)
+            .build();
+
+        // expect
+        assertThatThrownBy(() -> testContainer.waitingService.cancel(waitingCancel))
+            .isInstanceOf(WaitingNotFoundException.class)
+            .hasMessage("웨이팅을 찾을 수 없습니다.");
+    }
+
+    @Test
+    void Should_ThrowException_When_CancelUniqueCodeNotFound() {
+        // given
+        final Waiting waiting = aWaiting().build();
+        testContainer.waitingRepository.save(waiting);
+
+        final StoreId storeId = new StoreId(1L);
+        final UUID uniqueCode = UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
+        final WaitingCancel waitingCancel = WaitingCancel.builder()
+            .storeId(storeId)
+            .uniqueCode(uniqueCode)
+            .build();
+
+        // expect
+        assertThatThrownBy(() -> testContainer.waitingService.cancel(waitingCancel))
+            .isInstanceOf(WaitingNotFoundException.class)
+            .hasMessage("웨이팅을 찾을 수 없습니다.");
     }
 }
