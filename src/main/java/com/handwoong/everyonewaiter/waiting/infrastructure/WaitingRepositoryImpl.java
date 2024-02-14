@@ -7,10 +7,13 @@ import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.waiting.application.port.WaitingRepository;
 import com.handwoong.everyonewaiter.waiting.domain.Waiting;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingStatus;
+import com.handwoong.everyonewaiter.waiting.exception.WaitingNotFoundException;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -55,6 +58,23 @@ public class WaitingRepositoryImpl implements WaitingRepository {
                 )
                 .fetchFirst()
         );
+    }
+
+    @Override
+    public Waiting findByStoreIdAndUniqueCodeOrElseThrow(final StoreId storeId, final UUID uniqueCode) {
+        return Optional.ofNullable(
+                queryFactory.selectFrom(waitingEntity)
+                    .where(
+                        storeIdEq(storeId),
+                        waitingEntity.uniqueCode.eq(uniqueCode)
+                    )
+                    .fetchFirst()
+            )
+            .orElseThrow(() ->
+                new WaitingNotFoundException("웨이팅을 찾을 수 없습니다.",
+                    "storeId : [" + storeId + "] uniqueCode : [" + uniqueCode + "]")
+            )
+            .toModel();
     }
 
     private BooleanExpression storeIdEq(final StoreId storeId) {

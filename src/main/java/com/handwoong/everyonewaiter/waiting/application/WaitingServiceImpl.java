@@ -8,6 +8,7 @@ import com.handwoong.everyonewaiter.waiting.domain.Waiting;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingGenerator;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingId;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingValidator;
+import com.handwoong.everyonewaiter.waiting.dto.WaitingCancel;
 import com.handwoong.everyonewaiter.waiting.dto.WaitingRegister;
 import com.handwoong.everyonewaiter.waiting.exception.AlreadyExistsPhoneNumberException;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,15 @@ public class WaitingServiceImpl implements WaitingService {
         final Waiting waiting = new Waiting(waitingRegister, waitingValidator, waitingGenerator, uuidHolder);
         final Waiting registeredWaiting = waitingRepository.save(waiting);
         return registeredWaiting.getId();
+    }
+
+    @Override
+    @Transactional
+    public void cancel(final WaitingCancel waitingCancel) {
+        final Waiting waiting = waitingRepository.findByStoreIdAndUniqueCodeOrElseThrow(
+            waitingCancel.storeId(), waitingCancel.uniqueCode());
+        final Waiting canceledWaiting = waiting.cancel();
+        waitingRepository.save(canceledWaiting);
     }
 
     private void validatePhoneNumber(final PhoneNumber phoneNumber) {

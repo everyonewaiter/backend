@@ -26,4 +26,16 @@ public class WaitingExceptionHandler {
             .badRequest()
             .body(ApiResponse.error(errorMessage));
     }
+
+    @ExceptionHandler({WaitingNotFoundException.class})
+    public ResponseEntity<ApiResponse<Void>> waitingNotFound(
+        final WaitingNotFoundException exception,
+        final HttpServletRequest request
+    ) {
+        final String errorMessage = exception.getMessage();
+        ExceptionLogger.warn(BAD_REQUEST, request.getRequestURI(), errorMessage, exception.getResource());
+        return ResponseEntity
+            .badRequest()
+            .body(ApiResponse.error(errorMessage));
+    }
 }

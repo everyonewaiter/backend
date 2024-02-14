@@ -7,6 +7,7 @@ import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSn
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER_KEY;
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER_TYPE;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreResponseSnippet.CUD_RESPONSE;
+import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingRequestSnippet.CANCEL_REQUEST;
 import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingRequestSnippet.REGISTER_REQUEST;
 import static com.handwoong.everyonewaiter.waiting.domain.WaitingAdult.MAX_ADULT_MESSAGE;
 import static com.handwoong.everyonewaiter.waiting.domain.WaitingAdult.MIN_ADULT_MESSAGE;
@@ -17,11 +18,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.handwoong.everyonewaiter.common.dto.ApiResponse;
 import com.handwoong.everyonewaiter.common.dto.ApiResponse.ResultCode;
 import com.handwoong.everyonewaiter.medium.TestHelper;
+import com.handwoong.everyonewaiter.waiting.controller.request.WaitingCancelRequest;
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingRegisterRequest;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
@@ -163,6 +166,33 @@ class WaitingControllerTest extends TestHelper {
             .body(request)
             .filter(getFilter().document(AUTHORIZATION_HEADER, REGISTER_REQUEST, CUD_RESPONSE))
             .when().post("/api/waiting")
+            .then().log().all().extract();
+    }
+
+    @Test
+    void Should_Cancel_When_ValidRequest() {
+        // given
+        final WaitingCancelRequest request =
+            new WaitingCancelRequest(2L, UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
+
+        // when
+        final ExtractableResponse<Response> response = cancel(request);
+        final TypeRef<ApiResponse<Void>> typeRef = new TypeRef<>() {
+        };
+        final ApiResponse<Void> result = response.body().as(typeRef);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(result.resultCode()).isEqualTo(ResultCode.SUCCESS);
+    }
+
+    private ExtractableResponse<Response> cancel(final WaitingCancelRequest request) {
+        return RestAssured
+            .given(getSpecification()).log().all()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .body(request)
+            .filter(getFilter().document(CANCEL_REQUEST, CUD_RESPONSE))
+            .when().put("/api/waiting/cancel")
             .then().log().all().extract();
     }
 }

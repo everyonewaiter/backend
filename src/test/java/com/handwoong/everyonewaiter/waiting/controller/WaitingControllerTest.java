@@ -3,9 +3,11 @@ package com.handwoong.everyonewaiter.waiting.controller;
 import static com.handwoong.everyonewaiter.util.Fixtures.aStore;
 import static com.handwoong.everyonewaiter.util.Fixtures.aStoreOption;
 import static com.handwoong.everyonewaiter.util.Fixtures.aUser;
+import static com.handwoong.everyonewaiter.util.Fixtures.aWaiting;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.common.dto.ApiResponse;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
@@ -13,8 +15,12 @@ import com.handwoong.everyonewaiter.store.domain.StoreStatus;
 import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.util.TestContainer;
+import com.handwoong.everyonewaiter.waiting.controller.request.WaitingCancelRequest;
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingRegisterRequest;
+import com.handwoong.everyonewaiter.waiting.domain.Waiting;
+import com.handwoong.everyonewaiter.waiting.exception.WaitingNotFoundException;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +41,9 @@ class WaitingControllerTest {
 
         final Store store = aStore().build();
         testContainer.storeRepository.save(store);
+
+        final Waiting waiting = aWaiting().phoneNumber(new PhoneNumber("01011112222")).build();
+        testContainer.waitingRepository.save(waiting);
     }
 
     @Test
@@ -99,5 +108,42 @@ class WaitingControllerTest {
         assertThatThrownBy(() -> testContainer.waitingController.register(request))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("브레이크 타임에는 웨이팅을 등록할 수 없습니다.");
+    }
+
+    @Test
+    void Should_Cancel_When_ValidRequest() {
+        // given
+        final WaitingCancelRequest request =
+            new WaitingCancelRequest(1L, UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
+
+        // when
+        final ResponseEntity<ApiResponse<Void>> response = testContainer.waitingController.cancel(request);
+
+        // then
+        assertThat(response.getStatusCode().value()).isEqualTo(200);
+    }
+
+    @Test
+    void Should_ThrowException_When_CancelStoreIdNotFound() {
+        // given
+        final WaitingCancelRequest request =
+            new WaitingCancelRequest(2L, UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
+
+        // expect
+        assertThatThrownBy(() -> testContainer.waitingController.cancel(request))
+            .isInstanceOf(WaitingNotFoundException.class)
+            .hasMessage("웨이팅을 찾을 수 없습니다.");
+    }
+
+    @Test
+    void Should_ThrowException_When_CancelUniqueCodeNotFound() {
+        // given
+        final WaitingCancelRequest request =
+            new WaitingCancelRequest(1L, UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"));
+
+        // expect
+        assertThatThrownBy(() -> testContainer.waitingController.cancel(request))
+            .isInstanceOf(WaitingNotFoundException.class)
+            .hasMessage("웨이팅을 찾을 수 없습니다.");
     }
 }
