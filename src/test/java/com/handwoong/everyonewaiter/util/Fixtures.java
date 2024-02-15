@@ -8,6 +8,10 @@ import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.THURSDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.TUESDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.WEDNESDAY;
 
+import com.handwoong.everyonewaiter.category.domain.Category;
+import com.handwoong.everyonewaiter.category.domain.Category.CategoryBuilder;
+import com.handwoong.everyonewaiter.category.domain.CategoryId;
+import com.handwoong.everyonewaiter.category.domain.CategoryName;
 import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.common.mock.FakeUuidHolder;
@@ -141,5 +145,13 @@ public class Fixtures {
                     .createdAt(LocalDateTime.now())
                     .build()
             );
+    }
+
+    public static CategoryBuilder aCategory() {
+        return Category.builder()
+            .id(new CategoryId(1L))
+            .storeId(new StoreId(1L))
+            .name(new CategoryName("스테이크"))
+            .icon("drumstick");
     }
 }
