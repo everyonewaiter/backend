@@ -1,0 +1,21 @@
+package com.handwoong.everyonewaiter.category.domain;
+
+import com.handwoong.everyonewaiter.common.domain.AggregateRoot;
+import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
+import com.handwoong.everyonewaiter.store.domain.StoreId;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class Category extends AggregateRoot {
+
+    private final CategoryId id;
+    private final StoreId storeId;
+    private final CategoryName name;
+    private final String icon;
+    private final DomainTimestamp timestamp;
+}
