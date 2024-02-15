@@ -1,5 +1,10 @@
 package com.handwoong.everyonewaiter.util;
 
+import com.handwoong.everyonewaiter.category.application.CategoryServiceImpl;
+import com.handwoong.everyonewaiter.category.application.port.CategoryRepository;
+import com.handwoong.everyonewaiter.category.controller.port.CategoryService;
+import com.handwoong.everyonewaiter.category.domain.CategoryValidator;
+import com.handwoong.everyonewaiter.category.mock.FakeCategoryRepository;
 import com.handwoong.everyonewaiter.common.mock.FakePasswordEncoder;
 import com.handwoong.everyonewaiter.common.mock.FakeTimeHolder;
 import com.handwoong.everyonewaiter.common.mock.FakeUuidHolder;
@@ -49,6 +54,10 @@ public class TestContainer {
     public final WaitingService waitingService;
     public final WaitingController waitingController;
 
+    public final CategoryRepository categoryRepository;
+    public final CategoryValidator categoryValidator;
+    public final CategoryService categoryService;
+
     public TestContainer() {
         this.passwordEncoder = new FakePasswordEncoder("encode");
         this.timeHolder = new FakeTimeHolder();
@@ -68,6 +77,10 @@ public class TestContainer {
         this.waitingGenerator = new WaitingGenerator(userRepository, storeRepository, waitingRepository);
         this.waitingService = new WaitingServiceImpl(waitingRepository, waitingValidator, waitingGenerator, uuidHolder);
         this.waitingController = new WaitingController(waitingService);
+
+        this.categoryRepository = new FakeCategoryRepository();
+        this.categoryValidator = new CategoryValidator(userRepository, storeRepository);
+        this.categoryService = new CategoryServiceImpl(categoryRepository, categoryValidator);
     }
 
     public void setSecurityContextAuthentication(final Username username) {
