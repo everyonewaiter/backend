@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -17,7 +18,7 @@ public class Category extends AggregateRoot {
     private final CategoryId id;
     private final StoreId storeId;
     private final CategoryName name;
-    private final String icon;
+    private final CategoryIcon icon;
     private final DomainTimestamp timestamp;
 
     public static Category create(final CategoryCreate categoryCreate, final CategoryValidator categoryValidator) {

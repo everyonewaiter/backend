@@ -2,6 +2,7 @@ package com.handwoong.everyonewaiter.util;
 
 import com.handwoong.everyonewaiter.category.application.CategoryServiceImpl;
 import com.handwoong.everyonewaiter.category.application.port.CategoryRepository;
+import com.handwoong.everyonewaiter.category.controller.CategoryController;
 import com.handwoong.everyonewaiter.category.controller.port.CategoryService;
 import com.handwoong.everyonewaiter.category.domain.CategoryValidator;
 import com.handwoong.everyonewaiter.category.mock.FakeCategoryRepository;
@@ -57,6 +58,7 @@ public class TestContainer {
     public final CategoryRepository categoryRepository;
     public final CategoryValidator categoryValidator;
     public final CategoryService categoryService;
+    public final CategoryController categoryController;
 
     public TestContainer() {
         this.passwordEncoder = new FakePasswordEncoder("encode");
@@ -81,6 +83,7 @@ public class TestContainer {
         this.categoryRepository = new FakeCategoryRepository();
         this.categoryValidator = new CategoryValidator(userRepository, storeRepository);
         this.categoryService = new CategoryServiceImpl(categoryRepository, categoryValidator);
+        this.categoryController = new CategoryController(categoryService);
     }
 
     public void setSecurityContextAuthentication(final Username username) {

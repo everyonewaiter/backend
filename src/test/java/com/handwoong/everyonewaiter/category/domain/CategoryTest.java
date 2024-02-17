@@ -35,7 +35,7 @@ class CategoryTest {
         // given
         final StoreId storeId = new StoreId(1L);
         final CategoryName categoryName = new CategoryName("스테이크");
-        final String icon = "drumstick";
+        final CategoryIcon icon = new CategoryIcon("drumstick");
 
         final CategoryCreate categoryCreate = CategoryCreate.builder()
             .storeId(storeId)

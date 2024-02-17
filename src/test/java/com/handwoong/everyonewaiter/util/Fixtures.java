@@ -10,6 +10,7 @@ import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.WEDNESDAY;
 
 import com.handwoong.everyonewaiter.category.domain.Category;
 import com.handwoong.everyonewaiter.category.domain.Category.CategoryBuilder;
+import com.handwoong.everyonewaiter.category.domain.CategoryIcon;
 import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.domain.CategoryName;
 import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
@@ -152,6 +153,6 @@ public class Fixtures {
             .id(new CategoryId(1L))
             .storeId(new StoreId(1L))
             .name(new CategoryName("스테이크"))
-            .icon("drumstick");
+            .icon(new CategoryIcon("drumstick"));
     }
 }

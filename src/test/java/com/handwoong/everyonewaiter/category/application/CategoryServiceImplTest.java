@@ -5,6 +5,7 @@ import static com.handwoong.everyonewaiter.util.Fixtures.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.handwoong.everyonewaiter.category.domain.CategoryIcon;
 import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.domain.CategoryName;
 import com.handwoong.everyonewaiter.category.dto.CategoryCreate;
@@ -41,7 +42,7 @@ class CategoryServiceImplTest {
         final CategoryCreate categoryCreate = CategoryCreate.builder()
             .storeId(new StoreId(1L))
             .name(new CategoryName("스테이크"))
-            .icon("drumstick")
+            .icon(new CategoryIcon("drumstick"))
             .build();
 
         // when
@@ -58,7 +59,7 @@ class CategoryServiceImplTest {
         final CategoryCreate categoryCreate = CategoryCreate.builder()
             .storeId(new StoreId(1L))
             .name(new CategoryName("스테이크"))
-            .icon("drumstick")
+            .icon(new CategoryIcon("drumstick"))
             .build();
 
         // expect
@@ -73,7 +74,7 @@ class CategoryServiceImplTest {
         final CategoryCreate categoryCreate = CategoryCreate.builder()
             .storeId(new StoreId(2L))
             .name(new CategoryName("스테이크"))
-            .icon("drumstick")
+            .icon(new CategoryIcon("drumstick"))
             .build();
 
         // expect

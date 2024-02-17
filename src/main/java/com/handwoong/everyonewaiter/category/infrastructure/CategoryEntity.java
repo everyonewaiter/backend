@@ -1,6 +1,10 @@
 package com.handwoong.everyonewaiter.category.infrastructure;
 
+import static com.handwoong.everyonewaiter.category.domain.CategoryIcon.CATEGORY_ICON_MAX_LENGTH;
+import static com.handwoong.everyonewaiter.category.domain.CategoryName.CATEGORY_NAME_MAX_LENGTH;
+
 import com.handwoong.everyonewaiter.category.domain.Category;
+import com.handwoong.everyonewaiter.category.domain.CategoryIcon;
 import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.domain.CategoryName;
 import com.handwoong.everyonewaiter.common.infrastructure.BaseEntity;
@@ -31,11 +35,11 @@ public class CategoryEntity extends BaseEntity {
     private Long storeId;
 
     @NotNull
-    @Column(length = 20)
+    @Column(length = CATEGORY_NAME_MAX_LENGTH)
     private String name;
 
     @NotNull
-    @Column(length = 20)
+    @Column(length = CATEGORY_ICON_MAX_LENGTH)
     private String icon;
 
     public static CategoryEntity from(final Category category) {
@@ -43,7 +47,7 @@ public class CategoryEntity extends BaseEntity {
         categoryEntity.id = Objects.isNull(category.getId()) ? null : category.getId().value();
         categoryEntity.storeId = Objects.requireNonNull(category.getStoreId(), "카테고리의 매장 ID는 null일 수 없습니다.").value();
         categoryEntity.name = category.getName().toString();
-        categoryEntity.icon = category.getIcon();
+        categoryEntity.icon = category.getIcon().toString();
         return categoryEntity;
     }
 
@@ -52,7 +56,7 @@ public class CategoryEntity extends BaseEntity {
             .id(new CategoryId(id))
             .storeId(new StoreId(storeId))
             .name(new CategoryName(name))
-            .icon(icon)
+            .icon(new CategoryIcon(icon))
             .timestamp(getDomainTimestamp())
             .build();
     }
