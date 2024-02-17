@@ -3,8 +3,8 @@ package com.handwoong.everyonewaiter.store.controller.request;
 import static com.handwoong.everyonewaiter.store.controller.request.StoreBusinessTimeRequest.MIN_BUSINESS_TIME_MESSAGE;
 import static com.handwoong.everyonewaiter.store.domain.LandlineNumber.LANDLINE_NUMBER_FORMAT_MESSAGE;
 import static com.handwoong.everyonewaiter.store.domain.LandlineNumber.LANDLINE_NUMBER_REGEX;
-import static com.handwoong.everyonewaiter.store.domain.StoreName.MAX_LENGTH;
 import static com.handwoong.everyonewaiter.store.domain.StoreName.STORE_NAME_EMPTY_MESSAGE;
+import static com.handwoong.everyonewaiter.store.domain.StoreName.STORE_NAME_MAX_LENGTH;
 import static com.handwoong.everyonewaiter.store.domain.StoreName.STORE_NAME_MAX_LENGTH_MESSAGE;
 
 import com.handwoong.everyonewaiter.store.domain.LandlineNumber;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public record StoreCreateRequest(
     @NotBlank(message = STORE_NAME_EMPTY_MESSAGE)
-    @Size(max = MAX_LENGTH, message = STORE_NAME_MAX_LENGTH_MESSAGE)
+    @Size(max = STORE_NAME_MAX_LENGTH, message = STORE_NAME_MAX_LENGTH_MESSAGE)
     String name,
 
     @NotBlank(message = LANDLINE_NUMBER_FORMAT_MESSAGE)

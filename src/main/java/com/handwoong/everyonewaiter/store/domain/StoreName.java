@@ -7,7 +7,7 @@ public record StoreName(String name) {
 
     public static final String STORE_NAME_EMPTY_MESSAGE = "매장 이름을 입력해주세요.";
     public static final String STORE_NAME_MAX_LENGTH_MESSAGE = "매장 이름은 50자 이하로 입력해주세요.";
-    public static final int MAX_LENGTH = 50;
+    public static final int STORE_NAME_MAX_LENGTH = 50;
 
     public StoreName {
         validateNotEmpty(name);
@@ -21,7 +21,7 @@ public record StoreName(String name) {
     }
 
     private void validateLength(final String name) {
-        if (name.length() > MAX_LENGTH) {
+        if (name.length() > STORE_NAME_MAX_LENGTH) {
             throw new InvalidStoreNameFormatException(STORE_NAME_MAX_LENGTH_MESSAGE, name);
         }
     }
