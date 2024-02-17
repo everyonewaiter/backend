@@ -1,5 +1,7 @@
 package com.handwoong.everyonewaiter.store.infrastructure;
 
+import static com.handwoong.everyonewaiter.store.domain.StoreName.STORE_NAME_MAX_LENGTH;
+
 import com.handwoong.everyonewaiter.common.infrastructure.BaseEntity;
 import com.handwoong.everyonewaiter.store.domain.LandlineNumber;
 import com.handwoong.everyonewaiter.store.domain.Store;
@@ -44,7 +46,7 @@ public class StoreEntity extends BaseEntity {
     private Long userId;
 
     @NotNull
-    @Column(length = 50)
+    @Column(length = STORE_NAME_MAX_LENGTH)
     private String name;
 
     @NotNull

@@ -8,3 +8,4 @@
 include::user.adoc[]
 include::store.adoc[]
 include::waiting.adoc[]
+include::category.adoc[]

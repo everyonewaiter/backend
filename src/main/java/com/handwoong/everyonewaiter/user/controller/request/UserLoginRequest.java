@@ -1,7 +1,7 @@
 package com.handwoong.everyonewaiter.user.controller.request;
 
 import static com.handwoong.everyonewaiter.user.domain.Password.PASSWORD_REGEX;
-import static com.handwoong.everyonewaiter.user.domain.Username.MAX_LENGTH;
+import static com.handwoong.everyonewaiter.user.domain.Username.USERNAME_MAX_LENGTH;
 
 import com.handwoong.everyonewaiter.user.domain.Password;
 import com.handwoong.everyonewaiter.user.domain.Username;
@@ -12,7 +12,7 @@ import jakarta.validation.constraints.Size;
 
 public record UserLoginRequest(
     @NotBlank(message = LOGIN_MESSAGE)
-    @Size(max = MAX_LENGTH, message = LOGIN_MESSAGE)
+    @Size(max = USERNAME_MAX_LENGTH, message = LOGIN_MESSAGE)
     String username,
 
     @NotBlank(message = LOGIN_MESSAGE)
