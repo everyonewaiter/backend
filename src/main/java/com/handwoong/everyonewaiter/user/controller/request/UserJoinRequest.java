@@ -4,8 +4,8 @@ import static com.handwoong.everyonewaiter.common.domain.PhoneNumber.PHONE_NUMBE
 import static com.handwoong.everyonewaiter.common.domain.PhoneNumber.PHONE_NUMBER_REGEX;
 import static com.handwoong.everyonewaiter.user.domain.Password.PASSWORD_FORMAT_MESSAGE;
 import static com.handwoong.everyonewaiter.user.domain.Password.PASSWORD_REGEX;
-import static com.handwoong.everyonewaiter.user.domain.Username.MAX_LENGTH;
 import static com.handwoong.everyonewaiter.user.domain.Username.USERNAME_EMPTY_MESSAGE;
+import static com.handwoong.everyonewaiter.user.domain.Username.USERNAME_MAX_LENGTH;
 import static com.handwoong.everyonewaiter.user.domain.Username.USERNAME_MAX_LENGTH_MESSAGE;
 
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
@@ -18,7 +18,7 @@ import jakarta.validation.constraints.Size;
 
 public record UserJoinRequest(
     @NotBlank(message = USERNAME_EMPTY_MESSAGE)
-    @Size(max = MAX_LENGTH, message = USERNAME_MAX_LENGTH_MESSAGE)
+    @Size(max = USERNAME_MAX_LENGTH, message = USERNAME_MAX_LENGTH_MESSAGE)
     String username,
 
     @NotBlank(message = PASSWORD_FORMAT_MESSAGE)

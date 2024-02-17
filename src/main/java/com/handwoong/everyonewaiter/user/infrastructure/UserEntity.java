@@ -1,5 +1,7 @@
 package com.handwoong.everyonewaiter.user.infrastructure;
 
+import static com.handwoong.everyonewaiter.user.domain.Username.USERNAME_MAX_LENGTH;
+
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.common.infrastructure.BaseEntity;
 import com.handwoong.everyonewaiter.user.domain.Password;
@@ -33,7 +35,7 @@ public class UserEntity extends BaseEntity {
     private Long id;
 
     @NotNull
-    @Column(length = 30, unique = true)
+    @Column(length = USERNAME_MAX_LENGTH, unique = true)
     private String username;
 
     @NotNull

@@ -8,7 +8,7 @@ public record Username(String username) {
     public static final String USERNAME_EMPTY_MESSAGE = "사용자 아이디를 입력해주세요.";
     public static final String USERNAME_INCLUDE_BLANK_MESSAGE = "사용자 아이디는 공백이 포함될 수 없습니다.";
     public static final String USERNAME_MAX_LENGTH_MESSAGE = "사용자 아이디는 30자 이하로 입력해주세요.";
-    public static final int MAX_LENGTH = 30;
+    public static final int USERNAME_MAX_LENGTH = 30;
 
     public Username {
         validateNotEmpty(username);
@@ -30,7 +30,7 @@ public record Username(String username) {
     }
 
     private void validateLength(final String username) {
-        if (username.length() > MAX_LENGTH) {
+        if (username.length() > USERNAME_MAX_LENGTH) {
             throw new InvalidUsernameFormatException(USERNAME_MAX_LENGTH_MESSAGE, username);
         }
     }
