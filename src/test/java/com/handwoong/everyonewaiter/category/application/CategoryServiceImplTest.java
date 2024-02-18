@@ -1,14 +1,17 @@
 package com.handwoong.everyonewaiter.category.application;
 
+import static com.handwoong.everyonewaiter.util.Fixtures.aCategory;
 import static com.handwoong.everyonewaiter.util.Fixtures.aStore;
 import static com.handwoong.everyonewaiter.util.Fixtures.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.handwoong.everyonewaiter.category.domain.Category;
 import com.handwoong.everyonewaiter.category.domain.CategoryIcon;
 import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.domain.CategoryName;
 import com.handwoong.everyonewaiter.category.dto.CategoryCreate;
+import com.handwoong.everyonewaiter.category.dto.CategoryUpdate;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.store.exception.StoreNotFoundException;
@@ -34,6 +37,9 @@ class CategoryServiceImplTest {
 
         final Store store = aStore().build();
         testContainer.storeRepository.save(store);
+
+        final Category category = aCategory().build();
+        testContainer.categoryRepository.save(category);
     }
 
     @Test
@@ -79,6 +85,61 @@ class CategoryServiceImplTest {
 
         // expect
         assertThatThrownBy(() -> testContainer.categoryService.create(categoryCreate))
+            .isInstanceOf(StoreNotFoundException.class)
+            .hasMessage("매장을 찾을 수 없습니다.");
+    }
+
+    @Test
+    void Should_Update_When_ValidCategoryUpdate() {
+        // given
+        final CategoryId categoryId = new CategoryId(1L);
+        final CategoryName categoryName = new CategoryName("파스타");
+        final CategoryIcon categoryIcon = new CategoryIcon("utensils");
+        final CategoryUpdate categoryUpdate = CategoryUpdate.builder()
+            .id(categoryId)
+            .storeId(new StoreId(1L))
+            .name(categoryName)
+            .icon(categoryIcon)
+            .build();
+
+        // when
+        testContainer.categoryService.update(categoryUpdate);
+        final Category result = testContainer.categoryRepository.findByIdOrElseThrow(categoryId);
+
+        // then
+        assertThat(result.getName()).isEqualTo(categoryName);
+        assertThat(result.getIcon()).isEqualTo(categoryIcon);
+    }
+
+    @Test
+    void Should_ThrowException_When_UpdateUserNotFound() {
+        // given
+        testContainer.setSecurityContextAuthentication(new Username("username"));
+        final CategoryUpdate categoryUpdate = CategoryUpdate.builder()
+            .id(new CategoryId(1L))
+            .storeId(new StoreId(2L))
+            .name(new CategoryName("파스타"))
+            .icon(new CategoryIcon("utensils"))
+            .build();
+
+        // expect
+        assertThatThrownBy(() -> testContainer.categoryService.update(categoryUpdate))
+            .isInstanceOf(UserNotFoundException.class)
+            .hasMessage("사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void Should_ThrowException_When_UpdateStoreNotFound() {
+        // given
+        final CategoryUpdate categoryUpdate = CategoryUpdate.builder()
+            .id(new CategoryId(1L))
+            .storeId(new StoreId(2L))
+            .name(new CategoryName("파스타"))
+            .icon(new CategoryIcon("utensils"))
+            .build();
+
+        // expect
+        assertThatThrownBy(() -> testContainer.categoryService.update(categoryUpdate))
             .isInstanceOf(StoreNotFoundException.class)
             .hasMessage("매장을 찾을 수 없습니다.");
     }

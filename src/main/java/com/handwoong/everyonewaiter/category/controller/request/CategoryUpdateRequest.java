@@ -8,14 +8,18 @@ import static com.handwoong.everyonewaiter.category.domain.CategoryName.CATEGORY
 import static com.handwoong.everyonewaiter.category.domain.CategoryName.CATEGORY_NAME_MAX_LENGTH_MESSAGE;
 
 import com.handwoong.everyonewaiter.category.domain.CategoryIcon;
+import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.domain.CategoryName;
-import com.handwoong.everyonewaiter.category.dto.CategoryCreate;
+import com.handwoong.everyonewaiter.category.dto.CategoryUpdate;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record CategoryCreateRequest(
+public record CategoryUpdateRequest(
+    @NotNull
+    Long id,
+
     @NotNull
     Long storeId,
 
@@ -28,8 +32,9 @@ public record CategoryCreateRequest(
     String icon
 ) {
 
-    public CategoryCreate toDomainDto() {
-        return CategoryCreate.builder()
+    public CategoryUpdate toDomainDto() {
+        return CategoryUpdate.builder()
+            .id(new CategoryId(id))
             .storeId(new StoreId(storeId))
             .name(new CategoryName(name))
             .icon(new CategoryIcon(icon))

@@ -1,10 +1,12 @@
 package com.handwoong.everyonewaiter.category.domain;
 
+import static com.handwoong.everyonewaiter.util.Fixtures.aCategory;
 import static com.handwoong.everyonewaiter.util.Fixtures.aStore;
 import static com.handwoong.everyonewaiter.util.Fixtures.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.handwoong.everyonewaiter.category.dto.CategoryCreate;
+import com.handwoong.everyonewaiter.category.dto.CategoryUpdate;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.user.domain.User;
@@ -50,5 +52,27 @@ class CategoryTest {
         assertThat(category.getStoreId()).isEqualTo(storeId);
         assertThat(category.getName()).isEqualTo(categoryName);
         assertThat(category.getIcon()).isEqualTo(icon);
+    }
+
+    @Test
+    void Should_Update_When_ValidCategoryUpdate() {
+        // given
+        final Category category = aCategory().build();
+
+        final CategoryName categoryName = new CategoryName("파스타");
+        final CategoryIcon categoryIcon = new CategoryIcon("utensils");
+        final CategoryUpdate categoryUpdate = CategoryUpdate.builder()
+            .id(new CategoryId(1L))
+            .storeId(new StoreId(1L))
+            .name(categoryName)
+            .icon(categoryIcon)
+            .build();
+
+        // when
+        final Category result = category.update(categoryUpdate, testContainer.categoryValidator);
+
+        // then
+        assertThat(result.getName()).isEqualTo(categoryName);
+        assertThat(result.getIcon()).isEqualTo(categoryIcon);
     }
 }

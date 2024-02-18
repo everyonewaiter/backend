@@ -6,6 +6,7 @@ import com.handwoong.everyonewaiter.category.domain.Category;
 import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.domain.CategoryValidator;
 import com.handwoong.everyonewaiter.category.dto.CategoryCreate;
+import com.handwoong.everyonewaiter.category.dto.CategoryUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,5 +25,13 @@ public class CategoryServiceImpl implements CategoryService {
         final Category category = Category.create(categoryCreate, categoryValidator);
         final Category createdCategory = categoryRepository.save(category);
         return createdCategory.getId();
+    }
+
+    @Override
+    @Transactional
+    public void update(final CategoryUpdate categoryUpdate) {
+        final Category category = categoryRepository.findByIdOrElseThrow(categoryUpdate.id());
+        final Category updatedCategory = category.update(categoryUpdate, categoryValidator);
+        categoryRepository.save(updatedCategory);
     }
 }

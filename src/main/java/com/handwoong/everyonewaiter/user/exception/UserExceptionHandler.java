@@ -8,6 +8,7 @@ import com.handwoong.everyonewaiter.common.exception.ExceptionLogger;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -78,7 +79,7 @@ public class UserExceptionHandler {
         final String errorMessage = exception.getMessage();
         ExceptionLogger.warn(NOT_FOUND, request.getRequestURI(), errorMessage, exception.getResource());
         return ResponseEntity
-            .status(NOT_FOUND.value())
+            .status(HttpStatus.NOT_FOUND)
             .body(ApiResponse.error(errorMessage));
     }
 

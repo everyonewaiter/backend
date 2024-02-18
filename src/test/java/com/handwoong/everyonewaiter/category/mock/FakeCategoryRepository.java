@@ -3,9 +3,11 @@ package com.handwoong.everyonewaiter.category.mock;
 import com.handwoong.everyonewaiter.category.application.port.CategoryRepository;
 import com.handwoong.everyonewaiter.category.domain.Category;
 import com.handwoong.everyonewaiter.category.domain.CategoryId;
+import com.handwoong.everyonewaiter.category.exception.CategoryNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 public class FakeCategoryRepository implements CategoryRepository {
 
@@ -19,6 +21,12 @@ public class FakeCategoryRepository implements CategoryRepository {
         final Category newCategory = create(id, category);
         database.put(id, newCategory);
         return newCategory;
+    }
+
+    @Override
+    public Category findByIdOrElseThrow(final CategoryId id) {
+        return Optional.ofNullable(database.get(id.value()))
+            .orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다.", "id : [" + id + "]"));
     }
 
     private Category create(final Long id, final Category category) {

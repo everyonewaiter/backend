@@ -7,6 +7,7 @@ import com.handwoong.everyonewaiter.common.exception.ExceptionLogger;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -47,7 +48,7 @@ public class StoreExceptionHandler {
         final String errorMessage = exception.getMessage();
         ExceptionLogger.warn(BAD_REQUEST, request.getRequestURI(), errorMessage, exception.getResource());
         return ResponseEntity
-            .badRequest()
+            .status(HttpStatus.NOT_FOUND)
             .body(ApiResponse.error(errorMessage));
     }
 }
