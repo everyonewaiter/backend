@@ -9,11 +9,11 @@ import lombok.Builder;
 
 @Builder
 public record StoreCreate(
-    StoreName name,
-    LandlineNumber landlineNumber,
-    StoreBusinessTimes businessTimes,
-    StoreBreakTimes breakTimes,
-    StoreOption option
+		StoreName name,
+		LandlineNumber landlineNumber,
+		StoreBusinessTimes businessTimes,
+		StoreBreakTimes breakTimes,
+		StoreOption option
 ) {
 
 }

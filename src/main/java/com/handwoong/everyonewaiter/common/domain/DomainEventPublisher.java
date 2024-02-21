@@ -13,27 +13,27 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DomainEventPublisher {
 
-    private final ApplicationEventPublisher eventPub;
+	private final ApplicationEventPublisher eventPub;
 
-    @Pointcut("within(@org.springframework.stereotype.Repository *)")
-    public void repository() {
-    }
+	@Pointcut("within(@org.springframework.stereotype.Repository *)")
+	public void repository() {
+	}
 
-    @Pointcut("execution(* *..save*(..))")
-    public void saveMethod() {
-    }
+	@Pointcut("execution(* *..save*(..))")
+	public void saveMethod() {
+	}
 
-    @Pointcut("execution(* *..delete*(..))")
-    public void deleteMethod() {
-    }
+	@Pointcut("execution(* *..delete*(..))")
+	public void deleteMethod() {
+	}
 
-    @AfterReturning(value = "repository() && (saveMethod() || deleteMethod())")
-    public void invoke(final JoinPoint joinPoint) {
-        for (final Object arg : joinPoint.getArgs()) {
-            if (arg instanceof final AggregateRoot root) {
-                root.domainEvents().forEach(eventPub::publishEvent);
-                root.clearDomainEvents();
-            }
-        }
-    }
+	@AfterReturning(value = "repository() && (saveMethod() || deleteMethod())")
+	public void invoke(final JoinPoint joinPoint) {
+		for (final Object arg : joinPoint.getArgs()) {
+			if (arg instanceof final AggregateRoot root) {
+				root.domainEvents().forEach(eventPub::publishEvent);
+				root.clearDomainEvents();
+			}
+		}
+	}
 }

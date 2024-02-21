@@ -6,9 +6,9 @@ import com.handwoong.everyonewaiter.user.domain.UserId;
 
 public interface StoreRepository {
 
-    Store save(Store store);
+	Store save(Store store);
 
-    Store findByIdAndUserIdOrElseThrow(StoreId storeId, UserId userId);
+	Store findByIdAndUserIdOrElseThrow(StoreId storeId, UserId userId);
 
-    void delete(Store store);
+	void delete(Store store);
 }

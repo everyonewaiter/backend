@@ -20,65 +20,65 @@ import org.junit.jupiter.api.Test;
 
 class WaitingTest {
 
-    private TestContainer testContainer;
+	private TestContainer testContainer;
 
-    @BeforeEach
-    void setUp() {
-        final Username username = new Username("handwoong");
-        testContainer = new TestContainer();
-        testContainer.setSecurityContextAuthentication(username);
-        testContainer.setTimeHolder(LocalDateTime.of(2024, 2, 5, 18, 0, 0)); // 월요일 18시 0분
+	@BeforeEach
+	void setUp() {
+		final Username username = new Username("handwoong");
+		testContainer = new TestContainer();
+		testContainer.setSecurityContextAuthentication(username);
+		testContainer.setTimeHolder(LocalDateTime.of(2024, 2, 5, 18, 0, 0)); // 월요일 18시 0분
 
-        final User user = aUser().build();
-        testContainer.userRepository.save(user);
+		final User user = aUser().build();
+		testContainer.userRepository.save(user);
 
-        final Store store = aStore().build();
-        testContainer.storeRepository.save(store);
-    }
+		final Store store = aStore().build();
+		testContainer.storeRepository.save(store);
+	}
 
-    @Test
-    void Should_Create_When_Constructor() {
-        // given
-        final WaitingValidator waitingValidator = testContainer.waitingValidator;
-        final WaitingGenerator waitingGenerator = testContainer.waitingGenerator;
-        final FakeUuidHolder uuidHolder = testContainer.uuidHolder;
+	@Test
+	void Should_Create_When_Constructor() {
+		// given
+		final WaitingValidator waitingValidator = testContainer.waitingValidator;
+		final WaitingGenerator waitingGenerator = testContainer.waitingGenerator;
+		final FakeUuidHolder uuidHolder = testContainer.uuidHolder;
 
-        final StoreId storeId = new StoreId(1L);
-        final WaitingAdult adult = new WaitingAdult(2);
-        final WaitingChildren children = new WaitingChildren(0);
-        final PhoneNumber phoneNumber = new PhoneNumber("01012345678");
-        final WaitingRegister waitingRegister = WaitingRegister.builder()
-            .storeId(storeId)
-            .adult(adult)
-            .children(children)
-            .phoneNumber(phoneNumber)
-            .build();
+		final StoreId storeId = new StoreId(1L);
+		final WaitingAdult adult = new WaitingAdult(2);
+		final WaitingChildren children = new WaitingChildren(0);
+		final PhoneNumber phoneNumber = new PhoneNumber("01012345678");
+		final WaitingRegister waitingRegister = WaitingRegister.builder()
+				.storeId(storeId)
+				.adult(adult)
+				.children(children)
+				.phoneNumber(phoneNumber)
+				.build();
 
-        // when
-        final Waiting waiting = new Waiting(waitingRegister, waitingValidator, waitingGenerator, uuidHolder);
+		// when
+		final Waiting waiting = new Waiting(waitingRegister, waitingValidator, waitingGenerator, uuidHolder);
 
-        // then
-        assertThat(waiting.getId()).isNull();
-        assertThat(waiting.getStoreId()).isEqualTo(storeId);
-        assertThat(waiting.getAdult()).isEqualTo(adult);
-        assertThat(waiting.getChildren()).isEqualTo(children);
-        assertThat(waiting.getNumber().value()).isEqualTo(1);
-        assertThat(waiting.getPhoneNumber()).isEqualTo(phoneNumber);
-        assertThat(waiting.getStatus()).isEqualTo(WaitingStatus.WAIT);
-        assertThat(waiting.getNotificationType()).isEqualTo(WaitingNotificationType.REGISTER);
-        assertThat(waiting.getUniqueCode()).isEqualTo(UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
-    }
+		// then
+		assertThat(waiting.getId()).isNull();
+		assertThat(waiting.getStoreId()).isEqualTo(storeId);
+		assertThat(waiting.getAdult()).isEqualTo(adult);
+		assertThat(waiting.getChildren()).isEqualTo(children);
+		assertThat(waiting.getNumber().value()).isEqualTo(1);
+		assertThat(waiting.getPhoneNumber()).isEqualTo(phoneNumber);
+		assertThat(waiting.getStatus()).isEqualTo(WaitingStatus.WAIT);
+		assertThat(waiting.getNotificationType()).isEqualTo(WaitingNotificationType.REGISTER);
+		assertThat(waiting.getUniqueCode()).isEqualTo(UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
+	}
 
-    @Test
-    void Should_StatusCancel_When_Cancel() {
-        // given
-        final Waiting waiting = aWaiting().build();
+	@Test
+	void Should_StatusCancel_When_Cancel() {
+		// given
+		final Waiting waiting = aWaiting().build();
 
-        // when
-        final Waiting canceledWaiting = waiting.cancel();
+		// when
+		final Waiting canceledWaiting = waiting.cancel();
 
-        // then
-        assertThat(canceledWaiting.getStatus()).isEqualTo(WaitingStatus.CANCEL);
-        assertThat(canceledWaiting.getNotificationType()).isEqualTo(WaitingNotificationType.CANCEL);
-    }
+		// then
+		assertThat(canceledWaiting.getStatus()).isEqualTo(WaitingStatus.CANCEL);
+		assertThat(canceledWaiting.getNotificationType()).isEqualTo(WaitingNotificationType.CANCEL);
+	}
 }

@@ -11,46 +11,46 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final transient User user;
-    private final List<GrantedAuthority> roles = new ArrayList<>();
+	private final transient User user;
+	private final List<GrantedAuthority> roles = new ArrayList<>();
 
-    public CustomUserDetails(final User user) {
-        this.user = user;
-        roles.add(new SimpleGrantedAuthority(user.getRole().name()));
-    }
+	public CustomUserDetails(final User user) {
+		this.user = user;
+		roles.add(new SimpleGrantedAuthority(user.getRole().name()));
+	}
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return roles;
+	}
 
-    @Override
-    public String getPassword() {
-        return user.getPassword().toString();
-    }
+	@Override
+	public String getPassword() {
+		return user.getPassword().toString();
+	}
 
-    @Override
-    public String getUsername() {
-        return user.getUsername().toString();
-    }
+	@Override
+	public String getUsername() {
+		return user.getUsername().toString();
+	}
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return user.checkStatusDifference(UserStatus.SLEEP);
-    }
+	@Override
+	public boolean isAccountNonExpired() {
+		return user.checkStatusDifference(UserStatus.SLEEP);
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return user.checkStatusDifference(UserStatus.LOCK);
-    }
+	@Override
+	public boolean isAccountNonLocked() {
+		return user.checkStatusDifference(UserStatus.LOCK);
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return user.checkStatusDifference(UserStatus.INACTIVE);
-    }
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return user.checkStatusDifference(UserStatus.INACTIVE);
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return user.checkStatusDifference(UserStatus.LEAVE);
-    }
+	@Override
+	public boolean isEnabled() {
+		return user.checkStatusDifference(UserStatus.LEAVE);
+	}
 }

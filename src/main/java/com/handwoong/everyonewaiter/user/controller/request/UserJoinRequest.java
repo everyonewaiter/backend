@@ -17,24 +17,24 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record UserJoinRequest(
-    @NotBlank(message = USERNAME_EMPTY_MESSAGE)
-    @Size(max = USERNAME_MAX_LENGTH, message = USERNAME_MAX_LENGTH_MESSAGE)
-    String username,
+		@NotBlank(message = USERNAME_EMPTY_MESSAGE)
+		@Size(max = USERNAME_MAX_LENGTH, message = USERNAME_MAX_LENGTH_MESSAGE)
+		String username,
 
-    @NotBlank(message = PASSWORD_FORMAT_MESSAGE)
-    @Pattern(regexp = PASSWORD_REGEX, message = PASSWORD_FORMAT_MESSAGE)
-    String password,
+		@NotBlank(message = PASSWORD_FORMAT_MESSAGE)
+		@Pattern(regexp = PASSWORD_REGEX, message = PASSWORD_FORMAT_MESSAGE)
+		String password,
 
-    @NotBlank(message = PHONE_NUMBER_FORMAT_MESSAGE)
-    @Pattern(regexp = PHONE_NUMBER_REGEX, message = PHONE_NUMBER_FORMAT_MESSAGE)
-    String phoneNumber
+		@NotBlank(message = PHONE_NUMBER_FORMAT_MESSAGE)
+		@Pattern(regexp = PHONE_NUMBER_REGEX, message = PHONE_NUMBER_FORMAT_MESSAGE)
+		String phoneNumber
 ) {
 
-    public UserJoin toDomainDto() {
-        return UserJoin.builder()
-            .username(new Username(username))
-            .password(new Password(password))
-            .phoneNumber(new PhoneNumber(phoneNumber))
-            .build();
-    }
+	public UserJoin toDomainDto() {
+		return UserJoin.builder()
+				.username(new Username(username))
+				.password(new Password(password))
+				.phoneNumber(new PhoneNumber(phoneNumber))
+				.build();
+	}
 }

@@ -19,43 +19,43 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class StoreServiceImpl implements StoreService {
 
-    private final UserRepository userRepository;
-    private final StoreRepository storeRepository;
+	private final UserRepository userRepository;
+	private final StoreRepository storeRepository;
 
-    @Override
-    @Transactional
-    public StoreId create(final Username username, final StoreCreate storeCreate) {
-        final User user = userRepository.findByUsernameOrElseThrow(username);
-        final Store store = Store.create(user.getId(), storeCreate);
-        final Store savedStore = storeRepository.save(store);
-        return savedStore.getId();
-    }
+	@Override
+	@Transactional
+	public StoreId create(final Username username, final StoreCreate storeCreate) {
+		final User user = userRepository.findByUsernameOrElseThrow(username);
+		final Store store = Store.create(user.getId(), storeCreate);
+		final Store savedStore = storeRepository.save(store);
+		return savedStore.getId();
+	}
 
-    @Override
-    @Transactional
-    public void update(final Username username, final StoreUpdate storeUpdate) {
-        final Store store = findStoreByIdAndUsername(storeUpdate.id(), username);
-        final Store updatedStore = store.update(storeUpdate);
-        storeRepository.save(updatedStore);
-    }
+	@Override
+	@Transactional
+	public void update(final Username username, final StoreUpdate storeUpdate) {
+		final Store store = findStoreByIdAndUsername(storeUpdate.id(), username);
+		final Store updatedStore = store.update(storeUpdate);
+		storeRepository.save(updatedStore);
+	}
 
-    @Override
-    @Transactional
-    public void update(final Username username, final StoreOptionUpdate storeOptionUpdate) {
-        final Store store = findStoreByIdAndUsername(storeOptionUpdate.storeId(), username);
-        final Store updatedStore = store.update(storeOptionUpdate);
-        storeRepository.save(updatedStore);
-    }
+	@Override
+	@Transactional
+	public void update(final Username username, final StoreOptionUpdate storeOptionUpdate) {
+		final Store store = findStoreByIdAndUsername(storeOptionUpdate.storeId(), username);
+		final Store updatedStore = store.update(storeOptionUpdate);
+		storeRepository.save(updatedStore);
+	}
 
-    @Override
-    @Transactional
-    public void delete(final Username username, final StoreId storeId) {
-        final Store store = findStoreByIdAndUsername(storeId, username);
-        storeRepository.delete(store);
-    }
+	@Override
+	@Transactional
+	public void delete(final Username username, final StoreId storeId) {
+		final Store store = findStoreByIdAndUsername(storeId, username);
+		storeRepository.delete(store);
+	}
 
-    private Store findStoreByIdAndUsername(final StoreId storeId, final Username username) {
-        final User user = userRepository.findByUsernameOrElseThrow(username);
-        return storeRepository.findByIdAndUserIdOrElseThrow(storeId, user.getId());
-    }
+	private Store findStoreByIdAndUsername(final StoreId storeId, final Username username) {
+		final User user = userRepository.findByUsernameOrElseThrow(username);
+		return storeRepository.findByIdAndUserIdOrElseThrow(storeId, user.getId());
+	}
 }

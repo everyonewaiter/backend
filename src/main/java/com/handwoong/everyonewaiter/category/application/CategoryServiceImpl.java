@@ -16,22 +16,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
 
-    private final CategoryRepository categoryRepository;
-    private final CategoryValidator categoryValidator;
+	private final CategoryRepository categoryRepository;
+	private final CategoryValidator categoryValidator;
 
-    @Override
-    @Transactional
-    public CategoryId create(final CategoryCreate categoryCreate) {
-        final Category category = Category.create(categoryCreate, categoryValidator);
-        final Category createdCategory = categoryRepository.save(category);
-        return createdCategory.getId();
-    }
+	@Override
+	@Transactional
+	public CategoryId create(final CategoryCreate categoryCreate) {
+		final Category category = Category.create(categoryCreate, categoryValidator);
+		final Category createdCategory = categoryRepository.save(category);
+		return createdCategory.getId();
+	}
 
-    @Override
-    @Transactional
-    public void update(final CategoryUpdate categoryUpdate) {
-        final Category category = categoryRepository.findByIdOrElseThrow(categoryUpdate.id());
-        final Category updatedCategory = category.update(categoryUpdate, categoryValidator);
-        categoryRepository.save(updatedCategory);
-    }
+	@Override
+	@Transactional
+	public void update(final CategoryUpdate categoryUpdate) {
+		final Category category = categoryRepository.findByIdOrElseThrow(categoryUpdate.id());
+		final Category updatedCategory = category.update(categoryUpdate, categoryValidator);
+		categoryRepository.save(updatedCategory);
+	}
 }

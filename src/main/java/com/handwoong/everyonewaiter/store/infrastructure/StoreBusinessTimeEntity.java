@@ -22,52 +22,52 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StoreBusinessTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @NotNull
-    private LocalTime open;
+	@NotNull
+	private LocalTime open;
 
-    @NotNull
-    private LocalTime close;
+	@NotNull
+	private LocalTime close;
 
-    @NotNull
-    @Convert(converter = DaysOfWeekConverter.class)
-    private StoreDaysOfWeek daysOfWeek;
+	@NotNull
+	@Convert(converter = DaysOfWeekConverter.class)
+	private StoreDaysOfWeek daysOfWeek;
 
-    public static StoreBusinessTimeEntity from(final StoreBusinessTime storeBusinessTime) {
-        final StoreBusinessTimeEntity storeBusinessTimeEntity = new StoreBusinessTimeEntity();
-        storeBusinessTimeEntity.id =
-            Objects.isNull(storeBusinessTime.getId()) ? null : storeBusinessTime.getId().value();
-        storeBusinessTimeEntity.open = storeBusinessTime.getOpen();
-        storeBusinessTimeEntity.close = storeBusinessTime.getClose();
-        storeBusinessTimeEntity.daysOfWeek = storeBusinessTime.getDaysOfWeek();
-        return storeBusinessTimeEntity;
-    }
+	public static StoreBusinessTimeEntity from(final StoreBusinessTime storeBusinessTime) {
+		final StoreBusinessTimeEntity storeBusinessTimeEntity = new StoreBusinessTimeEntity();
+		storeBusinessTimeEntity.id =
+				Objects.isNull(storeBusinessTime.getId()) ? null : storeBusinessTime.getId().value();
+		storeBusinessTimeEntity.open = storeBusinessTime.getOpen();
+		storeBusinessTimeEntity.close = storeBusinessTime.getClose();
+		storeBusinessTimeEntity.daysOfWeek = storeBusinessTime.getDaysOfWeek();
+		return storeBusinessTimeEntity;
+	}
 
-    public StoreBusinessTime toModel() {
-        return StoreBusinessTime.builder()
-            .id(new StoreBusinessTimeId(id))
-            .open(open)
-            .close(close)
-            .daysOfWeek(daysOfWeek)
-            .build();
-    }
+	public StoreBusinessTime toModel() {
+		return StoreBusinessTime.builder()
+				.id(new StoreBusinessTimeId(id))
+				.open(open)
+				.close(close)
+				.daysOfWeek(daysOfWeek)
+				.build();
+	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof final StoreBusinessTimeEntity that)) {
-            return false;
-        }
-        return Objects.equals(id, that.id);
-    }
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof final StoreBusinessTimeEntity that)) {
+			return false;
+		}
+		return Objects.equals(id, that.id);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 }

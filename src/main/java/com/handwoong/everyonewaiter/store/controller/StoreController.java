@@ -25,35 +25,35 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/stores")
 public class StoreController {
 
-    private final StoreService storeService;
+	private final StoreService storeService;
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<Void>> create(@RequestBody @Valid final StoreCreateRequest request) {
-        final Username username = SecurityUtils.getAuthenticationUsername();
-        final StoreId storeId = storeService.create(username, request.toDomainDto());
-        return ResponseEntity
-            .created(URI.create(storeId.toString()))
-            .body(ApiResponse.success());
-    }
+	@PostMapping
+	public ResponseEntity<ApiResponse<Void>> create(@RequestBody @Valid final StoreCreateRequest request) {
+		final Username username = SecurityUtils.getAuthenticationUsername();
+		final StoreId storeId = storeService.create(username, request.toDomainDto());
+		return ResponseEntity
+				.created(URI.create(storeId.toString()))
+				.body(ApiResponse.success());
+	}
 
-    @PutMapping
-    public ResponseEntity<ApiResponse<Void>> update(@RequestBody @Valid final StoreUpdateRequest request) {
-        final Username username = SecurityUtils.getAuthenticationUsername();
-        storeService.update(username, request.toDomainDto());
-        return ResponseEntity.ok(ApiResponse.success());
-    }
+	@PutMapping
+	public ResponseEntity<ApiResponse<Void>> update(@RequestBody @Valid final StoreUpdateRequest request) {
+		final Username username = SecurityUtils.getAuthenticationUsername();
+		storeService.update(username, request.toDomainDto());
+		return ResponseEntity.ok(ApiResponse.success());
+	}
 
-    @PutMapping("/option")
-    public ResponseEntity<ApiResponse<Void>> update(@RequestBody @Valid final StoreOptionUpdateRequest request) {
-        final Username username = SecurityUtils.getAuthenticationUsername();
-        storeService.update(username, request.toDomainDto());
-        return ResponseEntity.ok(ApiResponse.success());
-    }
+	@PutMapping("/option")
+	public ResponseEntity<ApiResponse<Void>> update(@RequestBody @Valid final StoreOptionUpdateRequest request) {
+		final Username username = SecurityUtils.getAuthenticationUsername();
+		storeService.update(username, request.toDomainDto());
+		return ResponseEntity.ok(ApiResponse.success());
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable("id") final Long id) {
-        final Username username = SecurityUtils.getAuthenticationUsername();
-        storeService.delete(username, new StoreId(id));
-        return ResponseEntity.ok(ApiResponse.success());
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<ApiResponse<Void>> delete(@PathVariable("id") final Long id) {
+		final Username username = SecurityUtils.getAuthenticationUsername();
+		storeService.delete(username, new StoreId(id));
+		return ResponseEntity.ok(ApiResponse.success());
+	}
 }

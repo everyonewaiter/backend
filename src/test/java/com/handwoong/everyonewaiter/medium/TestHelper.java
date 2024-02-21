@@ -29,46 +29,46 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @AutoConfigureRestDocs
 public class TestHelper {
 
-    public static final ObjectMapper objectMapper = new ObjectMapper()
-        .registerModule(new JavaTimeModule())
-        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+	public static final ObjectMapper objectMapper = new ObjectMapper()
+			.registerModule(new JavaTimeModule())
+			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-    public static String userAccessToken;
-    public static String adminAccessToken;
+	public static String userAccessToken;
+	public static String adminAccessToken;
 
-    @LocalServerPort
-    private int port;
+	@LocalServerPort
+	private int port;
 
-    @Autowired
-    private DatabaseCleaner databaseCleaner;
+	@Autowired
+	private DatabaseCleaner databaseCleaner;
 
-    @BeforeEach
-    void setUp(final RestDocumentationContextProvider provider) {
-        RestAssured.port = port;
-        final RequestSpecification specification = new RequestSpecBuilder()
-            .addFilter(
-                documentationConfiguration(provider)
-                    .operationPreprocessors()
-                    .withRequestDefaults(RestDocsUtils.removeHeaders())
-                    .withResponseDefaults(RestDocsUtils.removeHeaders())
-            )
-            .addFilter(RestDocsUtils.getFilter())
-            .build();
-        setSpecification(specification);
-    }
+	@BeforeEach
+	void setUp(final RestDocumentationContextProvider provider) {
+		RestAssured.port = port;
+		final RequestSpecification specification = new RequestSpecBuilder()
+				.addFilter(
+						documentationConfiguration(provider)
+								.operationPreprocessors()
+								.withRequestDefaults(RestDocsUtils.removeHeaders())
+								.withResponseDefaults(RestDocsUtils.removeHeaders())
+				)
+				.addFilter(RestDocsUtils.getFilter())
+				.build();
+		setSpecification(specification);
+	}
 
-    @AfterEach
-    void clear() {
-        databaseCleaner.execute();
-    }
+	@AfterEach
+	void clear() {
+		databaseCleaner.execute();
+	}
 
-    @Value("${test.user}")
-    public void setUserAccessToken(final String userAccessToken) {
-        TestHelper.userAccessToken = userAccessToken;
-    }
+	@Value("${test.user}")
+	public void setUserAccessToken(final String userAccessToken) {
+		TestHelper.userAccessToken = userAccessToken;
+	}
 
-    @Value("${test.admin}")
-    public void setAdminAccessToken(final String adminAccessToken) {
-        TestHelper.adminAccessToken = adminAccessToken;
-    }
+	@Value("${test.admin}")
+	public void setAdminAccessToken(final String adminAccessToken) {
+		TestHelper.adminAccessToken = adminAccessToken;
+	}
 }

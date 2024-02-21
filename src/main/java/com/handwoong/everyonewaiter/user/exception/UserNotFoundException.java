@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class UserNotFoundException extends BaseException {
 
-    private final String resource;
+	private final String resource;
 
-    public UserNotFoundException(final String message, final String resource) {
-        super(message);
-        this.resource = resource;
-    }
+	public UserNotFoundException(final String message, final String resource) {
+		super(message);
+		this.resource = resource;
+	}
 }

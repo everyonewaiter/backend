@@ -23,102 +23,102 @@ import org.springframework.http.ResponseEntity;
 
 class CategoryControllerTest {
 
-    private TestContainer testContainer;
+	private TestContainer testContainer;
 
-    @BeforeEach
-    void setUp() {
-        final Username username = new Username("handwoong");
-        testContainer = new TestContainer();
-        testContainer.setSecurityContextAuthentication(username);
+	@BeforeEach
+	void setUp() {
+		final Username username = new Username("handwoong");
+		testContainer = new TestContainer();
+		testContainer.setSecurityContextAuthentication(username);
 
-        final User user = aUser().build();
-        testContainer.userRepository.save(user);
+		final User user = aUser().build();
+		testContainer.userRepository.save(user);
 
-        final Store store = aStore().build();
-        testContainer.storeRepository.save(store);
+		final Store store = aStore().build();
+		testContainer.storeRepository.save(store);
 
-        final Category category = aCategory().build();
-        testContainer.categoryRepository.save(category);
-    }
+		final Category category = aCategory().build();
+		testContainer.categoryRepository.save(category);
+	}
 
-    @Test
-    void Should_Create_When_ValidRequest() {
-        // given
-        final CategoryCreateRequest request = new CategoryCreateRequest(1L, "스테이크", "drumstick");
+	@Test
+	void Should_Create_When_ValidRequest() {
+		// given
+		final CategoryCreateRequest request = new CategoryCreateRequest(1L, "스테이크", "drumstick");
 
-        // when
-        final ResponseEntity<ApiResponse<Void>> response = testContainer.categoryController.create(request);
+		// when
+		final ResponseEntity<ApiResponse<Void>> response = testContainer.categoryController.create(request);
 
-        // then
-        assertThat(response.getStatusCode().value()).isEqualTo(201);
-    }
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(201);
+	}
 
-    @Test
-    void Should_Status400_When_CreateUserNotFound() {
-        // given
-        testContainer.setSecurityContextAuthentication(new Username("notfound"));
-        final CategoryCreateRequest request = new CategoryCreateRequest(1L, "스테이크", "drumstick");
+	@Test
+	void Should_Status400_When_CreateUserNotFound() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("notfound"));
+		final CategoryCreateRequest request = new CategoryCreateRequest(1L, "스테이크", "drumstick");
 
-        // expect
-        assertThatThrownBy(() -> testContainer.categoryController.create(request))
-            .isInstanceOf(UserNotFoundException.class)
-            .hasMessage("사용자를 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.categoryController.create(request))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
 
-    @Test
-    void Should_Status400_When_CreateStoreNotFound() {
-        // given
-        final CategoryCreateRequest request = new CategoryCreateRequest(2L, "스테이크", "drumstick");
+	@Test
+	void Should_Status400_When_CreateStoreNotFound() {
+		// given
+		final CategoryCreateRequest request = new CategoryCreateRequest(2L, "스테이크", "drumstick");
 
-        // expect
-        assertThatThrownBy(() -> testContainer.categoryController.create(request))
-            .isInstanceOf(StoreNotFoundException.class)
-            .hasMessage("매장을 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.categoryController.create(request))
+				.isInstanceOf(StoreNotFoundException.class)
+				.hasMessage("매장을 찾을 수 없습니다.");
+	}
 
-    @Test
-    void Should_Update_When_ValidRequest() {
-        // given
-        final CategoryUpdateRequest request = new CategoryUpdateRequest(1L, 1L, "파스타", "utensils");
+	@Test
+	void Should_Update_When_ValidRequest() {
+		// given
+		final CategoryUpdateRequest request = new CategoryUpdateRequest(1L, 1L, "파스타", "utensils");
 
-        // when
-        final ResponseEntity<ApiResponse<Void>> response = testContainer.categoryController.update(request);
+		// when
+		final ResponseEntity<ApiResponse<Void>> response = testContainer.categoryController.update(request);
 
-        // then
-        assertThat(response.getStatusCode().value()).isEqualTo(200);
-    }
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(200);
+	}
 
-    @Test
-    void Should_Status400_When_UpdateCategoryNotFound() {
-        // given
-        final CategoryUpdateRequest request = new CategoryUpdateRequest(2L, 1L, "파스타", "utensils");
+	@Test
+	void Should_Status400_When_UpdateCategoryNotFound() {
+		// given
+		final CategoryUpdateRequest request = new CategoryUpdateRequest(2L, 1L, "파스타", "utensils");
 
-        // expect
-        assertThatThrownBy(() -> testContainer.categoryController.update(request))
-            .isInstanceOf(CategoryNotFoundException.class)
-            .hasMessage("카테고리를 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.categoryController.update(request))
+				.isInstanceOf(CategoryNotFoundException.class)
+				.hasMessage("카테고리를 찾을 수 없습니다.");
+	}
 
-    @Test
-    void Should_Status400_When_UpdateUserNotFound() {
-        // given
-        testContainer.setSecurityContextAuthentication(new Username("notfound"));
-        final CategoryUpdateRequest request = new CategoryUpdateRequest(1L, 1L, "파스타", "utensils");
+	@Test
+	void Should_Status400_When_UpdateUserNotFound() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("notfound"));
+		final CategoryUpdateRequest request = new CategoryUpdateRequest(1L, 1L, "파스타", "utensils");
 
-        // expect
-        assertThatThrownBy(() -> testContainer.categoryController.update(request))
-            .isInstanceOf(UserNotFoundException.class)
-            .hasMessage("사용자를 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.categoryController.update(request))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
 
-    @Test
-    void Should_Status400_When_UpdateStoreNotFound() {
-        // given
-        final CategoryUpdateRequest request = new CategoryUpdateRequest(1L, 2L, "파스타", "utensils");
+	@Test
+	void Should_Status400_When_UpdateStoreNotFound() {
+		// given
+		final CategoryUpdateRequest request = new CategoryUpdateRequest(1L, 2L, "파스타", "utensils");
 
-        // expect
-        assertThatThrownBy(() -> testContainer.categoryController.update(request))
-            .isInstanceOf(StoreNotFoundException.class)
-            .hasMessage("매장을 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.categoryController.update(request))
+				.isInstanceOf(StoreNotFoundException.class)
+				.hasMessage("매장을 찾을 수 없습니다.");
+	}
 }

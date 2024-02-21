@@ -12,23 +12,24 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class StoreRepositoryImpl implements StoreRepository {
 
-    private final StoreJpaRepository storeJpaRepository;
+	private final StoreJpaRepository storeJpaRepository;
 
-    @Override
-    public Store save(final Store store) {
-        return storeJpaRepository.save(StoreEntity.from(store)).toModel();
-    }
+	@Override
+	public Store save(final Store store) {
+		return storeJpaRepository.save(StoreEntity.from(store)).toModel();
+	}
 
-    @Override
-    public Store findByIdAndUserIdOrElseThrow(final StoreId storeId, final UserId userId) {
-        return storeJpaRepository.findByIdAndUserId(storeId.value(), userId.value())
-            .orElseThrow(() ->
-                new StoreNotFoundException("매장을 찾을 수 없습니다.", "storeId : [" + storeId + "] userId : [" + userId + "]"))
-            .toModel();
-    }
+	@Override
+	public Store findByIdAndUserIdOrElseThrow(final StoreId storeId, final UserId userId) {
+		return storeJpaRepository.findByIdAndUserId(storeId.value(), userId.value())
+				.orElseThrow(() ->
+						new StoreNotFoundException("매장을 찾을 수 없습니다.",
+								"storeId : [" + storeId + "] userId : [" + userId + "]"))
+				.toModel();
+	}
 
-    @Override
-    public void delete(final Store store) {
-        storeJpaRepository.delete(StoreEntity.from(store));
-    }
+	@Override
+	public void delete(final Store store) {
+		storeJpaRepository.delete(StoreEntity.from(store));
+	}
 }

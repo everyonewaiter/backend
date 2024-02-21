@@ -35,136 +35,136 @@ import org.springframework.http.ResponseEntity;
 
 class StoreControllerTest {
 
-    private final List<StoreBusinessTimeRequest> businessTimes = List.of(
-        new StoreBusinessTimeRequest(
-            LocalTime.of(11, 0, 0),
-            LocalTime.of(21, 0, 0),
-            List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
-        )
-    );
-    private final List<StoreBreakTimeRequest> breakTimes = List.of(
-        new StoreBreakTimeRequest(
-            LocalTime.of(15, 0, 0),
-            LocalTime.of(16, 30, 0),
-            List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
-        ),
-        new StoreBreakTimeRequest(
-            LocalTime.of(15, 30, 0),
-            LocalTime.of(17, 0, 0),
-            List.of(SATURDAY, SUNDAY)
-        )
-    );
+	private final List<StoreBusinessTimeRequest> businessTimes = List.of(
+			new StoreBusinessTimeRequest(
+					LocalTime.of(11, 0, 0),
+					LocalTime.of(21, 0, 0),
+					List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
+			)
+	);
+	private final List<StoreBreakTimeRequest> breakTimes = List.of(
+			new StoreBreakTimeRequest(
+					LocalTime.of(15, 0, 0),
+					LocalTime.of(16, 30, 0),
+					List.of(TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
+			),
+			new StoreBreakTimeRequest(
+					LocalTime.of(15, 30, 0),
+					LocalTime.of(17, 0, 0),
+					List.of(SATURDAY, SUNDAY)
+			)
+	);
 
-    private TestContainer testContainer;
+	private TestContainer testContainer;
 
-    @BeforeEach
-    void setUp() {
-        testContainer = new TestContainer();
+	@BeforeEach
+	void setUp() {
+		testContainer = new TestContainer();
 
-        final User user = aUser().build();
-        testContainer.userRepository.save(user);
+		final User user = aUser().build();
+		testContainer.userRepository.save(user);
 
-        final Store store = aStore().build();
-        testContainer.storeRepository.save(store);
-    }
+		final Store store = aStore().build();
+		testContainer.storeRepository.save(store);
+	}
 
-    @Test
-    void Should_Create_When_ValidRequest() {
-        // given
-        testContainer.setSecurityContextAuthentication(new Username("handwoong"));
-        final StoreCreateRequest request = new StoreCreateRequest(
-            "나루", "0551234567", breakTimes, businessTimes, new StoreCreateOptionRequest(true, true, true));
+	@Test
+	void Should_Create_When_ValidRequest() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("handwoong"));
+		final StoreCreateRequest request = new StoreCreateRequest(
+				"나루", "0551234567", breakTimes, businessTimes, new StoreCreateOptionRequest(true, true, true));
 
-        // when
-        final ResponseEntity<ApiResponse<Void>> response = testContainer.storeController.create(request);
-        final ApiResponse<Void> result = response.getBody();
+		// when
+		final ResponseEntity<ApiResponse<Void>> response = testContainer.storeController.create(request);
+		final ApiResponse<Void> result = response.getBody();
 
-        // then
-        assertThat(response.getStatusCode().value()).isEqualTo(201);
-        assertThat(result).extracting("resultCode").isEqualTo(ResultCode.SUCCESS);
-    }
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(201);
+		assertThat(result).extracting("resultCode").isEqualTo(ResultCode.SUCCESS);
+	}
 
-    @Test
-    void Should_ThrowException_When_CreateUsernameNotFound() {
-        // given
-        testContainer.setSecurityContextAuthentication(new Username("notfound"));
-        final StoreCreateRequest request = new StoreCreateRequest(
-            "나루", "0551234567", breakTimes, businessTimes, new StoreCreateOptionRequest(true, true, true));
+	@Test
+	void Should_ThrowException_When_CreateUsernameNotFound() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("notfound"));
+		final StoreCreateRequest request = new StoreCreateRequest(
+				"나루", "0551234567", breakTimes, businessTimes, new StoreCreateOptionRequest(true, true, true));
 
-        // expect
-        assertThatThrownBy(() -> testContainer.storeController.create(request))
-            .isInstanceOf(UserNotFoundException.class)
-            .hasMessage("사용자를 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.storeController.create(request))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
 
-    @Test
-    void Should_Update_When_ValidRequest() {
-        // given
-        testContainer.setSecurityContextAuthentication(new Username("handwoong"));
-        final StoreUpdateRequest request =
-            new StoreUpdateRequest(1L, "나루 레스토랑", "021234567", breakTimes, businessTimes);
+	@Test
+	void Should_Update_When_ValidRequest() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("handwoong"));
+		final StoreUpdateRequest request =
+				new StoreUpdateRequest(1L, "나루 레스토랑", "021234567", breakTimes, businessTimes);
 
-        // when
-        final ResponseEntity<ApiResponse<Void>> response = testContainer.storeController.update(request);
-        final ApiResponse<Void> result = response.getBody();
+		// when
+		final ResponseEntity<ApiResponse<Void>> response = testContainer.storeController.update(request);
+		final ApiResponse<Void> result = response.getBody();
 
-        // then
-        assertThat(response.getStatusCode().value()).isEqualTo(200);
-        assertThat(result).extracting("resultCode").isEqualTo(ResultCode.SUCCESS);
-    }
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(200);
+		assertThat(result).extracting("resultCode").isEqualTo(ResultCode.SUCCESS);
+	}
 
-    @Test
-    void Should_ThrowException_When_UpdateUsernameNotFound() {
-        // given
-        testContainer.setSecurityContextAuthentication(new Username("notfound"));
-        final StoreUpdateRequest request =
-            new StoreUpdateRequest(1L, "나루 레스토랑", "021234567", breakTimes, businessTimes);
+	@Test
+	void Should_ThrowException_When_UpdateUsernameNotFound() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("notfound"));
+		final StoreUpdateRequest request =
+				new StoreUpdateRequest(1L, "나루 레스토랑", "021234567", breakTimes, businessTimes);
 
-        // expect
-        assertThatThrownBy(() -> testContainer.storeController.update(request))
-            .isInstanceOf(UserNotFoundException.class)
-            .hasMessage("사용자를 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.storeController.update(request))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
 
-    @Test
-    void Should_UpdateOption_When_ValidRequest() {
-        // given
-        testContainer.setSecurityContextAuthentication(new Username("handwoong"));
-        final StoreOptionUpdateRequest request = new StoreOptionUpdateRequest(1L, false, false, false);
+	@Test
+	void Should_UpdateOption_When_ValidRequest() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("handwoong"));
+		final StoreOptionUpdateRequest request = new StoreOptionUpdateRequest(1L, false, false, false);
 
-        // when
-        final ResponseEntity<ApiResponse<Void>> response = testContainer.storeController.update(request);
-        final ApiResponse<Void> result = response.getBody();
+		// when
+		final ResponseEntity<ApiResponse<Void>> response = testContainer.storeController.update(request);
+		final ApiResponse<Void> result = response.getBody();
 
-        // then
-        assertThat(response.getStatusCode().value()).isEqualTo(200);
-        assertThat(result).extracting("resultCode").isEqualTo(ResultCode.SUCCESS);
-    }
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(200);
+		assertThat(result).extracting("resultCode").isEqualTo(ResultCode.SUCCESS);
+	}
 
-    @Test
-    void Should_ThrowException_When_UpdateOptionUsernameNotFound() {
-        // given
-        testContainer.setSecurityContextAuthentication(new Username("notfound"));
-        final StoreOptionUpdateRequest request = new StoreOptionUpdateRequest(1L, false, false, false);
+	@Test
+	void Should_ThrowException_When_UpdateOptionUsernameNotFound() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("notfound"));
+		final StoreOptionUpdateRequest request = new StoreOptionUpdateRequest(1L, false, false, false);
 
-        // expect
-        assertThatThrownBy(() -> testContainer.storeController.update(request))
-            .isInstanceOf(UserNotFoundException.class)
-            .hasMessage("사용자를 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.storeController.update(request))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
 
-    @Test
-    void Should_DeleteStore_When_ValidStoreId() {
-        // given
-        testContainer.setSecurityContextAuthentication(new Username("handwoong"));
-        final UserId userId = new UserId(1L);
-        final StoreId storeId = new StoreId(1L);
+	@Test
+	void Should_DeleteStore_When_ValidStoreId() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("handwoong"));
+		final UserId userId = new UserId(1L);
+		final StoreId storeId = new StoreId(1L);
 
-        // when
-        testContainer.storeController.delete(1L);
+		// when
+		testContainer.storeController.delete(1L);
 
-        // then
-        assertThatThrownBy(() -> testContainer.storeRepository.findByIdAndUserIdOrElseThrow(storeId, userId))
-            .isInstanceOf(StoreNotFoundException.class);
-    }
+		// then
+		assertThatThrownBy(() -> testContainer.storeRepository.findByIdAndUserIdOrElseThrow(storeId, userId))
+				.isInstanceOf(StoreNotFoundException.class);
+	}
 }

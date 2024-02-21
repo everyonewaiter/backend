@@ -20,32 +20,32 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class WaitingServiceImpl implements WaitingService {
 
-    private final WaitingRepository waitingRepository;
-    private final WaitingValidator waitingValidator;
-    private final WaitingGenerator waitingGenerator;
-    private final UuidHolder uuidHolder;
+	private final WaitingRepository waitingRepository;
+	private final WaitingValidator waitingValidator;
+	private final WaitingGenerator waitingGenerator;
+	private final UuidHolder uuidHolder;
 
-    @Override
-    @Transactional
-    public WaitingId register(final WaitingRegister waitingRegister) {
-        validatePhoneNumber(waitingRegister.phoneNumber());
-        final Waiting waiting = new Waiting(waitingRegister, waitingValidator, waitingGenerator, uuidHolder);
-        final Waiting registeredWaiting = waitingRepository.save(waiting);
-        return registeredWaiting.getId();
-    }
+	@Override
+	@Transactional
+	public WaitingId register(final WaitingRegister waitingRegister) {
+		validatePhoneNumber(waitingRegister.phoneNumber());
+		final Waiting waiting = new Waiting(waitingRegister, waitingValidator, waitingGenerator, uuidHolder);
+		final Waiting registeredWaiting = waitingRepository.save(waiting);
+		return registeredWaiting.getId();
+	}
 
-    @Override
-    @Transactional
-    public void cancel(final WaitingCancel waitingCancel) {
-        final Waiting waiting = waitingRepository.findByStoreIdAndUniqueCodeOrElseThrow(
-            waitingCancel.storeId(), waitingCancel.uniqueCode());
-        final Waiting canceledWaiting = waiting.cancel();
-        waitingRepository.save(canceledWaiting);
-    }
+	@Override
+	@Transactional
+	public void cancel(final WaitingCancel waitingCancel) {
+		final Waiting waiting = waitingRepository.findByStoreIdAndUniqueCodeOrElseThrow(
+				waitingCancel.storeId(), waitingCancel.uniqueCode());
+		final Waiting canceledWaiting = waiting.cancel();
+		waitingRepository.save(canceledWaiting);
+	}
 
-    private void validatePhoneNumber(final PhoneNumber phoneNumber) {
-        if (waitingRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new AlreadyExistsPhoneNumberException("이미 웨이팅에 등록되어 있는 휴대폰 번호입니다.", phoneNumber.toString());
-        }
-    }
+	private void validatePhoneNumber(final PhoneNumber phoneNumber) {
+		if (waitingRepository.existsByPhoneNumber(phoneNumber)) {
+			throw new AlreadyExistsPhoneNumberException("이미 웨이팅에 등록되어 있는 휴대폰 번호입니다.", phoneNumber.toString());
+		}
+	}
 }

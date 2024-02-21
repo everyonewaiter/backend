@@ -20,19 +20,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/waiting")
 public class WaitingController {
 
-    private final WaitingService waitingService;
+	private final WaitingService waitingService;
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<Void>> register(@RequestBody @Valid final WaitingRegisterRequest request) {
-        final WaitingId waitingId = waitingService.register(request.toDomainDto());
-        return ResponseEntity
-            .created(URI.create(waitingId.toString()))
-            .body(ApiResponse.success());
-    }
+	@PostMapping
+	public ResponseEntity<ApiResponse<Void>> register(@RequestBody @Valid final WaitingRegisterRequest request) {
+		final WaitingId waitingId = waitingService.register(request.toDomainDto());
+		return ResponseEntity
+				.created(URI.create(waitingId.toString()))
+				.body(ApiResponse.success());
+	}
 
-    @PutMapping("/cancel")
-    public ResponseEntity<ApiResponse<Void>> cancel(@RequestBody @Valid final WaitingCancelRequest request) {
-        waitingService.cancel(request.toDomainDto());
-        return ResponseEntity.ok(ApiResponse.success());
-    }
+	@PutMapping("/cancel")
+	public ResponseEntity<ApiResponse<Void>> cancel(@RequestBody @Valid final WaitingCancelRequest request) {
+		waitingService.cancel(request.toDomainDto());
+		return ResponseEntity.ok(ApiResponse.success());
+	}
 }

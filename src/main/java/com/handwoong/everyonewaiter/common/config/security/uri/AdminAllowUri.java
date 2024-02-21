@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum AdminAllowUri implements AllowUri {
-    ;
+	;
 
-    private final String uri;
+	private final String uri;
 }

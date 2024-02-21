@@ -17,62 +17,62 @@ import org.junit.jupiter.api.Test;
 
 class CategoryTest {
 
-    private TestContainer testContainer;
+	private TestContainer testContainer;
 
-    @BeforeEach
-    void setUp() {
-        final Username username = new Username("handwoong");
-        testContainer = new TestContainer();
-        testContainer.setSecurityContextAuthentication(username);
+	@BeforeEach
+	void setUp() {
+		final Username username = new Username("handwoong");
+		testContainer = new TestContainer();
+		testContainer.setSecurityContextAuthentication(username);
 
-        final User user = aUser().build();
-        testContainer.userRepository.save(user);
+		final User user = aUser().build();
+		testContainer.userRepository.save(user);
 
-        final Store store = aStore().build();
-        testContainer.storeRepository.save(store);
-    }
+		final Store store = aStore().build();
+		testContainer.storeRepository.save(store);
+	}
 
-    @Test
-    void Should_Create_When_ValidCategoryCreate() {
-        // given
-        final StoreId storeId = new StoreId(1L);
-        final CategoryName categoryName = new CategoryName("스테이크");
-        final CategoryIcon icon = new CategoryIcon("drumstick");
+	@Test
+	void Should_Create_When_ValidCategoryCreate() {
+		// given
+		final StoreId storeId = new StoreId(1L);
+		final CategoryName categoryName = new CategoryName("스테이크");
+		final CategoryIcon icon = new CategoryIcon("drumstick");
 
-        final CategoryCreate categoryCreate = CategoryCreate.builder()
-            .storeId(storeId)
-            .name(categoryName)
-            .icon(icon)
-            .build();
+		final CategoryCreate categoryCreate = CategoryCreate.builder()
+				.storeId(storeId)
+				.name(categoryName)
+				.icon(icon)
+				.build();
 
-        // when
-        final Category category = Category.create(categoryCreate, testContainer.categoryValidator);
+		// when
+		final Category category = Category.create(categoryCreate, testContainer.categoryValidator);
 
-        // then
-        assertThat(category.getStoreId()).isEqualTo(storeId);
-        assertThat(category.getName()).isEqualTo(categoryName);
-        assertThat(category.getIcon()).isEqualTo(icon);
-    }
+		// then
+		assertThat(category.getStoreId()).isEqualTo(storeId);
+		assertThat(category.getName()).isEqualTo(categoryName);
+		assertThat(category.getIcon()).isEqualTo(icon);
+	}
 
-    @Test
-    void Should_Update_When_ValidCategoryUpdate() {
-        // given
-        final Category category = aCategory().build();
+	@Test
+	void Should_Update_When_ValidCategoryUpdate() {
+		// given
+		final Category category = aCategory().build();
 
-        final CategoryName categoryName = new CategoryName("파스타");
-        final CategoryIcon categoryIcon = new CategoryIcon("utensils");
-        final CategoryUpdate categoryUpdate = CategoryUpdate.builder()
-            .id(new CategoryId(1L))
-            .storeId(new StoreId(1L))
-            .name(categoryName)
-            .icon(categoryIcon)
-            .build();
+		final CategoryName categoryName = new CategoryName("파스타");
+		final CategoryIcon categoryIcon = new CategoryIcon("utensils");
+		final CategoryUpdate categoryUpdate = CategoryUpdate.builder()
+				.id(new CategoryId(1L))
+				.storeId(new StoreId(1L))
+				.name(categoryName)
+				.icon(categoryIcon)
+				.build();
 
-        // when
-        final Category result = category.update(categoryUpdate, testContainer.categoryValidator);
+		// when
+		final Category result = category.update(categoryUpdate, testContainer.categoryValidator);
 
-        // then
-        assertThat(result.getName()).isEqualTo(categoryName);
-        assertThat(result.getIcon()).isEqualTo(categoryIcon);
-    }
+		// then
+		assertThat(result.getName()).isEqualTo(categoryName);
+		assertThat(result.getIcon()).isEqualTo(categoryIcon);
+	}
 }

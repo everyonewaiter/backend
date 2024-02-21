@@ -27,160 +27,160 @@ import org.junit.jupiter.api.Test;
 
 class StoreServiceImplTest {
 
-    private TestContainer testContainer;
+	private TestContainer testContainer;
 
-    @BeforeEach
-    void setUp() {
-        testContainer = new TestContainer();
+	@BeforeEach
+	void setUp() {
+		testContainer = new TestContainer();
 
-        final User user = aUser().build();
-        testContainer.userRepository.save(user);
+		final User user = aUser().build();
+		testContainer.userRepository.save(user);
 
-        final Store store = aStore().build();
-        testContainer.storeRepository.save(store);
-    }
+		final Store store = aStore().build();
+		testContainer.storeRepository.save(store);
+	}
 
-    @Test
-    void Should_Create_When_ValidStoreCreate() {
-        // given
-        final StoreCreate storeCreate = StoreCreate.builder()
-            .name(new StoreName("나루"))
-            .landlineNumber(new LandlineNumber("0551234567"))
-            .businessTimes(new StoreBusinessTimes(List.of()))
-            .breakTimes(new StoreBreakTimes(List.of()))
-            .option(
-                StoreOption.builder()
-                    .useBreakTime(true)
-                    .useWaiting(true)
-                    .useOrder(true)
-                    .build()
-            )
-            .build();
+	@Test
+	void Should_Create_When_ValidStoreCreate() {
+		// given
+		final StoreCreate storeCreate = StoreCreate.builder()
+				.name(new StoreName("나루"))
+				.landlineNumber(new LandlineNumber("0551234567"))
+				.businessTimes(new StoreBusinessTimes(List.of()))
+				.breakTimes(new StoreBreakTimes(List.of()))
+				.option(
+						StoreOption.builder()
+								.useBreakTime(true)
+								.useWaiting(true)
+								.useOrder(true)
+								.build()
+				)
+				.build();
 
-        // when
-        final StoreId storeId = testContainer.storeService.create(new Username("handwoong"), storeCreate);
+		// when
+		final StoreId storeId = testContainer.storeService.create(new Username("handwoong"), storeCreate);
 
-        // then
-        assertThat(storeId).isEqualTo(new StoreId(1L));
-    }
+		// then
+		assertThat(storeId).isEqualTo(new StoreId(1L));
+	}
 
-    @Test
-    void Should_ThrowException_When_CreateUserNotFound() {
-        // given
-        final Username username = new Username("username");
-        final StoreCreate storeCreate = StoreCreate.builder().build();
+	@Test
+	void Should_ThrowException_When_CreateUserNotFound() {
+		// given
+		final Username username = new Username("username");
+		final StoreCreate storeCreate = StoreCreate.builder().build();
 
-        // expect
-        assertThatThrownBy(() -> testContainer.storeService.create(username, storeCreate))
-            .isInstanceOf(UserNotFoundException.class)
-            .hasMessage("사용자를 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.storeService.create(username, storeCreate))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
 
-    @Test
-    void Should_Update_When_ValidStoreUpdate() {
-        // given
-        final Username username = new Username("handwoong");
+	@Test
+	void Should_Update_When_ValidStoreUpdate() {
+		// given
+		final Username username = new Username("handwoong");
 
-        final StoreUpdate storeUpdate = StoreUpdate.builder()
-            .id(new StoreId(1L))
-            .name(new StoreName("나루 레스토랑"))
-            .landlineNumber(new LandlineNumber("0551234567"))
-            .businessTimes(new StoreBusinessTimes(List.of()))
-            .breakTimes(new StoreBreakTimes(List.of()))
-            .build();
+		final StoreUpdate storeUpdate = StoreUpdate.builder()
+				.id(new StoreId(1L))
+				.name(new StoreName("나루 레스토랑"))
+				.landlineNumber(new LandlineNumber("0551234567"))
+				.businessTimes(new StoreBusinessTimes(List.of()))
+				.breakTimes(new StoreBreakTimes(List.of()))
+				.build();
 
-        // when
-        testContainer.storeService.update(username, storeUpdate);
-        final Store result =
-            testContainer.storeRepository.findByIdAndUserIdOrElseThrow(new StoreId(1L), new UserId(1L));
+		// when
+		testContainer.storeService.update(username, storeUpdate);
+		final Store result =
+				testContainer.storeRepository.findByIdAndUserIdOrElseThrow(new StoreId(1L), new UserId(1L));
 
-        // then
-        assertThat(result.getName()).hasToString("나루 레스토랑");
-    }
+		// then
+		assertThat(result.getName()).hasToString("나루 레스토랑");
+	}
 
-    @Test
-    void Should_ThrowException_When_UpdateUserNotFound() {
-        // given
-        final Username username = new Username("username");
-        final StoreUpdate storeUpdate = StoreUpdate.builder().build();
+	@Test
+	void Should_ThrowException_When_UpdateUserNotFound() {
+		// given
+		final Username username = new Username("username");
+		final StoreUpdate storeUpdate = StoreUpdate.builder().build();
 
-        // expect
-        assertThatThrownBy(() -> testContainer.storeService.update(username, storeUpdate))
-            .isInstanceOf(UserNotFoundException.class)
-            .hasMessage("사용자를 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.storeService.update(username, storeUpdate))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
 
-    @Test
-    void Should_ThrowException_When_UpdateStoreNotFound() {
-        // given
-        final Username username = new Username("handwoong");
-        final StoreUpdate storeUpdate = StoreUpdate.builder().id(new StoreId(10L)).build();
+	@Test
+	void Should_ThrowException_When_UpdateStoreNotFound() {
+		// given
+		final Username username = new Username("handwoong");
+		final StoreUpdate storeUpdate = StoreUpdate.builder().id(new StoreId(10L)).build();
 
-        // expect
-        assertThatThrownBy(() -> testContainer.storeService.update(username, storeUpdate))
-            .isInstanceOf(StoreNotFoundException.class)
-            .hasMessage("매장을 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.storeService.update(username, storeUpdate))
+				.isInstanceOf(StoreNotFoundException.class)
+				.hasMessage("매장을 찾을 수 없습니다.");
+	}
 
-    @Test
-    void Should_UpdateOption_When_ValidStoreUpdateOption() {
-        // given
-        final Username username = new Username("handwoong");
+	@Test
+	void Should_UpdateOption_When_ValidStoreUpdateOption() {
+		// given
+		final Username username = new Username("handwoong");
 
-        final StoreOptionUpdate storeOptionUpdate = StoreOptionUpdate.builder()
-            .storeId(new StoreId(1L))
-            .useBreakTime(false)
-            .useWaiting(false)
-            .useOrder(false)
-            .build();
+		final StoreOptionUpdate storeOptionUpdate = StoreOptionUpdate.builder()
+				.storeId(new StoreId(1L))
+				.useBreakTime(false)
+				.useWaiting(false)
+				.useOrder(false)
+				.build();
 
-        // when
-        testContainer.storeService.update(username, storeOptionUpdate);
-        final Store result =
-            testContainer.storeRepository.findByIdAndUserIdOrElseThrow(new StoreId(1L), new UserId(1L));
+		// when
+		testContainer.storeService.update(username, storeOptionUpdate);
+		final Store result =
+				testContainer.storeRepository.findByIdAndUserIdOrElseThrow(new StoreId(1L), new UserId(1L));
 
-        // then
-        assertThat(result.getOption().isUseBreakTime()).isFalse();
-        assertThat(result.getOption().isUseWaiting()).isFalse();
-        assertThat(result.getOption().isUseOrder()).isFalse();
-    }
+		// then
+		assertThat(result.getOption().isUseBreakTime()).isFalse();
+		assertThat(result.getOption().isUseWaiting()).isFalse();
+		assertThat(result.getOption().isUseOrder()).isFalse();
+	}
 
-    @Test
-    void Should_ThrowException_When_UpdateOptionUserNotFound() {
-        // given
-        final Username username = new Username("username");
-        final StoreOptionUpdate storeOptionUpdate = StoreOptionUpdate.builder().build();
+	@Test
+	void Should_ThrowException_When_UpdateOptionUserNotFound() {
+		// given
+		final Username username = new Username("username");
+		final StoreOptionUpdate storeOptionUpdate = StoreOptionUpdate.builder().build();
 
-        // expect
-        assertThatThrownBy(() -> testContainer.storeService.update(username, storeOptionUpdate))
-            .isInstanceOf(UserNotFoundException.class)
-            .hasMessage("사용자를 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.storeService.update(username, storeOptionUpdate))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
 
-    @Test
-    void Should_ThrowException_When_UpdateOptionStoreNotFound() {
-        // given
-        final Username username = new Username("handwoong");
-        final StoreOptionUpdate storeOptionUpdate = StoreOptionUpdate.builder().storeId(new StoreId(10L)).build();
+	@Test
+	void Should_ThrowException_When_UpdateOptionStoreNotFound() {
+		// given
+		final Username username = new Username("handwoong");
+		final StoreOptionUpdate storeOptionUpdate = StoreOptionUpdate.builder().storeId(new StoreId(10L)).build();
 
-        // expect
-        assertThatThrownBy(() -> testContainer.storeService.update(username, storeOptionUpdate))
-            .isInstanceOf(StoreNotFoundException.class)
-            .hasMessage("매장을 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.storeService.update(username, storeOptionUpdate))
+				.isInstanceOf(StoreNotFoundException.class)
+				.hasMessage("매장을 찾을 수 없습니다.");
+	}
 
-    @Test
-    void Should_DeleteStore_When_StoreId() {
-        // given
-        final Username username = new Username("handwoong");
-        final StoreId storeId = new StoreId(1L);
-        final UserId userId = new UserId(1L);
+	@Test
+	void Should_DeleteStore_When_StoreId() {
+		// given
+		final Username username = new Username("handwoong");
+		final StoreId storeId = new StoreId(1L);
+		final UserId userId = new UserId(1L);
 
-        // when
-        testContainer.storeService.delete(username, storeId);
+		// when
+		testContainer.storeService.delete(username, storeId);
 
-        // then
-        assertThatThrownBy(() -> testContainer.storeRepository.findByIdAndUserIdOrElseThrow(storeId, userId))
-            .isInstanceOf(StoreNotFoundException.class);
-    }
+		// then
+		assertThatThrownBy(() -> testContainer.storeRepository.findByIdAndUserIdOrElseThrow(storeId, userId))
+				.isInstanceOf(StoreNotFoundException.class);
+	}
 }

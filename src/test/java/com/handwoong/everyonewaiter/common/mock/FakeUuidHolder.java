@@ -5,22 +5,22 @@ import java.util.UUID;
 
 public class FakeUuidHolder implements UuidHolder {
 
-    private String uuidInput;
+	private String uuidInput;
 
-    public FakeUuidHolder() {
-        this("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
-    }
+	public FakeUuidHolder() {
+		this("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+	}
 
-    public FakeUuidHolder(final String uuidInput) {
-        this.uuidInput = uuidInput;
-    }
+	public FakeUuidHolder(final String uuidInput) {
+		this.uuidInput = uuidInput;
+	}
 
-    @Override
-    public UUID generate() {
-        return UUID.fromString(uuidInput);
-    }
+	@Override
+	public UUID generate() {
+		return UUID.fromString(uuidInput);
+	}
 
-    public void setUuidInput(final String uuidInput) {
-        this.uuidInput = uuidInput;
-    }
+	public void setUuidInput(final String uuidInput) {
+		this.uuidInput = uuidInput;
+	}
 }

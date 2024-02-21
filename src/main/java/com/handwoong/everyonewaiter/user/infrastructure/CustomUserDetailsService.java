@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final User user = userRepository.findByUsername(new Username(username))
-            .orElseThrow(() -> new UsernameNotFoundException("사용자 아이디 " + username + "으로 사용자를 찾을 수 없습니다."));
-        return new CustomUserDetails(user);
-    }
+	@Override
+	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+		final User user = userRepository.findByUsername(new Username(username))
+				.orElseThrow(() -> new UsernameNotFoundException("사용자 아이디 " + username + "으로 사용자를 찾을 수 없습니다."));
+		return new CustomUserDetails(user);
+	}
 }

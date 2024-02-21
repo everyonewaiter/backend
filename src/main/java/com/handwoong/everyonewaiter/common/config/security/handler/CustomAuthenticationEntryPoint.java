@@ -9,12 +9,12 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 public class CustomAuthenticationEntryPoint extends BaseAuthenticationHandler implements AuthenticationEntryPoint {
 
-    @Override
-    public void commence(
-        final HttpServletRequest request,
-        final HttpServletResponse response,
-        final AuthenticationException authException
-    ) throws IOException {
-        handle(HttpStatus.UNAUTHORIZED, "인증에 실패하였습니다.", response);
-    }
+	@Override
+	public void commence(
+			final HttpServletRequest request,
+			final HttpServletResponse response,
+			final AuthenticationException authException
+	) throws IOException {
+		handle(HttpStatus.UNAUTHORIZED, "인증에 실패하였습니다.", response);
+	}
 }

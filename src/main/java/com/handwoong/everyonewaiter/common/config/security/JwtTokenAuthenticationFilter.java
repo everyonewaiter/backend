@@ -24,41 +24,41 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class JwtTokenAuthenticationFilter extends GenericFilter {
 
-    private final transient JwtTokenProvider jwtTokenProvider;
+	private final transient JwtTokenProvider jwtTokenProvider;
 
-    @Override
-    public void doFilter(
-        final ServletRequest servletRequest,
-        final ServletResponse servletResponse,
-        final FilterChain filterChain
-    ) throws IOException, ServletException {
-        final String parsedJwtToken = parseJwtTokenFromRequest(servletRequest);
-        saveAuthentication(parsedJwtToken);
-        filterChain.doFilter(servletRequest, servletResponse);
-    }
+	@Override
+	public void doFilter(
+			final ServletRequest servletRequest,
+			final ServletResponse servletResponse,
+			final FilterChain filterChain
+	) throws IOException, ServletException {
+		final String parsedJwtToken = parseJwtTokenFromRequest(servletRequest);
+		saveAuthentication(parsedJwtToken);
+		filterChain.doFilter(servletRequest, servletResponse);
+	}
 
-    private String parseJwtTokenFromRequest(final ServletRequest servletRequest) {
-        final HttpServletRequest request = (HttpServletRequest) servletRequest;
-        final String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
+	private String parseJwtTokenFromRequest(final ServletRequest servletRequest) {
+		final HttpServletRequest request = (HttpServletRequest) servletRequest;
+		final String bearerToken = request.getHeader("Authorization");
+		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+			return bearerToken.substring(7);
+		}
+		return null;
+	}
 
-    private void saveAuthentication(final String token) {
-        try {
-            final TokenInfo tokenInfo = jwtTokenProvider.parseToken(token, "roles");
-            final Authentication authentication = createAuthenticationFromTokenInfo(tokenInfo);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } catch (final InvalidJwtTokenException exception) {
-            SecurityContextHolder.getContext().setAuthentication(null);
-        }
-    }
+	private void saveAuthentication(final String token) {
+		try {
+			final TokenInfo tokenInfo = jwtTokenProvider.parseToken(token, "roles");
+			final Authentication authentication = createAuthenticationFromTokenInfo(tokenInfo);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		} catch (final InvalidJwtTokenException exception) {
+			SecurityContextHolder.getContext().setAuthentication(null);
+		}
+	}
 
-    private Authentication createAuthenticationFromTokenInfo(final TokenInfo tokenInfo) {
-        final List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(tokenInfo.claimValue()));
-        final User principal = new User(tokenInfo.subject(), "", authorities);
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
-    }
+	private Authentication createAuthenticationFromTokenInfo(final TokenInfo tokenInfo) {
+		final List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(tokenInfo.claimValue()));
+		final User principal = new User(tokenInfo.subject(), "", authorities);
+		return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+	}
 }

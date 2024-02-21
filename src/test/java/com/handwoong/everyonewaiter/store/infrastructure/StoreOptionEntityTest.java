@@ -8,28 +8,28 @@ import org.junit.jupiter.api.Test;
 
 class StoreOptionEntityTest {
 
-    @Test
-    void Should_CreateEntity_When_FromModel() {
-        // given
-        final StoreOption storeOption = aStoreOption().build();
+	@Test
+	void Should_CreateEntity_When_FromModel() {
+		// given
+		final StoreOption storeOption = aStoreOption().build();
 
-        // when
-        final StoreOptionEntity storeOptionEntity = StoreOptionEntity.from(storeOption);
+		// when
+		final StoreOptionEntity storeOptionEntity = StoreOptionEntity.from(storeOption);
 
-        // then
-        assertThat(storeOptionEntity).extracting("id").isEqualTo(1L);
-    }
+		// then
+		assertThat(storeOptionEntity).extracting("id").isEqualTo(1L);
+	}
 
-    @Test
-    void Should_CreateDomain_When_ToModel() {
-        // given
-        final StoreOption storeOption = aStoreOption().build();
-        final StoreOptionEntity storeOptionEntity = StoreOptionEntity.from(storeOption);
+	@Test
+	void Should_CreateDomain_When_ToModel() {
+		// given
+		final StoreOption storeOption = aStoreOption().build();
+		final StoreOptionEntity storeOptionEntity = StoreOptionEntity.from(storeOption);
 
-        // when
-        final StoreOption result = storeOptionEntity.toModel();
+		// when
+		final StoreOption result = storeOptionEntity.toModel();
 
-        // then
-        assertThat(result.getId().value()).isEqualTo(1L);
-    }
+		// then
+		assertThat(result.getId().value()).isEqualTo(1L);
+	}
 }

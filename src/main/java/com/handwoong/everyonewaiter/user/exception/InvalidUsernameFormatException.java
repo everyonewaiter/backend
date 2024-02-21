@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class InvalidUsernameFormatException extends BaseException {
 
-    private final String username;
+	private final String username;
 
-    public InvalidUsernameFormatException(final String message, final String username) {
-        super(message);
-        this.username = username;
-    }
+	public InvalidUsernameFormatException(final String message, final String username) {
+		super(message);
+		this.username = username;
+	}
 }

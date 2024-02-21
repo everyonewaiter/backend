@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class CategoryNotFoundException extends BaseException {
 
-    private final String resource;
+	private final String resource;
 
-    public CategoryNotFoundException(final String message, final String resource) {
-        super(message);
-        this.resource = resource;
-    }
+	public CategoryNotFoundException(final String message, final String resource) {
+		super(message);
+		this.resource = resource;
+	}
 }

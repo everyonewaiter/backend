@@ -17,33 +17,33 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserLoginServiceImpl implements UserLoginService {
 
-    private final JwtTokenProvider jwtTokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+	private final JwtTokenProvider jwtTokenProvider;
+	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    @Override
-    public JwtToken login(final UserLogin userLogin) {
-        final UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(userLogin.username(), userLogin.password());
-        final Authentication authentication =
-            authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        return jwtTokenProvider.createToken(authenticationTokenInfo(authentication));
-    }
+	@Override
+	public JwtToken login(final UserLogin userLogin) {
+		final UsernamePasswordAuthenticationToken authenticationToken =
+				new UsernamePasswordAuthenticationToken(userLogin.username(), userLogin.password());
+		final Authentication authentication =
+				authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		return jwtTokenProvider.createToken(authenticationTokenInfo(authentication));
+	}
 
-    private TokenInfo authenticationTokenInfo(final Authentication authentication) {
-        final String username = authentication.getName();
-        final String role = extractUserRole(authentication);
-        return TokenInfo.builder()
-            .subject(username)
-            .claimKey("roles")
-            .claimValue(role)
-            .build();
-    }
+	private TokenInfo authenticationTokenInfo(final Authentication authentication) {
+		final String username = authentication.getName();
+		final String role = extractUserRole(authentication);
+		return TokenInfo.builder()
+				.subject(username)
+				.claimKey("roles")
+				.claimValue(role)
+				.build();
+	}
 
-    private String extractUserRole(final Authentication authentication) {
-        return authentication.getAuthorities()
-            .stream()
-            .map(GrantedAuthority::getAuthority)
-            .findAny()
-            .orElseThrow(UnauthorizedAccessException::new);
-    }
+	private String extractUserRole(final Authentication authentication) {
+		return authentication.getAuthorities()
+				.stream()
+				.map(GrantedAuthority::getAuthority)
+				.findAny()
+				.orElseThrow(UnauthorizedAccessException::new);
+	}
 }

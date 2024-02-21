@@ -9,9 +9,9 @@ import org.springframework.restdocs.snippet.Snippet;
 
 public class StoreResponseSnippet {
 
-    public static final Snippet CUD_RESPONSE = responseFields(
-        COMMON_API_RESPONSE_RESULT_CODE,
-        COMMON_API_RESPONSE_MESSAGE.optional(),
-        COMMON_API_RESPONSE_DATA.optional()
-    );
+	public static final Snippet CUD_RESPONSE = responseFields(
+			COMMON_API_RESPONSE_RESULT_CODE,
+			COMMON_API_RESPONSE_MESSAGE.optional(),
+			COMMON_API_RESPONSE_DATA.optional()
+	);
 }

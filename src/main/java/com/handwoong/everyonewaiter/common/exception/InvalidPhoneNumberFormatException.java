@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public class InvalidPhoneNumberFormatException extends BaseException {
 
-    private final String phoneNumber;
+	private final String phoneNumber;
 
-    public InvalidPhoneNumberFormatException(final String message, final String phoneNumber) {
-        super(message);
-        this.phoneNumber = phoneNumber;
-    }
+	public InvalidPhoneNumberFormatException(final String message, final String phoneNumber) {
+		super(message);
+		this.phoneNumber = phoneNumber;
+	}
 }

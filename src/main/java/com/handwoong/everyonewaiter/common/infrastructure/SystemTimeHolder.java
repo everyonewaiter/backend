@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class SystemTimeHolder implements TimeHolder {
 
-    @Override
-    public long millis() {
-        return System.currentTimeMillis();
-    }
+	@Override
+	public long millis() {
+		return System.currentTimeMillis();
+	}
 }

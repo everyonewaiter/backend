@@ -8,6 +8,6 @@ import lombok.Getter;
 @Builder
 public class DomainTimestamp {
 
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+	private final LocalDateTime createdAt;
+	private final LocalDateTime updatedAt;
 }

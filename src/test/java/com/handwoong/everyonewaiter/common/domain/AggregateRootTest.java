@@ -10,53 +10,53 @@ import org.junit.jupiter.api.Test;
 
 class AggregateRootTest {
 
-    @Test
-    void Should_ReturnEvent_When_RegisterEvent() {
-        // given
-        final AggregateRoot root =
-            mock(AggregateRoot.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+	@Test
+	void Should_ReturnEvent_When_RegisterEvent() {
+		// given
+		final AggregateRoot root =
+				mock(AggregateRoot.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
 
-        // when
-        final TestEvent event = root.registerEvent(new TestEvent("테스트 이벤트"));
+		// when
+		final TestEvent event = root.registerEvent(new TestEvent("테스트 이벤트"));
 
-        // then
-        assertThat(event.name).isEqualTo("테스트 이벤트");
-    }
+		// then
+		assertThat(event.name).isEqualTo("테스트 이벤트");
+	}
 
-    @Test
-    void Should_GetAllRegisteredEvent_When_DomainEvents() {
-        // given
-        final AggregateRoot root =
-            mock(AggregateRoot.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
-        root.registerEvent(new TestEvent("이벤트1"));
-        root.registerEvent(new TestEvent("이벤트2"));
-        root.registerEvent(new TestEvent("이벤트3"));
+	@Test
+	void Should_GetAllRegisteredEvent_When_DomainEvents() {
+		// given
+		final AggregateRoot root =
+				mock(AggregateRoot.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+		root.registerEvent(new TestEvent("이벤트1"));
+		root.registerEvent(new TestEvent("이벤트2"));
+		root.registerEvent(new TestEvent("이벤트3"));
 
-        // when
-        final Collection<Object> events = root.domainEvents();
+		// when
+		final Collection<Object> events = root.domainEvents();
 
-        // then
-        assertThat(events).hasSize(3).extracting("name").contains("이벤트1", "이벤트2", "이벤트3");
-    }
+		// then
+		assertThat(events).hasSize(3).extracting("name").contains("이벤트1", "이벤트2", "이벤트3");
+	}
 
-    @Test
-    void Should_RemoveAllRegisteredEvent_When_ClearDomainEvents() {
-        // given
-        final AggregateRoot root =
-            mock(AggregateRoot.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
-        root.registerEvent(new TestEvent("이벤트1"));
-        root.registerEvent(new TestEvent("이벤트2"));
-        root.registerEvent(new TestEvent("이벤트3"));
+	@Test
+	void Should_RemoveAllRegisteredEvent_When_ClearDomainEvents() {
+		// given
+		final AggregateRoot root =
+				mock(AggregateRoot.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+		root.registerEvent(new TestEvent("이벤트1"));
+		root.registerEvent(new TestEvent("이벤트2"));
+		root.registerEvent(new TestEvent("이벤트3"));
 
-        // when
-        root.clearDomainEvents();
-        final Collection<Object> events = root.domainEvents();
+		// when
+		root.clearDomainEvents();
+		final Collection<Object> events = root.domainEvents();
 
-        // then
-        assertThat(events).isEmpty();
-    }
+		// then
+		assertThat(events).isEmpty();
+	}
 
-    private record TestEvent(String name) {
+	private record TestEvent(String name) {
 
-    }
+	}
 }

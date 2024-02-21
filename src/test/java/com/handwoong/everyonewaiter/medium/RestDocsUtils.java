@@ -20,57 +20,57 @@ import org.springframework.restdocs.snippet.Attributes.Attribute;
 
 public class RestDocsUtils {
 
-    public static final FieldDescriptor COMMON_API_RESPONSE_RESULT_CODE =
-        fieldWithPath("resultCode")
-            .type(JsonFieldType.STRING)
-            .description("상태 코드 SUCCESS | FAIL");
-    public static final FieldDescriptor COMMON_API_RESPONSE_MESSAGE =
-        fieldWithPath("message")
-            .type(JsonFieldType.STRING)
-            .description("결과 메시지");
-    public static final FieldDescriptor COMMON_API_RESPONSE_DATA =
-        fieldWithPath("data")
-            .type(JsonFieldType.OBJECT)
-            .description("결과 데이터");
+	public static final FieldDescriptor COMMON_API_RESPONSE_RESULT_CODE =
+			fieldWithPath("resultCode")
+					.type(JsonFieldType.STRING)
+					.description("상태 코드 SUCCESS | FAIL");
+	public static final FieldDescriptor COMMON_API_RESPONSE_MESSAGE =
+			fieldWithPath("message")
+					.type(JsonFieldType.STRING)
+					.description("결과 메시지");
+	public static final FieldDescriptor COMMON_API_RESPONSE_DATA =
+			fieldWithPath("data")
+					.type(JsonFieldType.OBJECT)
+					.description("결과 데이터");
 
-    private static RequestSpecification specification;
+	private static RequestSpecification specification;
 
-    private RestDocsUtils() {
-    }
+	private RestDocsUtils() {
+	}
 
-    public static RestDocumentationFilter getFilter() {
-        return document(
-            "{class-name}/{method-name}",
-            getRequestPreprocessor(),
-            getResponsePreprocessor()
-        );
-    }
+	public static RestDocumentationFilter getFilter() {
+		return document(
+				"{class-name}/{method-name}",
+				getRequestPreprocessor(),
+				getResponsePreprocessor()
+		);
+	}
 
-    public static OperationPreprocessor removeHeaders() {
-        final HeadersModifyingOperationPreprocessor modifyHeaders = Preprocessors.modifyHeaders();
-        for (final String header : HttpHeader.getUnusedHeaders()) {
-            modifyHeaders.remove(header);
-        }
-        return modifyHeaders;
-    }
+	public static OperationPreprocessor removeHeaders() {
+		final HeadersModifyingOperationPreprocessor modifyHeaders = Preprocessors.modifyHeaders();
+		for (final String header : HttpHeader.getUnusedHeaders()) {
+			modifyHeaders.remove(header);
+		}
+		return modifyHeaders;
+	}
 
-    public static OperationRequestPreprocessor getRequestPreprocessor() {
-        return preprocessRequest(prettyPrint());
-    }
+	public static OperationRequestPreprocessor getRequestPreprocessor() {
+		return preprocessRequest(prettyPrint());
+	}
 
-    public static OperationResponsePreprocessor getResponsePreprocessor() {
-        return preprocessResponse(prettyPrint());
-    }
+	public static OperationResponsePreprocessor getResponsePreprocessor() {
+		return preprocessResponse(prettyPrint());
+	}
 
-    public static RequestSpecification getSpecification() {
-        return specification;
-    }
+	public static RequestSpecification getSpecification() {
+		return specification;
+	}
 
-    public static void setSpecification(final RequestSpecification specification) {
-        RestDocsUtils.specification = specification;
-    }
+	public static void setSpecification(final RequestSpecification specification) {
+		RestDocsUtils.specification = specification;
+	}
 
-    public static Attribute constraints(final String value) {
-        return key("constraints").value(value);
-    }
+	public static Attribute constraints(final String value) {
+		return key("constraints").value(value);
+	}
 }

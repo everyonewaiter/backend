@@ -21,75 +21,75 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class WaitingRepositoryImpl implements WaitingRepository {
 
-    private final JPAQueryFactory queryFactory;
-    private final WaitingJpaRepository waitingJpaRepository;
+	private final JPAQueryFactory queryFactory;
+	private final WaitingJpaRepository waitingJpaRepository;
 
-    @Override
-    public Waiting save(final Waiting waiting) {
-        return waitingJpaRepository.save(WaitingEntity.from(waiting)).toModel();
-    }
+	@Override
+	public Waiting save(final Waiting waiting) {
+		return waitingJpaRepository.save(WaitingEntity.from(waiting)).toModel();
+	}
 
-    @Override
-    public boolean existsByPhoneNumber(final PhoneNumber phoneNumber) {
-        return Objects.nonNull(
-            queryFactory.selectOne()
-                .from(waitingEntity)
-                .where(
-                    statusEq(WaitingStatus.WAIT),
-                    phoneNumberEq(phoneNumber)
-                )
-                .fetchFirst()
-        );
-    }
+	@Override
+	public boolean existsByPhoneNumber(final PhoneNumber phoneNumber) {
+		return Objects.nonNull(
+				queryFactory.selectOne()
+						.from(waitingEntity)
+						.where(
+								statusEq(WaitingStatus.WAIT),
+								phoneNumberEq(phoneNumber)
+						)
+						.fetchFirst()
+		);
+	}
 
-    @Override
-    public int countByAfterStoreOpen(
-        final StoreId storeId,
-        final WaitingStatus status,
-        final LocalDateTime lastOpenedAt
-    ) {
-        return Math.toIntExact(
-            queryFactory.select(waitingEntity.count())
-                .from(waitingEntity)
-                .where(
-                    storeIdEq(storeId),
-                    statusEq(status),
-                    afterCreatedAt(lastOpenedAt)
-                )
-                .fetchFirst()
-        );
-    }
+	@Override
+	public int countByAfterStoreOpen(
+			final StoreId storeId,
+			final WaitingStatus status,
+			final LocalDateTime lastOpenedAt
+	) {
+		return Math.toIntExact(
+				queryFactory.select(waitingEntity.count())
+						.from(waitingEntity)
+						.where(
+								storeIdEq(storeId),
+								statusEq(status),
+								afterCreatedAt(lastOpenedAt)
+						)
+						.fetchFirst()
+		);
+	}
 
-    @Override
-    public Waiting findByStoreIdAndUniqueCodeOrElseThrow(final StoreId storeId, final UUID uniqueCode) {
-        return Optional.ofNullable(
-                queryFactory.selectFrom(waitingEntity)
-                    .where(
-                        storeIdEq(storeId),
-                        waitingEntity.uniqueCode.eq(uniqueCode)
-                    )
-                    .fetchFirst()
-            )
-            .orElseThrow(() ->
-                new WaitingNotFoundException("웨이팅을 찾을 수 없습니다.",
-                    "storeId : [" + storeId + "] uniqueCode : [" + uniqueCode + "]")
-            )
-            .toModel();
-    }
+	@Override
+	public Waiting findByStoreIdAndUniqueCodeOrElseThrow(final StoreId storeId, final UUID uniqueCode) {
+		return Optional.ofNullable(
+						queryFactory.selectFrom(waitingEntity)
+								.where(
+										storeIdEq(storeId),
+										waitingEntity.uniqueCode.eq(uniqueCode)
+								)
+								.fetchFirst()
+				)
+				.orElseThrow(() ->
+						new WaitingNotFoundException("웨이팅을 찾을 수 없습니다.",
+								"storeId : [" + storeId + "] uniqueCode : [" + uniqueCode + "]")
+				)
+				.toModel();
+	}
 
-    private BooleanExpression storeIdEq(final StoreId storeId) {
-        return Objects.isNull(storeId) ? null : waitingEntity.storeId.eq(storeId.value());
-    }
+	private BooleanExpression storeIdEq(final StoreId storeId) {
+		return Objects.isNull(storeId) ? null : waitingEntity.storeId.eq(storeId.value());
+	}
 
-    private BooleanExpression statusEq(final WaitingStatus status) {
-        return Objects.isNull(status) ? null : waitingEntity.status.eq(status);
-    }
+	private BooleanExpression statusEq(final WaitingStatus status) {
+		return Objects.isNull(status) ? null : waitingEntity.status.eq(status);
+	}
 
-    private BooleanExpression afterCreatedAt(final LocalDateTime timestamp) {
-        return Objects.isNull(timestamp) ? null : waitingEntity.createdAt.after(timestamp);
-    }
+	private BooleanExpression afterCreatedAt(final LocalDateTime timestamp) {
+		return Objects.isNull(timestamp) ? null : waitingEntity.createdAt.after(timestamp);
+	}
 
-    private BooleanExpression phoneNumberEq(final PhoneNumber phoneNumber) {
-        return Objects.isNull(phoneNumber) ? null : waitingEntity.phoneNumber.eq(phoneNumber.toString());
-    }
+	private BooleanExpression phoneNumberEq(final PhoneNumber phoneNumber) {
+		return Objects.isNull(phoneNumber) ? null : waitingEntity.phoneNumber.eq(phoneNumber.toString());
+	}
 }

@@ -5,5 +5,5 @@ import com.handwoong.everyonewaiter.user.dto.UserLogin;
 
 public interface UserLoginService {
 
-    JwtToken login(UserLogin userLogin);
+	JwtToken login(UserLogin userLogin);
 }

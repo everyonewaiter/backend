@@ -27,53 +27,53 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CategoryEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @NotNull
-    private Long storeId;
+	@NotNull
+	private Long storeId;
 
-    @NotNull
-    @Column(length = CATEGORY_NAME_MAX_LENGTH)
-    private String name;
+	@NotNull
+	@Column(length = CATEGORY_NAME_MAX_LENGTH)
+	private String name;
 
-    @NotNull
-    @Column(length = CATEGORY_ICON_MAX_LENGTH)
-    private String icon;
+	@NotNull
+	@Column(length = CATEGORY_ICON_MAX_LENGTH)
+	private String icon;
 
-    public static CategoryEntity from(final Category category) {
-        final CategoryEntity categoryEntity = new CategoryEntity();
-        categoryEntity.id = Objects.isNull(category.getId()) ? null : category.getId().value();
-        categoryEntity.storeId = Objects.requireNonNull(category.getStoreId(), "카테고리의 매장 ID는 null일 수 없습니다.").value();
-        categoryEntity.name = category.getName().toString();
-        categoryEntity.icon = category.getIcon().toString();
-        return categoryEntity;
-    }
+	public static CategoryEntity from(final Category category) {
+		final CategoryEntity categoryEntity = new CategoryEntity();
+		categoryEntity.id = Objects.isNull(category.getId()) ? null : category.getId().value();
+		categoryEntity.storeId = Objects.requireNonNull(category.getStoreId(), "카테고리의 매장 ID는 null일 수 없습니다.").value();
+		categoryEntity.name = category.getName().toString();
+		categoryEntity.icon = category.getIcon().toString();
+		return categoryEntity;
+	}
 
-    public Category toModel() {
-        return Category.builder()
-            .id(new CategoryId(id))
-            .storeId(new StoreId(storeId))
-            .name(new CategoryName(name))
-            .icon(new CategoryIcon(icon))
-            .timestamp(getDomainTimestamp())
-            .build();
-    }
+	public Category toModel() {
+		return Category.builder()
+				.id(new CategoryId(id))
+				.storeId(new StoreId(storeId))
+				.name(new CategoryName(name))
+				.icon(new CategoryIcon(icon))
+				.timestamp(getDomainTimestamp())
+				.build();
+	}
 
-    @Override
-    public boolean equals(final Object object) {
-        if (this == object) {
-            return true;
-        }
-        if (!(object instanceof final CategoryEntity that)) {
-            return false;
-        }
-        return Objects.equals(id, that.id);
-    }
+	@Override
+	public boolean equals(final Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (!(object instanceof final CategoryEntity that)) {
+			return false;
+		}
+		return Objects.equals(id, that.id);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 }

@@ -21,43 +21,43 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 public record StoreCreateRequest(
-    @NotBlank(message = STORE_NAME_EMPTY_MESSAGE)
-    @Size(max = STORE_NAME_MAX_LENGTH, message = STORE_NAME_MAX_LENGTH_MESSAGE)
-    String name,
+		@NotBlank(message = STORE_NAME_EMPTY_MESSAGE)
+		@Size(max = STORE_NAME_MAX_LENGTH, message = STORE_NAME_MAX_LENGTH_MESSAGE)
+		String name,
 
-    @NotBlank(message = LANDLINE_NUMBER_FORMAT_MESSAGE)
-    @Pattern(regexp = LANDLINE_NUMBER_REGEX, message = LANDLINE_NUMBER_FORMAT_MESSAGE)
-    String landlineNumber,
+		@NotBlank(message = LANDLINE_NUMBER_FORMAT_MESSAGE)
+		@Pattern(regexp = LANDLINE_NUMBER_REGEX, message = LANDLINE_NUMBER_FORMAT_MESSAGE)
+		String landlineNumber,
 
-    @NotNull
-    List<@Valid StoreBreakTimeRequest> breakTimes,
+		@NotNull
+		List<@Valid StoreBreakTimeRequest> breakTimes,
 
-    @NotEmpty(message = MIN_BUSINESS_TIME_MESSAGE)
-    List<@Valid StoreBusinessTimeRequest> businessTimes,
+		@NotEmpty(message = MIN_BUSINESS_TIME_MESSAGE)
+		List<@Valid StoreBusinessTimeRequest> businessTimes,
 
-    @NotNull
-    @Valid StoreCreateOptionRequest option
+		@NotNull
+		@Valid StoreCreateOptionRequest option
 ) {
 
-    public StoreCreate toDomainDto() {
-        return StoreCreate.builder()
-            .name(new StoreName(name))
-            .landlineNumber(new LandlineNumber(landlineNumber))
-            .businessTimes(
-                new StoreBusinessTimes(
-                    businessTimes.stream()
-                        .map(StoreBusinessTimeRequest::toDomain)
-                        .toList()
-                )
-            )
-            .breakTimes(
-                new StoreBreakTimes(
-                    breakTimes.stream()
-                        .map(StoreBreakTimeRequest::toDomain)
-                        .toList()
-                )
-            )
-            .option(option.toDomain())
-            .build();
-    }
+	public StoreCreate toDomainDto() {
+		return StoreCreate.builder()
+				.name(new StoreName(name))
+				.landlineNumber(new LandlineNumber(landlineNumber))
+				.businessTimes(
+						new StoreBusinessTimes(
+								businessTimes.stream()
+										.map(StoreBusinessTimeRequest::toDomain)
+										.toList()
+						)
+				)
+				.breakTimes(
+						new StoreBreakTimes(
+								breakTimes.stream()
+										.map(StoreBreakTimeRequest::toDomain)
+										.toList()
+						)
+				)
+				.option(option.toDomain())
+				.build();
+	}
 }

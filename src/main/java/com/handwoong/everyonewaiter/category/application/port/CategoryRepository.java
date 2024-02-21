@@ -5,7 +5,7 @@ import com.handwoong.everyonewaiter.category.domain.CategoryId;
 
 public interface CategoryRepository {
 
-    Category save(Category category);
+	Category save(Category category);
 
-    Category findByIdOrElseThrow(CategoryId id);
+	Category findByIdOrElseThrow(CategoryId id);
 }
