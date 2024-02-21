@@ -18,81 +18,81 @@ import org.springframework.security.authentication.BadCredentialsException;
 
 class UserControllerTest {
 
-    @Test
-    void Should_Join_When_ValidRequest() {
-        // given
-        final TestContainer testContainer = new TestContainer();
-        final UserJoinRequest request = new UserJoinRequest("handwoong", "123456", "01012345678");
+	@Test
+	void Should_Join_When_ValidRequest() {
+		// given
+		final TestContainer testContainer = new TestContainer();
+		final UserJoinRequest request = new UserJoinRequest("handwoong", "123456", "01012345678");
 
-        // when
-        final ResponseEntity<ApiResponse<Void>> response = testContainer.userController.join(request);
-        final ApiResponse<Void> result = response.getBody();
+		// when
+		final ResponseEntity<ApiResponse<Void>> response = testContainer.userController.join(request);
+		final ApiResponse<Void> result = response.getBody();
 
-        // then
-        assertThat(response.getStatusCode().value()).isEqualTo(201);
-        assertThat(result).extracting("resultCode").isEqualTo(ResultCode.SUCCESS);
-    }
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(201);
+		assertThat(result).extracting("resultCode").isEqualTo(ResultCode.SUCCESS);
+	}
 
-    @Test
-    void Should_ThrowException_When_JoinDuplicateUsername() {
-        // given
-        final TestContainer testContainer = new TestContainer();
-        final User user = aUser().build();
-        testContainer.userRepository.save(user);
+	@Test
+	void Should_ThrowException_When_JoinDuplicateUsername() {
+		// given
+		final TestContainer testContainer = new TestContainer();
+		final User user = aUser().build();
+		testContainer.userRepository.save(user);
 
-        final UserJoinRequest request = new UserJoinRequest("handwoong", "123456", "01012345678");
+		final UserJoinRequest request = new UserJoinRequest("handwoong", "123456", "01012345678");
 
-        // expect
-        assertThatThrownBy(() -> testContainer.userController.join(request))
-            .isInstanceOf(AlreadyExistsUsernameException.class)
-            .hasMessage("이미 존재하는 사용자 아이디입니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.userController.join(request))
+				.isInstanceOf(AlreadyExistsUsernameException.class)
+				.hasMessage("이미 존재하는 사용자 아이디입니다.");
+	}
 
-    @Test
-    void Should_Login_When_ValidRequest() {
-        // given
-        final TestContainer testContainer = new TestContainer();
-        final User user = aUser().build();
-        testContainer.userRepository.save(user);
+	@Test
+	void Should_Login_When_ValidRequest() {
+		// given
+		final TestContainer testContainer = new TestContainer();
+		final User user = aUser().build();
+		testContainer.userRepository.save(user);
 
-        final UserLoginRequest request = new UserLoginRequest("handwoong", "password");
+		final UserLoginRequest request = new UserLoginRequest("handwoong", "password");
 
-        // when
-        final ResponseEntity<ApiResponse<JwtToken>> response = testContainer.userController.login(request);
-        final ApiResponse<JwtToken> result = response.getBody();
+		// when
+		final ResponseEntity<ApiResponse<JwtToken>> response = testContainer.userController.login(request);
+		final ApiResponse<JwtToken> result = response.getBody();
 
-        // then
-        assertThat(response.getStatusCode().value()).isEqualTo(200);
-        assertThat(result).extracting("resultCode").isEqualTo(ResultCode.SUCCESS);
-    }
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(200);
+		assertThat(result).extracting("resultCode").isEqualTo(ResultCode.SUCCESS);
+	}
 
-    @Test
-    void Should_ThrowException_When_LoginInvalidUsername() {
-        // given
-        final TestContainer testContainer = new TestContainer();
-        final User user = aUser().build();
-        testContainer.userRepository.save(user);
+	@Test
+	void Should_ThrowException_When_LoginInvalidUsername() {
+		// given
+		final TestContainer testContainer = new TestContainer();
+		final User user = aUser().build();
+		testContainer.userRepository.save(user);
 
-        final UserLoginRequest request = new UserLoginRequest("invalidUsername", "password");
+		final UserLoginRequest request = new UserLoginRequest("invalidUsername", "password");
 
-        // expect
-        assertThatThrownBy(() -> testContainer.userController.login(request))
-            .isInstanceOf(BadCredentialsException.class)
-            .hasMessage("자격 증명에 실패하였습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.userController.login(request))
+				.isInstanceOf(BadCredentialsException.class)
+				.hasMessage("자격 증명에 실패하였습니다.");
+	}
 
-    @Test
-    void Should_ThrowException_When_LoginInvalidPassword() {
-        // given
-        final TestContainer testContainer = new TestContainer();
-        final User user = aUser().build();
-        testContainer.userRepository.save(user);
+	@Test
+	void Should_ThrowException_When_LoginInvalidPassword() {
+		// given
+		final TestContainer testContainer = new TestContainer();
+		final User user = aUser().build();
+		testContainer.userRepository.save(user);
 
-        final UserLoginRequest request = new UserLoginRequest("handwoong", "invalidPassword");
+		final UserLoginRequest request = new UserLoginRequest("handwoong", "invalidPassword");
 
-        // expect
-        assertThatThrownBy(() -> testContainer.userController.login(request))
-            .isInstanceOf(BadCredentialsException.class)
-            .hasMessage("자격 증명에 실패하였습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> testContainer.userController.login(request))
+				.isInstanceOf(BadCredentialsException.class)
+				.hasMessage("자격 증명에 실패하였습니다.");
+	}
 }
