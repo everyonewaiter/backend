@@ -30,69 +30,69 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @NotNull
-    @Column(length = USERNAME_MAX_LENGTH, unique = true)
-    private String username;
+	@NotNull
+	@Column(length = USERNAME_MAX_LENGTH, unique = true)
+	private String username;
 
-    @NotNull
-    private String password;
+	@NotNull
+	private String password;
 
-    @NotNull
-    @Column(length = 20)
-    private String phoneNumber;
+	@NotNull
+	@Column(length = 20)
+	private String phoneNumber;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private UserRole role;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private UserStatus status;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private UserStatus status;
 
-    private Long lastLoggedIn;
+	private Long lastLoggedIn;
 
-    public static UserEntity from(final User user) {
-        final UserEntity userEntity = new UserEntity();
-        userEntity.id = Objects.isNull(user.getId()) ? null : user.getId().value();
-        userEntity.username = user.getUsername().toString();
-        userEntity.password = user.getPassword().toString();
-        userEntity.phoneNumber = user.getPhoneNumber().toString();
-        userEntity.role = user.getRole();
-        userEntity.status = user.getStatus();
-        userEntity.lastLoggedIn = user.getLastLoggedIn();
-        return userEntity;
-    }
+	public static UserEntity from(final User user) {
+		final UserEntity userEntity = new UserEntity();
+		userEntity.id = Objects.isNull(user.getId()) ? null : user.getId().value();
+		userEntity.username = user.getUsername().toString();
+		userEntity.password = user.getPassword().toString();
+		userEntity.phoneNumber = user.getPhoneNumber().toString();
+		userEntity.role = user.getRole();
+		userEntity.status = user.getStatus();
+		userEntity.lastLoggedIn = user.getLastLoggedIn();
+		return userEntity;
+	}
 
-    public User toModel() {
-        return User.builder()
-            .id(new UserId(id))
-            .username(new Username(username))
-            .password(new Password(password))
-            .phoneNumber(new PhoneNumber(phoneNumber))
-            .role(role)
-            .status(status)
-            .lastLoggedIn(lastLoggedIn)
-            .timestamp(getDomainTimestamp())
-            .build();
-    }
+	public User toModel() {
+		return User.builder()
+				.id(new UserId(id))
+				.username(new Username(username))
+				.password(new Password(password))
+				.phoneNumber(new PhoneNumber(phoneNumber))
+				.role(role)
+				.status(status)
+				.lastLoggedIn(lastLoggedIn)
+				.timestamp(getDomainTimestamp())
+				.build();
+	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof final UserEntity that)) {
-            return false;
-        }
-        return Objects.nonNull(id) && Objects.equals(id, that.id);
-    }
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof final UserEntity that)) {
+			return false;
+		}
+		return Objects.nonNull(id) && Objects.equals(id, that.id);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 }

@@ -31,72 +31,72 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final ClientConfig clientConfig;
-    private final JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
+	private final ClientConfig clientConfig;
+	private final JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
-        configureBasicSecurity(http);
-        configureAuthorizationSecurity(http);
-        configureSecurityExceptionHandler(http);
-        configureSecurityFilter(http);
-        return http.build();
-    }
+	@Bean
+	public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
+		configureBasicSecurity(http);
+		configureAuthorizationSecurity(http);
+		configureSecurityExceptionHandler(http);
+		configureSecurityFilter(http);
+		return http.build();
+	}
 
-    private void configureBasicSecurity(final HttpSecurity http) throws Exception {
-        http.formLogin(AbstractHttpConfigurer::disable)
-            .httpBasic(AbstractHttpConfigurer::disable)
-            .csrf(AbstractHttpConfigurer::disable)
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-    }
+	private void configureBasicSecurity(final HttpSecurity http) throws Exception {
+		http.formLogin(AbstractHttpConfigurer::disable)
+				.httpBasic(AbstractHttpConfigurer::disable)
+				.csrf(AbstractHttpConfigurer::disable)
+				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+				.sessionManagement(session ->
+						session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+	}
 
-    private void configureAuthorizationSecurity(final HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth ->
-            auth.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                .permitAll()
-                .requestMatchers(convertUriToPathMatcher(AccessAllowUri.values())).permitAll()
-                .requestMatchers(convertUriToPathMatcher(AnonymousAllowUri.values())).anonymous()
-                .requestMatchers(convertUriToPathMatcher(AdminAllowUri.values())).hasRole("ADMIN")
-                .anyRequest().authenticated()
-        );
-    }
+	private void configureAuthorizationSecurity(final HttpSecurity http) throws Exception {
+		http.authorizeHttpRequests(auth ->
+				auth.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+						.permitAll()
+						.requestMatchers(convertUriToPathMatcher(AccessAllowUri.values())).permitAll()
+						.requestMatchers(convertUriToPathMatcher(AnonymousAllowUri.values())).anonymous()
+						.requestMatchers(convertUriToPathMatcher(AdminAllowUri.values())).hasRole("ADMIN")
+						.anyRequest().authenticated()
+		);
+	}
 
-    private AntPathRequestMatcher[] convertUriToPathMatcher(final AllowUri[] allowUris) {
-        return Arrays.stream(allowUris)
-            .map(AllowUri::getUri)
-            .map(AntPathRequestMatcher::antMatcher)
-            .toArray(AntPathRequestMatcher[]::new);
-    }
+	private AntPathRequestMatcher[] convertUriToPathMatcher(final AllowUri[] allowUris) {
+		return Arrays.stream(allowUris)
+				.map(AllowUri::getUri)
+				.map(AntPathRequestMatcher::antMatcher)
+				.toArray(AntPathRequestMatcher[]::new);
+	}
 
-    private void configureSecurityExceptionHandler(final HttpSecurity http) throws Exception {
-        http.exceptionHandling(exceptionHandling ->
-            exceptionHandling
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                .accessDeniedHandler(new CustomAccessDeniedHandler()));
-    }
+	private void configureSecurityExceptionHandler(final HttpSecurity http) throws Exception {
+		http.exceptionHandling(exceptionHandling ->
+				exceptionHandling
+						.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+						.accessDeniedHandler(new CustomAccessDeniedHandler()));
+	}
 
-    private void configureSecurityFilter(final HttpSecurity http) {
-        http.addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-    }
+	private void configureSecurityFilter(final HttpSecurity http) {
+		http.addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedOriginPatterns(List.of(clientConfig.getClientUrl()));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setExposedHeaders(List.of("*"));
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		final CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowCredentials(true);
+		configuration.setAllowedOriginPatterns(List.of(clientConfig.getClientUrl()));
+		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+		configuration.setAllowedHeaders(List.of("*"));
+		configuration.setExposedHeaders(List.of("*"));
 
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
 }

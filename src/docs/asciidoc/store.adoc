@@ -11,3 +11,15 @@ operation::store-controller-test/should_-update_-when_-valid-request[snippets='h
 === 옵션 변경
 
 operation::store-controller-test/should_-update-option_-when_-valid-request[snippets='http-request,request-headers,request-fields,http-response,response-fields']
+
+=== 삭제
+
+operation::store-controller-test/should_-delete-store_-when_-valid-request[snippets='http-request,path-parameters,request-headers,http-response,response-fields']
+
+=== 목록 조회
+
+operation::store-controller-test/should_-store-responses_-when_-login-user[snippets='http-request,request-headers,http-response,response-fields']
+
+=== 단건 조회
+
+operation::store-controller-test/should_-store-response_-when_-valid-request[snippets='http-request,path-parameters,request-headers,http-response,response-fields']

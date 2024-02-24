@@ -9,11 +9,11 @@ import java.util.UUID;
 
 public interface WaitingRepository {
 
-    Waiting save(Waiting waiting);
+	Waiting save(Waiting waiting);
 
-    boolean existsByPhoneNumber(PhoneNumber phoneNumber);
+	boolean existsByPhoneNumber(PhoneNumber phoneNumber);
 
-    int countByAfterStoreOpen(StoreId storeId, WaitingStatus status, LocalDateTime lastOpenedAt);
+	int countByAfterStoreOpen(StoreId storeId, WaitingStatus status, LocalDateTime lastOpenedAt);
 
-    Waiting findByStoreIdAndUniqueCodeOrElseThrow(StoreId storeId, UUID uniqueCode);
+	Waiting findByStoreIdAndUniqueCodeOrElseThrow(StoreId storeId, UUID uniqueCode);
 }

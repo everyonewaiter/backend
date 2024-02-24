@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class StoreNotFoundException extends BaseException {
 
-    private final String resource;
+	private final String resource;
 
-    public StoreNotFoundException(final String message, final String resource) {
-        super(message);
-        this.resource = resource;
-    }
+	public StoreNotFoundException(final String message, final String resource) {
+		super(message);
+		this.resource = resource;
+	}
 }

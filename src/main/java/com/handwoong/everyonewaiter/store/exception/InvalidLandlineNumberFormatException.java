@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class InvalidLandlineNumberFormatException extends BaseException {
 
-    private final String landlineNumber;
+	private final String landlineNumber;
 
-    public InvalidLandlineNumberFormatException(final String message, final String landlineNumber) {
-        super(message);
-        this.landlineNumber = landlineNumber;
-    }
+	public InvalidLandlineNumberFormatException(final String message, final String landlineNumber) {
+		super(message);
+		this.landlineNumber = landlineNumber;
+	}
 }

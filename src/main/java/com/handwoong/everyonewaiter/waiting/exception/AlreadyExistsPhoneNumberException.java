@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class AlreadyExistsPhoneNumberException extends BaseException {
 
-    private final String phoneNumber;
+	private final String phoneNumber;
 
-    public AlreadyExistsPhoneNumberException(final String message, final String phoneNumber) {
-        super(message);
-        this.phoneNumber = phoneNumber;
-    }
+	public AlreadyExistsPhoneNumberException(final String message, final String phoneNumber) {
+		super(message);
+		this.phoneNumber = phoneNumber;
+	}
 }

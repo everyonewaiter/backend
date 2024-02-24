@@ -8,6 +8,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ClientConfig {
 
-    @Value("${client.url}")
-    private String clientUrl;
+	@Value("${client.url}")
+	private String clientUrl;
 }

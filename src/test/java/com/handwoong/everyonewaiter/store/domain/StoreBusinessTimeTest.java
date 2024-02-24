@@ -17,61 +17,62 @@ import org.junit.jupiter.api.Test;
 
 class StoreBusinessTimeTest {
 
-    @Test
-    void Should_IncreaseCount_When_MatchedDayOfWeek() {
-        // given
-        final Map<DayOfWeek, Integer> counter = DayOfWeek.dayOfWeekCounter();
-        final StoreBusinessTime storeBusinessTime = aStoreBusinessTime().build();
+	@Test
+	void Should_IncreaseCount_When_MatchedDayOfWeek() {
+		// given
+		final Map<DayOfWeek, Integer> counter = DayOfWeek.dayOfWeekCounter();
+		final StoreBusinessTime storeBusinessTime = aStoreBusinessTime().build();
 
-        // when
-        storeBusinessTime.daysCount(counter);
+		// when
+		storeBusinessTime.daysCount(counter);
 
-        // then
-        assertThat(counter)
-            .containsEntry(MONDAY, 1)
-            .containsEntry(TUESDAY, 1)
-            .containsEntry(WEDNESDAY, 1)
-            .containsEntry(THURSDAY, 1)
-            .containsEntry(FRIDAY, 1)
-            .containsEntry(SATURDAY, 1)
-            .containsEntry(SUNDAY, 1);
-    }
+		// then
+		assertThat(counter)
+				.containsEntry(MONDAY, 1)
+				.containsEntry(TUESDAY, 1)
+				.containsEntry(WEDNESDAY, 1)
+				.containsEntry(THURSDAY, 1)
+				.containsEntry(FRIDAY, 1)
+				.containsEntry(SATURDAY, 1)
+				.containsEntry(SUNDAY, 1);
+	}
 
-    @Test
-    void Should_7_When_GetDaysSize() {
-        // given
-        final StoreBusinessTime storeBusinessTime = aStoreBusinessTime()
-            .daysOfWeek(new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)))
-            .build();
+	@Test
+	void Should_7_When_GetDaysSize() {
+		// given
+		final StoreBusinessTime storeBusinessTime = aStoreBusinessTime()
+				.daysOfWeek(
+						new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)))
+				.build();
 
-        // when
-        final int result = storeBusinessTime.getDaysSize();
+		// when
+		final int result = storeBusinessTime.getDaysSize();
 
-        // then
-        assertThat(result).isEqualTo(7);
-    }
+		// then
+		assertThat(result).isEqualTo(7);
+	}
 
-    @Test
-    void Should_True_When_CompareWithinTime() {
-        // given
-        final StoreBusinessTime storeBusinessTime = aStoreBusinessTime().build();
+	@Test
+	void Should_True_When_CompareWithinTime() {
+		// given
+		final StoreBusinessTime storeBusinessTime = aStoreBusinessTime().build();
 
-        // when
-        final boolean result = storeBusinessTime.compareCurrentTime(MONDAY, LocalTime.of(15, 0, 0));
+		// when
+		final boolean result = storeBusinessTime.compareCurrentTime(MONDAY, LocalTime.of(15, 0, 0));
 
-        // then
-        assertThat(result).isTrue();
-    }
+		// then
+		assertThat(result).isTrue();
+	}
 
-    @Test
-    void Should_False_When_CompareWithinTime() {
-        // given
-        final StoreBusinessTime storeBusinessTime = aStoreBusinessTime().build();
+	@Test
+	void Should_False_When_CompareWithinTime() {
+		// given
+		final StoreBusinessTime storeBusinessTime = aStoreBusinessTime().build();
 
-        // when
-        final boolean result = storeBusinessTime.compareCurrentTime(MONDAY, LocalTime.of(22, 0, 0));
+		// when
+		final boolean result = storeBusinessTime.compareCurrentTime(MONDAY, LocalTime.of(22, 0, 0));
 
-        // then
-        assertThat(result).isFalse();
-    }
+		// then
+		assertThat(result).isFalse();
+	}
 }

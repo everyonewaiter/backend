@@ -23,52 +23,52 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Waiting extends AggregateRoot {
 
-    private final WaitingId id;
-    private final StoreId storeId;
-    private final WaitingAdult adult;
-    private final WaitingChildren children;
-    private final WaitingNumber number;
-    private final PhoneNumber phoneNumber;
-    private final WaitingStatus status;
-    private final WaitingNotificationType notificationType;
-    private final UUID uniqueCode;
-    private final DomainTimestamp timestamp;
+	private final WaitingId id;
+	private final StoreId storeId;
+	private final WaitingAdult adult;
+	private final WaitingChildren children;
+	private final WaitingNumber number;
+	private final PhoneNumber phoneNumber;
+	private final WaitingStatus status;
+	private final WaitingNotificationType notificationType;
+	private final UUID uniqueCode;
+	private final DomainTimestamp timestamp;
 
-    public Waiting(
-        final WaitingRegister waitingRegister,
-        final WaitingValidator waitingValidator,
-        final WaitingGenerator waitingGenerator,
-        final UuidHolder uuidHolder
-    ) {
-        waitingValidator.validate(waitingRegister.storeId());
-        final WaitingGenerateInfo waitingInfo = waitingGenerator.generate(waitingRegister.storeId());
-        registerEvent(new WaitingRegisterEvent(waitingInfo, waitingRegister.phoneNumber()));
+	public Waiting(
+			final WaitingRegister waitingRegister,
+			final WaitingValidator waitingValidator,
+			final WaitingGenerator waitingGenerator,
+			final UuidHolder uuidHolder
+	) {
+		waitingValidator.validate(waitingRegister.storeId());
+		final WaitingGenerateInfo waitingInfo = waitingGenerator.generate(waitingRegister.storeId());
+		registerEvent(new WaitingRegisterEvent(waitingInfo, waitingRegister.phoneNumber()));
 
-        this.id = null;
-        this.storeId = waitingRegister.storeId();
-        this.adult = waitingRegister.adult();
-        this.children = waitingRegister.children();
-        this.number = waitingInfo.number();
-        this.phoneNumber = waitingRegister.phoneNumber();
-        this.status = WAIT;
-        this.notificationType = WaitingNotificationType.REGISTER;
-        this.uniqueCode = uuidHolder.generate();
-        this.timestamp = null;
-    }
+		this.id = null;
+		this.storeId = waitingRegister.storeId();
+		this.adult = waitingRegister.adult();
+		this.children = waitingRegister.children();
+		this.number = waitingInfo.number();
+		this.phoneNumber = waitingRegister.phoneNumber();
+		this.status = WAIT;
+		this.notificationType = WaitingNotificationType.REGISTER;
+		this.uniqueCode = uuidHolder.generate();
+		this.timestamp = null;
+	}
 
-    public Waiting cancel() {
-        registerEvent(new WaitingCancelEvent(storeId, WaitingNotificationType.CANCEL, phoneNumber));
-        return Waiting.builder()
-            .id(id)
-            .storeId(storeId)
-            .adult(adult)
-            .children(children)
-            .number(number)
-            .phoneNumber(phoneNumber)
-            .status(CANCEL)
-            .notificationType(WaitingNotificationType.CANCEL)
-            .uniqueCode(uniqueCode)
-            .timestamp(timestamp)
-            .build();
-    }
+	public Waiting cancel() {
+		registerEvent(new WaitingCancelEvent(storeId, WaitingNotificationType.CANCEL, phoneNumber));
+		return Waiting.builder()
+				.id(id)
+				.storeId(storeId)
+				.adult(adult)
+				.children(children)
+				.number(number)
+				.phoneNumber(phoneNumber)
+				.status(CANCEL)
+				.notificationType(WaitingNotificationType.CANCEL)
+				.uniqueCode(uniqueCode)
+				.timestamp(timestamp)
+				.build();
+	}
 }

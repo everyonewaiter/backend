@@ -16,58 +16,58 @@ import org.springframework.util.StringUtils;
 @Configuration
 public class P6SpyFormatter implements MessageFormattingStrategy {
 
-    private static final String PRINT_FORMAT = "%s %d%s";
-    private static final String MILLI_SECOND = "ms";
+	private static final String PRINT_FORMAT = "%s %d%s";
+	private static final String MILLI_SECOND = "ms";
 
-    @PostConstruct
-    public void setLogMessageFormat() {
-        P6SpyOptions.getActiveInstance()
-            .setLogMessageFormat(this.getClass().getName());
-    }
+	@PostConstruct
+	public void setLogMessageFormat() {
+		P6SpyOptions.getActiveInstance()
+				.setLogMessageFormat(this.getClass().getName());
+	}
 
-    @Override
-    public String formatMessage(
-        final int connectionId,
-        final String now,
-        final long elapsed,
-        final String category,
-        final String prepared,
-        final String sql,
-        final String url
-    ) {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(String.format(PRINT_FORMAT, category, elapsed, MILLI_SECOND));
-        if (StringUtils.hasText(sql)) {
-            final String formatSql = format(category, sql);
-            final String highlightSql = highlight(formatSql);
-            sb.append(highlightSql);
-        }
-        return sb.toString();
-    }
+	@Override
+	public String formatMessage(
+			final int connectionId,
+			final String now,
+			final long elapsed,
+			final String category,
+			final String prepared,
+			final String sql,
+			final String url
+	) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(String.format(PRINT_FORMAT, category, elapsed, MILLI_SECOND));
+		if (StringUtils.hasText(sql)) {
+			final String formatSql = format(category, sql);
+			final String highlightSql = highlight(formatSql);
+			sb.append(highlightSql);
+		}
+		return sb.toString();
+	}
 
-    private String format(final String category, final String sql) {
-        return isFormat(category) ? createFormatSql(sql) : sql;
-    }
+	private String format(final String category, final String sql) {
+		return isFormat(category) ? createFormatSql(sql) : sql;
+	}
 
-    private boolean isFormat(final String category) {
-        return Category.STATEMENT
-            .getName()
-            .equals(category);
-    }
+	private boolean isFormat(final String category) {
+		return Category.STATEMENT
+				.getName()
+				.equals(category);
+	}
 
-    private String createFormatSql(final String sql) {
-        final String trimmedSQL = sql.trim().toLowerCase(Locale.ROOT);
-        return FormatType.isDDL(trimmedSQL)
-            ? formatSqlWithStyle(DDL, sql)
-            : formatSqlWithStyle(BASIC, sql);
-    }
+	private String createFormatSql(final String sql) {
+		final String trimmedSQL = sql.trim().toLowerCase(Locale.ROOT);
+		return FormatType.isDDL(trimmedSQL)
+				? formatSqlWithStyle(DDL, sql)
+				: formatSqlWithStyle(BASIC, sql);
+	}
 
-    private String highlight(final String sql) {
-        return formatSqlWithStyle(HIGHLIGHT, sql);
-    }
+	private String highlight(final String sql) {
+		return formatSqlWithStyle(HIGHLIGHT, sql);
+	}
 
-    private String formatSqlWithStyle(final FormatStyle style, final String sql) {
-        return style.getFormatter()
-            .format(sql);
-    }
+	private String formatSqlWithStyle(final FormatStyle style, final String sql) {
+		return style.getFormatter()
+				.format(sql);
+	}
 }

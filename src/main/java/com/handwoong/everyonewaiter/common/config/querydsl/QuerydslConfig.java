@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class QuerydslConfig {
 
-    private final EntityManager entityManager;
+	private final EntityManager entityManager;
 
-    @Bean
-    public JPAQueryFactory queryFactory() {
-        return new JPAQueryFactory(entityManager);
-    }
+	@Bean
+	public JPAQueryFactory queryFactory() {
+		return new JPAQueryFactory(entityManager);
+	}
 }

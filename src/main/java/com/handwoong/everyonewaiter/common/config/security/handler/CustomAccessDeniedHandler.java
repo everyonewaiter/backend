@@ -9,12 +9,12 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 
 public class CustomAccessDeniedHandler extends BaseAuthenticationHandler implements AccessDeniedHandler {
 
-    @Override
-    public void handle(
-        final HttpServletRequest request,
-        final HttpServletResponse response,
-        final AccessDeniedException accessDeniedException
-    ) throws IOException {
-        handle(HttpStatus.FORBIDDEN, "접근 권한이 없습니다.", response);
-    }
+	@Override
+	public void handle(
+			final HttpServletRequest request,
+			final HttpServletResponse response,
+			final AccessDeniedException accessDeniedException
+	) throws IOException {
+		handle(HttpStatus.FORBIDDEN, "접근 권한이 없습니다.", response);
+	}
 }

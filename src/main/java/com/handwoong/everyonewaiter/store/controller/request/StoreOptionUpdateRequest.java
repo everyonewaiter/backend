@@ -5,25 +5,25 @@ import com.handwoong.everyonewaiter.store.dto.StoreOptionUpdate;
 import jakarta.validation.constraints.NotNull;
 
 public record StoreOptionUpdateRequest(
-    @NotNull
-    Long storeId,
+		@NotNull
+		Long storeId,
 
-    @NotNull
-    Boolean useBreakTime,
+		@NotNull
+		Boolean useBreakTime,
 
-    @NotNull
-    Boolean useWaiting,
+		@NotNull
+		Boolean useWaiting,
 
-    @NotNull
-    Boolean useOrder
+		@NotNull
+		Boolean useOrder
 ) {
 
-    public StoreOptionUpdate toDomainDto() {
-        return StoreOptionUpdate.builder()
-            .storeId(new StoreId(storeId))
-            .useBreakTime(useBreakTime)
-            .useWaiting(useWaiting)
-            .useOrder(useOrder)
-            .build();
-    }
+	public StoreOptionUpdate toDomainDto() {
+		return StoreOptionUpdate.builder()
+				.storeId(new StoreId(storeId))
+				.useBreakTime(useBreakTime)
+				.useWaiting(useWaiting)
+				.useOrder(useOrder)
+				.build();
+	}
 }

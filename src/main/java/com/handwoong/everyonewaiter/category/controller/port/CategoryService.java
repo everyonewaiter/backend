@@ -6,7 +6,7 @@ import com.handwoong.everyonewaiter.category.dto.CategoryUpdate;
 
 public interface CategoryService {
 
-    CategoryId create(CategoryCreate categoryCreate);
+	CategoryId create(CategoryCreate categoryCreate);
 
-    void update(CategoryUpdate categoryUpdate);
+	void update(CategoryUpdate categoryUpdate);
 }

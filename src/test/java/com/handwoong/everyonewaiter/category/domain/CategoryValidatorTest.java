@@ -17,54 +17,54 @@ import org.junit.jupiter.api.Test;
 
 class CategoryValidatorTest {
 
-    private TestContainer testContainer;
+	private TestContainer testContainer;
 
-    @BeforeEach
-    void setUp() {
-        testContainer = new TestContainer();
-        testContainer.setSecurityContextAuthentication(new Username("handwoong"));
-    }
+	@BeforeEach
+	void setUp() {
+		testContainer = new TestContainer();
+		testContainer.setSecurityContextAuthentication(new Username("handwoong"));
+	}
 
-    @Test
-    void Should_DoesNotThrowException_When_Validate() {
-        // given
-        final User user = aUser().build();
-        testContainer.userRepository.save(user);
+	@Test
+	void Should_DoesNotThrowException_When_Validate() {
+		// given
+		final User user = aUser().build();
+		testContainer.userRepository.save(user);
 
-        final Store store = aStore().build();
-        testContainer.storeRepository.save(store);
+		final Store store = aStore().build();
+		testContainer.storeRepository.save(store);
 
-        final StoreId storeId = new StoreId(1L);
-        final CategoryValidator categoryValidator = testContainer.categoryValidator;
+		final StoreId storeId = new StoreId(1L);
+		final CategoryValidator categoryValidator = testContainer.categoryValidator;
 
-        // expect
-        assertThatCode(() -> categoryValidator.validate(storeId)).doesNotThrowAnyException();
-    }
+		// expect
+		assertThatCode(() -> categoryValidator.validate(storeId)).doesNotThrowAnyException();
+	}
 
-    @Test
-    void Should_ThrowException_When_UserNotFound() {
-        // given
-        final StoreId storeId = new StoreId(1L);
-        final CategoryValidator categoryValidator = testContainer.categoryValidator;
+	@Test
+	void Should_ThrowException_When_UserNotFound() {
+		// given
+		final StoreId storeId = new StoreId(1L);
+		final CategoryValidator categoryValidator = testContainer.categoryValidator;
 
-        // expect
-        assertThatThrownBy(() -> categoryValidator.validate(storeId))
-            .isInstanceOf(UserNotFoundException.class)
-            .hasMessage("사용자를 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> categoryValidator.validate(storeId))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
 
-    @Test
-    void Should_ThrowException_When_StoreNotFound() {
-        // given
-        final User user = aUser().build();
-        testContainer.userRepository.save(user);
+	@Test
+	void Should_ThrowException_When_StoreNotFound() {
+		// given
+		final User user = aUser().build();
+		testContainer.userRepository.save(user);
 
-        final StoreId storeId = new StoreId(1L);
-        final CategoryValidator categoryValidator = testContainer.categoryValidator;
+		final StoreId storeId = new StoreId(1L);
+		final CategoryValidator categoryValidator = testContainer.categoryValidator;
 
-        // expect
-        assertThatThrownBy(() -> categoryValidator.validate(storeId))
-            .isInstanceOf(StoreNotFoundException.class)
-            .hasMessage("매장을 찾을 수 없습니다.");
-    }
+		// expect
+		assertThatThrownBy(() -> categoryValidator.validate(storeId))
+				.isInstanceOf(StoreNotFoundException.class)
+				.hasMessage("매장을 찾을 수 없습니다.");
+	}
 }

@@ -6,7 +6,7 @@ import com.handwoong.everyonewaiter.waiting.dto.WaitingRegister;
 
 public interface WaitingService {
 
-    WaitingId register(WaitingRegister waitingRegister);
+	WaitingId register(WaitingRegister waitingRegister);
 
-    void cancel(WaitingCancel waitingCancel);
+	void cancel(WaitingCancel waitingCancel);
 }

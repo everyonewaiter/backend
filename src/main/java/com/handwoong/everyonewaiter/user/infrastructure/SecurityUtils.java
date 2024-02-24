@@ -11,15 +11,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityUtils {
 
-    public static Username getAuthenticationUsername() {
-        final Authentication authentication = getAuthentication();
-        if (Objects.isNull(authentication) || authentication.getPrincipal() instanceof String) {
-            throw new UnauthorizedAccessException();
-        }
-        return new Username(authentication.getName());
-    }
+	public static Username getAuthenticationUsername() {
+		final Authentication authentication = getAuthentication();
+		if (Objects.isNull(authentication) || authentication.getPrincipal() instanceof String) {
+			throw new UnauthorizedAccessException();
+		}
+		return new Username(authentication.getName());
+	}
 
-    private static Authentication getAuthentication() {
-        return SecurityContextHolder.getContext().getAuthentication();
-    }
+	private static Authentication getAuthentication() {
+		return SecurityContextHolder.getContext().getAuthentication();
+	}
 }

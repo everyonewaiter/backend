@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class WaitingNotFoundException extends BaseException {
 
-    private final String resource;
+	private final String resource;
 
-    public WaitingNotFoundException(final String message, final String resource) {
-        super(message);
-        this.resource = resource;
-    }
+	public WaitingNotFoundException(final String message, final String resource) {
+		super(message);
+		this.resource = resource;
+	}
 }

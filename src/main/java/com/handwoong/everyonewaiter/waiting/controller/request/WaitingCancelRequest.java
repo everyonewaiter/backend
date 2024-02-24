@@ -6,17 +6,17 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record WaitingCancelRequest(
-    @NotNull
-    Long storeId,
+		@NotNull
+		Long storeId,
 
-    @NotNull
-    UUID uniqueCode
+		@NotNull
+		UUID uniqueCode
 ) {
 
-    public WaitingCancel toDomainDto() {
-        return WaitingCancel.builder()
-            .storeId(new StoreId(storeId))
-            .uniqueCode(uniqueCode)
-            .build();
-    }
+	public WaitingCancel toDomainDto() {
+		return WaitingCancel.builder()
+				.storeId(new StoreId(storeId))
+				.uniqueCode(uniqueCode)
+				.build();
+	}
 }

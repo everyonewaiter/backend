@@ -7,7 +7,7 @@ import com.handwoong.everyonewaiter.user.dto.UserLogin;
 
 public interface UserService {
 
-    UserId join(UserJoin userJoin);
+	UserId join(UserJoin userJoin);
 
-    JwtToken login(UserLogin userLogin);
+	JwtToken login(UserLogin userLogin);
 }

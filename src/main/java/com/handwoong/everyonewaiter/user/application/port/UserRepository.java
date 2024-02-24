@@ -6,11 +6,11 @@ import java.util.Optional;
 
 public interface UserRepository {
 
-    User save(User user);
+	User save(User user);
 
-    boolean existsByUsername(Username username);
+	boolean existsByUsername(Username username);
 
-    Optional<User> findByUsername(Username username);
+	Optional<User> findByUsername(Username username);
 
-    User findByUsernameOrElseThrow(Username username);
+	User findByUsernameOrElseThrow(Username username);
 }

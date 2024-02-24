@@ -15,17 +15,17 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
+	@CreatedDate
+	@Column(updatable = false)
+	private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+	@LastModifiedDate
+	private LocalDateTime updatedAt;
 
-    protected DomainTimestamp getDomainTimestamp() {
-        return DomainTimestamp.builder()
-            .createdAt(createdAt)
-            .updatedAt(updatedAt)
-            .build();
-    }
+	protected DomainTimestamp getDomainTimestamp() {
+		return DomainTimestamp.builder()
+				.createdAt(createdAt)
+				.updatedAt(updatedAt)
+				.build();
+	}
 }

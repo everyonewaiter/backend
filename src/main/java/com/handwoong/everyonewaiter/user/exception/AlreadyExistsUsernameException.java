@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class AlreadyExistsUsernameException extends BaseException {
 
-    private final String username;
+	private final String username;
 
-    public AlreadyExistsUsernameException(final String message, final String username) {
-        super(message);
-        this.username = username;
-    }
+	public AlreadyExistsUsernameException(final String message, final String username) {
+		super(message);
+		this.username = username;
+	}
 }

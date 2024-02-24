@@ -22,51 +22,51 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StoreBreakTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @NotNull
-    private LocalTime start;
+	@NotNull
+	private LocalTime start;
 
-    @NotNull
-    private LocalTime end;
+	@NotNull
+	private LocalTime end;
 
-    @NotNull
-    @Convert(converter = DaysOfWeekConverter.class)
-    private StoreDaysOfWeek daysOfWeek;
+	@NotNull
+	@Convert(converter = DaysOfWeekConverter.class)
+	private StoreDaysOfWeek daysOfWeek;
 
-    public static StoreBreakTimeEntity from(final StoreBreakTime storeBreakTime) {
-        final StoreBreakTimeEntity storeBreakTimeEntity = new StoreBreakTimeEntity();
-        storeBreakTimeEntity.id = Objects.isNull(storeBreakTime.getId()) ? null : storeBreakTime.getId().value();
-        storeBreakTimeEntity.start = storeBreakTime.getStart();
-        storeBreakTimeEntity.end = storeBreakTime.getEnd();
-        storeBreakTimeEntity.daysOfWeek = storeBreakTime.getDaysOfWeek();
-        return storeBreakTimeEntity;
-    }
+	public static StoreBreakTimeEntity from(final StoreBreakTime storeBreakTime) {
+		final StoreBreakTimeEntity storeBreakTimeEntity = new StoreBreakTimeEntity();
+		storeBreakTimeEntity.id = Objects.isNull(storeBreakTime.getId()) ? null : storeBreakTime.getId().value();
+		storeBreakTimeEntity.start = storeBreakTime.getStart();
+		storeBreakTimeEntity.end = storeBreakTime.getEnd();
+		storeBreakTimeEntity.daysOfWeek = storeBreakTime.getDaysOfWeek();
+		return storeBreakTimeEntity;
+	}
 
-    public StoreBreakTime toModel() {
-        return StoreBreakTime.builder()
-            .id(new StoreBreakTimeId(id))
-            .start(start)
-            .end(end)
-            .daysOfWeek(daysOfWeek)
-            .build();
-    }
+	public StoreBreakTime toModel() {
+		return StoreBreakTime.builder()
+				.id(new StoreBreakTimeId(id))
+				.start(start)
+				.end(end)
+				.daysOfWeek(daysOfWeek)
+				.build();
+	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof final StoreBreakTimeEntity that)) {
-            return false;
-        }
-        return Objects.equals(id, that.id);
-    }
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof final StoreBreakTimeEntity that)) {
+			return false;
+		}
+		return Objects.equals(id, that.id);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 }

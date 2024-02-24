@@ -9,23 +9,23 @@ import lombok.Getter;
 @Builder
 public class StoreBreakTime {
 
-    private final StoreBreakTimeId id;
-    private final LocalTime start;
-    private final LocalTime end;
-    private final StoreDaysOfWeek daysOfWeek;
+	private final StoreBreakTimeId id;
+	private final LocalTime start;
+	private final LocalTime end;
+	private final StoreDaysOfWeek daysOfWeek;
 
-    public void daysCount(final Map<DayOfWeek, Integer> counter) {
-        daysOfWeek.count(counter);
-    }
+	public void daysCount(final Map<DayOfWeek, Integer> counter) {
+		daysOfWeek.count(counter);
+	}
 
-    public int getDaysSize() {
-        return daysOfWeek.getDaysSize();
-    }
+	public int getDaysSize() {
+		return daysOfWeek.getDaysSize();
+	}
 
-    public boolean compareCurrentTime(final DayOfWeek dayOfWeek, final LocalTime currentTime) {
-        if (daysOfWeek.contains(dayOfWeek)) {
-            return currentTime.isAfter(start) && currentTime.isBefore(end);
-        }
-        return false;
-    }
+	public boolean compareCurrentTime(final DayOfWeek dayOfWeek, final LocalTime currentTime) {
+		if (daysOfWeek.contains(dayOfWeek)) {
+			return currentTime.isAfter(start) && currentTime.isBefore(end);
+		}
+		return false;
+	}
 }

@@ -16,39 +16,39 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CategoryExceptionHandler {
 
-    @ExceptionHandler({InvalidCategoryNameFormatException.class})
-    public ResponseEntity<ApiResponse<Void>> invalidCategoryNameFormat(
-        final InvalidCategoryNameFormatException exception,
-        final HttpServletRequest request
-    ) {
-        final String errorMessage = exception.getMessage();
-        ExceptionLogger.warn(BAD_REQUEST, request.getRequestURI(), errorMessage, exception.getName());
-        return ResponseEntity
-            .badRequest()
-            .body(ApiResponse.error(errorMessage));
-    }
+	@ExceptionHandler({InvalidCategoryNameFormatException.class})
+	public ResponseEntity<ApiResponse<Void>> invalidCategoryNameFormat(
+			final InvalidCategoryNameFormatException exception,
+			final HttpServletRequest request
+	) {
+		final String errorMessage = exception.getMessage();
+		ExceptionLogger.warn(BAD_REQUEST, request.getRequestURI(), errorMessage, exception.getName());
+		return ResponseEntity
+				.badRequest()
+				.body(ApiResponse.error(errorMessage));
+	}
 
-    @ExceptionHandler({InvalidCategoryIconFormatException.class})
-    public ResponseEntity<ApiResponse<Void>> invalidCategoryIconFormat(
-        final InvalidCategoryIconFormatException exception,
-        final HttpServletRequest request
-    ) {
-        final String errorMessage = exception.getMessage();
-        ExceptionLogger.warn(BAD_REQUEST, request.getRequestURI(), errorMessage, exception.getIcon());
-        return ResponseEntity
-            .badRequest()
-            .body(ApiResponse.error(errorMessage));
-    }
+	@ExceptionHandler({InvalidCategoryIconFormatException.class})
+	public ResponseEntity<ApiResponse<Void>> invalidCategoryIconFormat(
+			final InvalidCategoryIconFormatException exception,
+			final HttpServletRequest request
+	) {
+		final String errorMessage = exception.getMessage();
+		ExceptionLogger.warn(BAD_REQUEST, request.getRequestURI(), errorMessage, exception.getIcon());
+		return ResponseEntity
+				.badRequest()
+				.body(ApiResponse.error(errorMessage));
+	}
 
-    @ExceptionHandler({CategoryNotFoundException.class})
-    public ResponseEntity<ApiResponse<Void>> categoryNotFound(
-        final CategoryNotFoundException exception,
-        final HttpServletRequest request
-    ) {
-        final String errorMessage = exception.getMessage();
-        ExceptionLogger.warn(BAD_REQUEST, request.getRequestURI(), errorMessage, exception.getResource());
-        return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(ApiResponse.error(errorMessage));
-    }
+	@ExceptionHandler({CategoryNotFoundException.class})
+	public ResponseEntity<ApiResponse<Void>> categoryNotFound(
+			final CategoryNotFoundException exception,
+			final HttpServletRequest request
+	) {
+		final String errorMessage = exception.getMessage();
+		ExceptionLogger.warn(BAD_REQUEST, request.getRequestURI(), errorMessage, exception.getResource());
+		return ResponseEntity
+				.status(HttpStatus.NOT_FOUND)
+				.body(ApiResponse.error(errorMessage));
+	}
 }

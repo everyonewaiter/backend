@@ -31,79 +31,79 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class WaitingEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @NotNull
-    private Long storeId;
+	@NotNull
+	private Long storeId;
 
-    @NotNull
-    private int adult;
+	@NotNull
+	private int adult;
 
-    @NotNull
-    private int children;
+	@NotNull
+	private int children;
 
-    @NotNull
-    private int number;
+	@NotNull
+	private int number;
 
-    @NotNull
-    @Column(length = 20)
-    private String phoneNumber;
+	@NotNull
+	@Column(length = 20)
+	private String phoneNumber;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private WaitingStatus status;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private WaitingStatus status;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private WaitingNotificationType notificationType;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private WaitingNotificationType notificationType;
 
-    @NotNull
-    private UUID uniqueCode;
+	@NotNull
+	private UUID uniqueCode;
 
-    public static WaitingEntity from(final Waiting waiting) {
-        final WaitingEntity waitingEntity = new WaitingEntity();
-        waitingEntity.id = Objects.isNull(waiting.getId()) ? null : waiting.getId().value();
-        waitingEntity.storeId = Objects.requireNonNull(waiting.getStoreId(), "웨이팅의 매장 ID는 null일 수 없습니다.").value();
-        waitingEntity.adult = waiting.getAdult().value();
-        waitingEntity.children = waiting.getChildren().value();
-        waitingEntity.number = waiting.getNumber().value();
-        waitingEntity.phoneNumber = waiting.getPhoneNumber().toString();
-        waitingEntity.status = waiting.getStatus();
-        waitingEntity.notificationType = waiting.getNotificationType();
-        waitingEntity.uniqueCode = waiting.getUniqueCode();
-        return waitingEntity;
-    }
+	public static WaitingEntity from(final Waiting waiting) {
+		final WaitingEntity waitingEntity = new WaitingEntity();
+		waitingEntity.id = Objects.isNull(waiting.getId()) ? null : waiting.getId().value();
+		waitingEntity.storeId = Objects.requireNonNull(waiting.getStoreId(), "웨이팅의 매장 ID는 null일 수 없습니다.").value();
+		waitingEntity.adult = waiting.getAdult().value();
+		waitingEntity.children = waiting.getChildren().value();
+		waitingEntity.number = waiting.getNumber().value();
+		waitingEntity.phoneNumber = waiting.getPhoneNumber().toString();
+		waitingEntity.status = waiting.getStatus();
+		waitingEntity.notificationType = waiting.getNotificationType();
+		waitingEntity.uniqueCode = waiting.getUniqueCode();
+		return waitingEntity;
+	}
 
-    public Waiting toModel() {
-        return Waiting.builder()
-            .id(new WaitingId(id))
-            .storeId(new StoreId(storeId))
-            .adult(new WaitingAdult(adult))
-            .children(new WaitingChildren(children))
-            .number(new WaitingNumber(number))
-            .phoneNumber(new PhoneNumber(phoneNumber))
-            .status(status)
-            .notificationType(notificationType)
-            .uniqueCode(uniqueCode)
-            .timestamp(getDomainTimestamp())
-            .build();
-    }
+	public Waiting toModel() {
+		return Waiting.builder()
+				.id(new WaitingId(id))
+				.storeId(new StoreId(storeId))
+				.adult(new WaitingAdult(adult))
+				.children(new WaitingChildren(children))
+				.number(new WaitingNumber(number))
+				.phoneNumber(new PhoneNumber(phoneNumber))
+				.status(status)
+				.notificationType(notificationType)
+				.uniqueCode(uniqueCode)
+				.timestamp(getDomainTimestamp())
+				.build();
+	}
 
-    @Override
-    public boolean equals(final Object object) {
-        if (this == object) {
-            return true;
-        }
-        if (!(object instanceof final WaitingEntity that)) {
-            return false;
-        }
-        return Objects.equals(id, that.id);
-    }
+	@Override
+	public boolean equals(final Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (!(object instanceof final WaitingEntity that)) {
+			return false;
+		}
+		return Objects.equals(id, that.id);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 }

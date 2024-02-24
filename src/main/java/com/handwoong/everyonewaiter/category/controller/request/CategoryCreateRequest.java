@@ -16,23 +16,23 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CategoryCreateRequest(
-    @NotNull
-    Long storeId,
+		@NotNull
+		Long storeId,
 
-    @NotBlank(message = CATEGORY_NAME_EMPTY_MESSAGE)
-    @Size(max = CATEGORY_NAME_MAX_LENGTH, message = CATEGORY_NAME_MAX_LENGTH_MESSAGE)
-    String name,
+		@NotBlank(message = CATEGORY_NAME_EMPTY_MESSAGE)
+		@Size(max = CATEGORY_NAME_MAX_LENGTH, message = CATEGORY_NAME_MAX_LENGTH_MESSAGE)
+		String name,
 
-    @NotBlank(message = CATEGORY_ICON_EMPTY_MESSAGE)
-    @Size(max = CATEGORY_ICON_MAX_LENGTH, message = CATEGORY_ICON_MAX_LENGTH_MESSAGE)
-    String icon
+		@NotBlank(message = CATEGORY_ICON_EMPTY_MESSAGE)
+		@Size(max = CATEGORY_ICON_MAX_LENGTH, message = CATEGORY_ICON_MAX_LENGTH_MESSAGE)
+		String icon
 ) {
 
-    public CategoryCreate toDomainDto() {
-        return CategoryCreate.builder()
-            .storeId(new StoreId(storeId))
-            .name(new CategoryName(name))
-            .icon(new CategoryIcon(icon))
-            .build();
-    }
+	public CategoryCreate toDomainDto() {
+		return CategoryCreate.builder()
+				.storeId(new StoreId(storeId))
+				.name(new CategoryName(name))
+				.icon(new CategoryIcon(icon))
+				.build();
+	}
 }

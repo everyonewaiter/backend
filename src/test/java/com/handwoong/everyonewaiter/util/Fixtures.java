@@ -55,104 +55,104 @@ import java.util.List;
 
 public class Fixtures {
 
-    private Fixtures() {
-    }
+	private Fixtures() {
+	}
 
-    public static UserBuilder aUser() {
-        return User.builder()
-            .id(new UserId(1L))
-            .username(new Username("handwoong"))
-            .password(new Password("password"))
-            .phoneNumber(new PhoneNumber("01012345678"))
-            .role(UserRole.ROLE_USER)
-            .status(UserStatus.ACTIVE);
-    }
+	public static UserBuilder aUser() {
+		return User.builder()
+				.id(new UserId(1L))
+				.username(new Username("handwoong"))
+				.password(new Password("password"))
+				.phoneNumber(new PhoneNumber("01012345678"))
+				.role(UserRole.ROLE_USER)
+				.status(UserStatus.ACTIVE);
+	}
 
-    public static StoreBuilder aStore() {
-        return Store.builder()
-            .id(new StoreId(1L))
-            .userId(new UserId(1L))
-            .name(new StoreName("나루"))
-            .landlineNumber(new LandlineNumber("0551234567"))
-            .status(StoreStatus.OPEN)
-            .lastOpenedAt(LocalDateTime.of(1970, 1, 1, 0, 0, 0))
-            .businessTimes(new StoreBusinessTimes(List.of(aStoreBusinessTime().build())))
-            .breakTimes(
-                new StoreBreakTimes(
-                    List.of(
-                        aStoreBreakTime().build(),
-                        aStoreBreakTime()
-                            .id(new StoreBreakTimeId(2L))
-                            .start(LocalTime.of(15, 30, 0))
-                            .end(LocalTime.of(17, 0, 0))
-                            .daysOfWeek(aWeekend())
-                            .build()
-                    )
-                )
-            )
-            .option(aStoreOption().build());
-    }
+	public static StoreBuilder aStore() {
+		return Store.builder()
+				.id(new StoreId(1L))
+				.userId(new UserId(1L))
+				.name(new StoreName("나루"))
+				.landlineNumber(new LandlineNumber("0551234567"))
+				.status(StoreStatus.OPEN)
+				.lastOpenedAt(LocalDateTime.of(1970, 1, 1, 0, 0, 0))
+				.businessTimes(new StoreBusinessTimes(List.of(aStoreBusinessTime().build())))
+				.breakTimes(
+						new StoreBreakTimes(
+								List.of(
+										aStoreBreakTime().build(),
+										aStoreBreakTime()
+												.id(new StoreBreakTimeId(2L))
+												.start(LocalTime.of(15, 30, 0))
+												.end(LocalTime.of(17, 0, 0))
+												.daysOfWeek(aWeekend())
+												.build()
+								)
+						)
+				)
+				.option(aStoreOption().build());
+	}
 
-    public static StoreBreakTimeBuilder aStoreBreakTime() {
-        return StoreBreakTime.builder()
-            .id(new StoreBreakTimeId(1L))
-            .start(LocalTime.of(15, 0, 0))
-            .end(LocalTime.of(16, 30, 0))
-            .daysOfWeek(aWeekday());
-    }
+	public static StoreBreakTimeBuilder aStoreBreakTime() {
+		return StoreBreakTime.builder()
+				.id(new StoreBreakTimeId(1L))
+				.start(LocalTime.of(15, 0, 0))
+				.end(LocalTime.of(16, 30, 0))
+				.daysOfWeek(aWeekday());
+	}
 
-    public static StoreBusinessTimeBuilder aStoreBusinessTime() {
-        return StoreBusinessTime.builder()
-            .id(new StoreBusinessTimeId(1L))
-            .open(LocalTime.of(11, 0, 0))
-            .close(LocalTime.of(21, 0, 0))
-            .daysOfWeek(anAllDay());
-    }
+	public static StoreBusinessTimeBuilder aStoreBusinessTime() {
+		return StoreBusinessTime.builder()
+				.id(new StoreBusinessTimeId(1L))
+				.open(LocalTime.of(11, 0, 0))
+				.close(LocalTime.of(21, 0, 0))
+				.daysOfWeek(anAllDay());
+	}
 
-    public static StoreDaysOfWeek aWeekday() {
-        return new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY));
-    }
+	public static StoreDaysOfWeek aWeekday() {
+		return new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY));
+	}
 
-    public static StoreDaysOfWeek aWeekend() {
-        return new StoreDaysOfWeek(List.of(SATURDAY, SUNDAY));
-    }
+	public static StoreDaysOfWeek aWeekend() {
+		return new StoreDaysOfWeek(List.of(SATURDAY, SUNDAY));
+	}
 
-    public static StoreDaysOfWeek anAllDay() {
-        return new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY));
-    }
+	public static StoreDaysOfWeek anAllDay() {
+		return new StoreDaysOfWeek(List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY));
+	}
 
-    public static StoreOptionBuilder aStoreOption() {
-        return StoreOption.builder()
-            .id(new StoreOptionId(1L))
-            .useBreakTime(true)
-            .useWaiting(true)
-            .useOrder(true);
-    }
+	public static StoreOptionBuilder aStoreOption() {
+		return StoreOption.builder()
+				.id(new StoreOptionId(1L))
+				.useBreakTime(true)
+				.useWaiting(true)
+				.useOrder(true);
+	}
 
-    public static WaitingBuilder aWaiting() {
-        final FakeUuidHolder uuidHolder = new FakeUuidHolder("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
-        return Waiting.builder()
-            .id(new WaitingId(1L))
-            .storeId(new StoreId(1L))
-            .adult(new WaitingAdult(2))
-            .children(new WaitingChildren(0))
-            .number(new WaitingNumber(10))
-            .phoneNumber(new PhoneNumber("01012345678"))
-            .status(WaitingStatus.WAIT)
-            .notificationType(WaitingNotificationType.REGISTER)
-            .uniqueCode(uuidHolder.generate())
-            .timestamp(
-                DomainTimestamp.builder()
-                    .createdAt(LocalDateTime.now())
-                    .build()
-            );
-    }
+	public static WaitingBuilder aWaiting() {
+		final FakeUuidHolder uuidHolder = new FakeUuidHolder("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+		return Waiting.builder()
+				.id(new WaitingId(1L))
+				.storeId(new StoreId(1L))
+				.adult(new WaitingAdult(2))
+				.children(new WaitingChildren(0))
+				.number(new WaitingNumber(10))
+				.phoneNumber(new PhoneNumber("01012345678"))
+				.status(WaitingStatus.WAIT)
+				.notificationType(WaitingNotificationType.REGISTER)
+				.uniqueCode(uuidHolder.generate())
+				.timestamp(
+						DomainTimestamp.builder()
+								.createdAt(LocalDateTime.now())
+								.build()
+				);
+	}
 
-    public static CategoryBuilder aCategory() {
-        return Category.builder()
-            .id(new CategoryId(1L))
-            .storeId(new StoreId(1L))
-            .name(new CategoryName("스테이크"))
-            .icon(new CategoryIcon("drumstick"));
-    }
+	public static CategoryBuilder aCategory() {
+		return Category.builder()
+				.id(new CategoryId(1L))
+				.storeId(new StoreId(1L))
+				.name(new CategoryName("스테이크"))
+				.icon(new CategoryIcon("drumstick"));
+	}
 }

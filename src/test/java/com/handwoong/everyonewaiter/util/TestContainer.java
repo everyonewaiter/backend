@@ -36,67 +36,67 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class TestContainer {
 
-    public final PasswordEncoder passwordEncoder;
-    public final FakeTimeHolder timeHolder;
-    public final FakeUuidHolder uuidHolder;
+	public final PasswordEncoder passwordEncoder;
+	public final FakeTimeHolder timeHolder;
+	public final FakeUuidHolder uuidHolder;
 
-    public final UserRepository userRepository;
-    public final UserLoginService userLoginService;
-    public final UserService userService;
-    public final UserController userController;
+	public final UserRepository userRepository;
+	public final UserLoginService userLoginService;
+	public final UserService userService;
+	public final UserController userController;
 
-    public final StoreRepository storeRepository;
-    public final StoreService storeService;
-    public final StoreController storeController;
+	public final StoreRepository storeRepository;
+	public final StoreService storeService;
+	public final StoreController storeController;
 
-    public final WaitingRepository waitingRepository;
-    public final WaitingValidator waitingValidator;
-    public final WaitingGenerator waitingGenerator;
-    public final WaitingService waitingService;
-    public final WaitingController waitingController;
+	public final WaitingRepository waitingRepository;
+	public final WaitingValidator waitingValidator;
+	public final WaitingGenerator waitingGenerator;
+	public final WaitingService waitingService;
+	public final WaitingController waitingController;
 
-    public final CategoryRepository categoryRepository;
-    public final CategoryValidator categoryValidator;
-    public final CategoryService categoryService;
-    public final CategoryController categoryController;
+	public final CategoryRepository categoryRepository;
+	public final CategoryValidator categoryValidator;
+	public final CategoryService categoryService;
+	public final CategoryController categoryController;
 
-    public TestContainer() {
-        this.passwordEncoder = new FakePasswordEncoder("encode");
-        this.timeHolder = new FakeTimeHolder();
-        this.uuidHolder = new FakeUuidHolder();
+	public TestContainer() {
+		this.passwordEncoder = new FakePasswordEncoder("encode");
+		this.timeHolder = new FakeTimeHolder();
+		this.uuidHolder = new FakeUuidHolder();
 
-        this.userRepository = new FakeUserRepository();
-        this.userLoginService = new FakeUserLoginService(userRepository);
-        this.userService = new UserServiceImpl(userRepository, userLoginService, passwordEncoder, timeHolder);
-        this.userController = new UserController(userService);
+		this.userRepository = new FakeUserRepository();
+		this.userLoginService = new FakeUserLoginService(userRepository);
+		this.userService = new UserServiceImpl(userRepository, userLoginService, passwordEncoder, timeHolder);
+		this.userController = new UserController(userService);
 
-        this.storeRepository = new FakeStoreRepository();
-        this.storeService = new StoreServiceImpl(userRepository, storeRepository);
-        this.storeController = new StoreController(storeService);
+		this.storeRepository = new FakeStoreRepository();
+		this.storeService = new StoreServiceImpl(userRepository, storeRepository);
+		this.storeController = new StoreController(storeService);
 
-        this.waitingRepository = new FakeWaitingRepository();
-        this.waitingValidator = new WaitingValidator(userRepository, storeRepository, timeHolder);
-        this.waitingGenerator = new WaitingGenerator(userRepository, storeRepository, waitingRepository);
-        this.waitingService = new WaitingServiceImpl(waitingRepository, waitingValidator, waitingGenerator, uuidHolder);
-        this.waitingController = new WaitingController(waitingService);
+		this.waitingRepository = new FakeWaitingRepository();
+		this.waitingValidator = new WaitingValidator(userRepository, storeRepository, timeHolder);
+		this.waitingGenerator = new WaitingGenerator(userRepository, storeRepository, waitingRepository);
+		this.waitingService = new WaitingServiceImpl(waitingRepository, waitingValidator, waitingGenerator, uuidHolder);
+		this.waitingController = new WaitingController(waitingService);
 
-        this.categoryRepository = new FakeCategoryRepository();
-        this.categoryValidator = new CategoryValidator(userRepository, storeRepository);
-        this.categoryService = new CategoryServiceImpl(categoryRepository, categoryValidator);
-        this.categoryController = new CategoryController(categoryService);
-    }
+		this.categoryRepository = new FakeCategoryRepository();
+		this.categoryValidator = new CategoryValidator(userRepository, storeRepository);
+		this.categoryService = new CategoryServiceImpl(categoryRepository, categoryValidator);
+		this.categoryController = new CategoryController(categoryService);
+	}
 
-    public void setSecurityContextAuthentication(final Username username) {
-        final UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(username, "");
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-    }
+	public void setSecurityContextAuthentication(final Username username) {
+		final UsernamePasswordAuthenticationToken authenticationToken =
+				new UsernamePasswordAuthenticationToken(username, "");
+		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+	}
 
-    public void setTimeHolder(final LocalDateTime fixedTime) {
-        this.timeHolder.setMillis(fixedTime);
-    }
+	public void setTimeHolder(final LocalDateTime fixedTime) {
+		this.timeHolder.setMillis(fixedTime);
+	}
 
-    public void setUuidHolder(final String uuidInput) {
-        this.uuidHolder.setUuidInput(uuidInput);
-    }
+	public void setUuidHolder(final String uuidInput) {
+		this.uuidHolder.setUuidInput(uuidInput);
+	}
 }

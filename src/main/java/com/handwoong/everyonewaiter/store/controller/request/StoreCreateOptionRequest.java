@@ -4,21 +4,21 @@ import com.handwoong.everyonewaiter.store.domain.StoreOption;
 import jakarta.validation.constraints.NotNull;
 
 public record StoreCreateOptionRequest(
-    @NotNull
-    Boolean useBreakTime,
+		@NotNull
+		Boolean useBreakTime,
 
-    @NotNull
-    Boolean useWaiting,
+		@NotNull
+		Boolean useWaiting,
 
-    @NotNull
-    Boolean useOrder
+		@NotNull
+		Boolean useOrder
 ) {
 
-    public StoreOption toDomain() {
-        return StoreOption.builder()
-            .useBreakTime(useBreakTime)
-            .useWaiting(useWaiting)
-            .useOrder(useOrder)
-            .build();
-    }
+	public StoreOption toDomain() {
+		return StoreOption.builder()
+				.useBreakTime(useBreakTime)
+				.useWaiting(useWaiting)
+				.useOrder(useOrder)
+				.build();
+	}
 }

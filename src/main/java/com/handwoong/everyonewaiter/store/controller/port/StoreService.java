@@ -1,18 +1,24 @@
 package com.handwoong.everyonewaiter.store.controller.port;
 
+import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.store.dto.StoreCreate;
 import com.handwoong.everyonewaiter.store.dto.StoreOptionUpdate;
 import com.handwoong.everyonewaiter.store.dto.StoreUpdate;
 import com.handwoong.everyonewaiter.user.domain.Username;
+import java.util.List;
 
 public interface StoreService {
 
-    StoreId create(Username username, StoreCreate storeCreate);
+	List<Store> findAllByUsername(Username username);
 
-    void update(Username username, StoreUpdate storeUpdate);
+	Store findByIdAndUsername(StoreId storeId, Username username);
 
-    void update(Username username, StoreOptionUpdate storeOptionUpdate);
+	StoreId create(Username username, StoreCreate storeCreate);
 
-    void delete(Username username, StoreId storeId);
+	void update(Username username, StoreUpdate storeUpdate);
+
+	void update(Username username, StoreOptionUpdate storeOptionUpdate);
+
+	void delete(Username username, StoreId storeId);
 }

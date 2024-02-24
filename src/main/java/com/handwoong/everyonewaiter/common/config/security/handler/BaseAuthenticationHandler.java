@@ -12,18 +12,18 @@ import org.springframework.http.MediaType;
 @RequiredArgsConstructor
 public class BaseAuthenticationHandler {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+	private final ObjectMapper mapper = new ObjectMapper();
 
-    protected void handle(
-        final HttpStatus status,
-        final String message,
-        final HttpServletResponse response
-    ) throws IOException {
-        final ApiResponse<Void> errorResponse = ApiResponse.error(message);
-        final String body = mapper.writeValueAsString(errorResponse);
-        response.setStatus(status.value());
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(body);
-    }
+	protected void handle(
+			final HttpStatus status,
+			final String message,
+			final HttpServletResponse response
+	) throws IOException {
+		final ApiResponse<Void> errorResponse = ApiResponse.error(message);
+		final String body = mapper.writeValueAsString(errorResponse);
+		response.setStatus(status.value());
+		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+		response.getWriter().write(body);
+	}
 }

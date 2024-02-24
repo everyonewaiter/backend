@@ -12,26 +12,26 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
-    private final UserJpaRepository userJpaRepository;
+	private final UserJpaRepository userJpaRepository;
 
-    @Override
-    public User save(final User user) {
-        return userJpaRepository.save(UserEntity.from(user)).toModel();
-    }
+	@Override
+	public User save(final User user) {
+		return userJpaRepository.save(UserEntity.from(user)).toModel();
+	}
 
-    @Override
-    public boolean existsByUsername(final Username username) {
-        return userJpaRepository.existsByUsername(username.toString());
-    }
+	@Override
+	public boolean existsByUsername(final Username username) {
+		return userJpaRepository.existsByUsername(username.toString());
+	}
 
-    @Override
-    public Optional<User> findByUsername(final Username username) {
-        return userJpaRepository.findByUsername(username.toString()).map(UserEntity::toModel);
-    }
+	@Override
+	public Optional<User> findByUsername(final Username username) {
+		return userJpaRepository.findByUsername(username.toString()).map(UserEntity::toModel);
+	}
 
-    @Override
-    public User findByUsernameOrElseThrow(final Username username) {
-        return findByUsername(username)
-            .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다.", username.toString()));
-    }
+	@Override
+	public User findByUsernameOrElseThrow(final Username username) {
+		return findByUsername(username)
+				.orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다.", username.toString()));
+	}
 }
