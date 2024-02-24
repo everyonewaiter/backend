@@ -6,6 +6,7 @@ import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.store.exception.StoreNotFoundException;
 import com.handwoong.everyonewaiter.user.domain.UserId;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,6 +16,14 @@ public class FakeStoreRepository implements StoreRepository {
 	private final Map<Long, Store> database = new HashMap<>();
 
 	private Long sequence = 1L;
+
+	@Override
+	public List<Store> findAllByUserId(final UserId userId) {
+		return database.values()
+				.stream()
+				.filter(store -> store.getUserId().equals(userId))
+				.toList();
+	}
 
 	@Override
 	public Store save(final Store store) {
