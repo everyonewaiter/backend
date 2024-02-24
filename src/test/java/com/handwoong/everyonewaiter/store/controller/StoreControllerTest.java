@@ -19,6 +19,8 @@ import com.handwoong.everyonewaiter.store.controller.request.StoreCreateOptionRe
 import com.handwoong.everyonewaiter.store.controller.request.StoreCreateRequest;
 import com.handwoong.everyonewaiter.store.controller.request.StoreOptionUpdateRequest;
 import com.handwoong.everyonewaiter.store.controller.request.StoreUpdateRequest;
+import com.handwoong.everyonewaiter.store.controller.response.StoreResponse;
+import com.handwoong.everyonewaiter.store.controller.response.StoreResponses;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.store.exception.StoreNotFoundException;
@@ -29,6 +31,7 @@ import com.handwoong.everyonewaiter.user.exception.UserNotFoundException;
 import com.handwoong.everyonewaiter.util.TestContainer;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +69,67 @@ class StoreControllerTest {
 
 		final Store store = aStore().build();
 		testContainer.storeRepository.save(store);
+	}
+
+	@Test
+	void Should_StoreResponses_When_LoginUser() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("handwoong"));
+
+		// when
+		final ResponseEntity<ApiResponse<StoreResponses>> response = testContainer.storeController.findAllByUser();
+		final StoreResponses result = Objects.requireNonNull(response.getBody()).data();
+
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(200);
+		assertThat(result.stores()).hasSize(1);
+	}
+
+	@Test
+	void Should_ThrowException_When_FindAllByUserLogoutUser() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("username"));
+
+		// expect
+		assertThatThrownBy(() -> testContainer.storeController.findAllByUser())
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_StoreResponse_When_LoginUser() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("handwoong"));
+
+		// when
+		final ResponseEntity<ApiResponse<StoreResponse>> response = testContainer.storeController.findByUser(1L);
+		final StoreResponse result = Objects.requireNonNull(response.getBody()).data();
+
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(200);
+		assertThat(result.id()).isEqualTo(1L);
+	}
+
+	@Test
+	void Should_ThrowException_When_FindByUserLogoutUser() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("username"));
+
+		// expect
+		assertThatThrownBy(() -> testContainer.storeController.findByUser(1L))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_ThrowException_When_FindByUserStoreNotFound() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("handwoong"));
+
+		// expect
+		assertThatThrownBy(() -> testContainer.storeController.findByUser(2L))
+				.isInstanceOf(StoreNotFoundException.class)
+				.hasMessage("매장을 찾을 수 없습니다.");
 	}
 
 	@Test

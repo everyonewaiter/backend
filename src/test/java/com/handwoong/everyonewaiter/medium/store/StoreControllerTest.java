@@ -10,6 +10,8 @@ import static com.handwoong.everyonewaiter.medium.store.snippet.StoreRequestSnip
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreRequestSnippet.UPDATE_OPTION_REQUEST;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreRequestSnippet.UPDATE_REQUEST;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreResponseSnippet.CUD_RESPONSE;
+import static com.handwoong.everyonewaiter.medium.store.snippet.StoreResponseSnippet.STORE_RESPONSE;
+import static com.handwoong.everyonewaiter.medium.store.snippet.StoreResponseSnippet.STORE_RESPONSES;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.FRIDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.SATURDAY;
 import static com.handwoong.everyonewaiter.store.domain.DayOfWeek.SUNDAY;
@@ -64,6 +66,86 @@ class StoreControllerTest extends TestHelper {
 					List.of(SATURDAY, SUNDAY)
 			)
 	);
+
+	@Test
+	void Should_StoreResponses_When_LoginUser() {
+		// given
+		final String token = userAccessToken;
+
+		// when
+		final ExtractableResponse<Response> response = findAllByUser(token);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(200);
+	}
+
+	@Test
+	void Should_FindAllByUserStatus401_When_LogoutUser() {
+		// given
+		final String token = "";
+
+		// when
+		final ExtractableResponse<Response> response = findAllByUser(token);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(401);
+	}
+
+	private ExtractableResponse<Response> findAllByUser(final String token) {
+		return RestAssured
+				.given(getSpecification()).log().all()
+				.header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_TYPE + " " + token)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.filter(getFilter().document(AUTHORIZATION_HEADER, STORE_RESPONSES))
+				.when().get("/api/stores")
+				.then().log().all().extract();
+	}
+
+	@Test
+	void Should_StoreResponse_When_ValidRequest() {
+		// given
+		final String token = userAccessToken;
+
+		// when
+		final ExtractableResponse<Response> response = findByUser(token, 1L);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(200);
+	}
+
+	@Test
+	void Should_FindByUserStatus401_When_LogoutUser() {
+		// given
+		final String token = "";
+
+		// when
+		final ExtractableResponse<Response> response = findByUser(token, 1L);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(401);
+	}
+
+	@Test
+	void Should_FindByUserStatus404_When_StoreNotFound() {
+		// given
+		final String token = userAccessToken;
+
+		// when
+		final ExtractableResponse<Response> response = findByUser(token, 100L);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(404);
+	}
+
+	private ExtractableResponse<Response> findByUser(final String token, final Long storeId) {
+		return RestAssured
+				.given(getSpecification()).log().all()
+				.header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_TYPE + " " + token)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.filter(getFilter().document(AUTHORIZATION_HEADER, PATH_PARAM_STORE_ID, STORE_RESPONSE))
+				.when().get("/api/stores/{id}", storeId)
+				.then().log().all().extract();
+	}
 
 	@Test
 	void Should_Create_When_ValidRequest() throws Exception {
