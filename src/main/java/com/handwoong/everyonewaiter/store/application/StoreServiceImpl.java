@@ -10,6 +10,7 @@ import com.handwoong.everyonewaiter.store.dto.StoreUpdate;
 import com.handwoong.everyonewaiter.user.application.port.UserRepository;
 import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.Username;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,18 @@ public class StoreServiceImpl implements StoreService {
 	private final StoreRepository storeRepository;
 
 	@Override
+	public List<Store> findAllByUsername(final Username username) {
+		final User user = userRepository.findByUsernameOrElseThrow(username);
+		return storeRepository.findAllByUserId(user.getId());
+	}
+
+	@Override
+	public Store findByIdAndUsername(final StoreId storeId, final Username username) {
+		final User user = userRepository.findByUsernameOrElseThrow(username);
+		return storeRepository.findByIdAndUserIdOrElseThrow(storeId, user.getId());
+	}
+
+	@Override
 	@Transactional
 	public StoreId create(final Username username, final StoreCreate storeCreate) {
 		final User user = userRepository.findByUsernameOrElseThrow(username);
@@ -34,7 +47,7 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	@Transactional
 	public void update(final Username username, final StoreUpdate storeUpdate) {
-		final Store store = findStoreByIdAndUsername(storeUpdate.id(), username);
+		final Store store = findByIdAndUsername(storeUpdate.id(), username);
 		final Store updatedStore = store.update(storeUpdate);
 		storeRepository.save(updatedStore);
 	}
@@ -42,7 +55,7 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	@Transactional
 	public void update(final Username username, final StoreOptionUpdate storeOptionUpdate) {
-		final Store store = findStoreByIdAndUsername(storeOptionUpdate.storeId(), username);
+		final Store store = findByIdAndUsername(storeOptionUpdate.storeId(), username);
 		final Store updatedStore = store.update(storeOptionUpdate);
 		storeRepository.save(updatedStore);
 	}
@@ -50,12 +63,7 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	@Transactional
 	public void delete(final Username username, final StoreId storeId) {
-		final Store store = findStoreByIdAndUsername(storeId, username);
+		final Store store = findByIdAndUsername(storeId, username);
 		storeRepository.delete(store);
-	}
-
-	private Store findStoreByIdAndUsername(final StoreId storeId, final Username username) {
-		final User user = userRepository.findByUsernameOrElseThrow(username);
-		return storeRepository.findByIdAndUserIdOrElseThrow(storeId, user.getId());
 	}
 }

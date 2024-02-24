@@ -4,16 +4,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode
-public class StoreDaysOfWeek {
+public record StoreDaysOfWeek(List<DayOfWeek> daysOfWeek) {
 
-	private final List<DayOfWeek> daysOfWeek;
-
-	public StoreDaysOfWeek(final List<DayOfWeek> daysOfWeek) {
+	public StoreDaysOfWeek {
 		validate(daysOfWeek);
-		this.daysOfWeek = daysOfWeek;
 	}
 
 	private void validate(final List<DayOfWeek> daysOfWeek) {

@@ -41,6 +41,65 @@ class StoreServiceImplTest {
 	}
 
 	@Test
+	void Should_FindStores_When_ValidUsername() {
+		// given
+		final Username username = new Username("handwoong");
+
+		// when
+		final List<Store> stores = testContainer.storeService.findAllByUsername(username);
+
+		// then
+		assertThat(stores).hasSize(1);
+	}
+
+	@Test
+	void Should_ThrowException_When_FindStoresUsernameNotFound() {
+		// given
+		final Username username = new Username("username");
+
+		// expect
+		assertThatThrownBy(() -> testContainer.storeService.findAllByUsername(username))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_FindStore_When_ValidStoreIdAndUsername() {
+		final StoreId storeId = new StoreId(1L);
+		final Username username = new Username("handwoong");
+
+		// when
+		final Store store = testContainer.storeService.findByIdAndUsername(storeId, username);
+
+		// then
+		assertThat(store.getId()).isEqualTo(storeId);
+	}
+
+	@Test
+	void Should_ThrowException_When_FindStoreUsernameNotFound() {
+		// given
+		final StoreId storeId = new StoreId(1L);
+		final Username username = new Username("username");
+
+		// expect
+		assertThatThrownBy(() -> testContainer.storeService.findByIdAndUsername(storeId, username))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_ThrowException_When_FindStoreStoreNotFound() {
+		// given
+		final StoreId storeId = new StoreId(2L);
+		final Username username = new Username("handwoong");
+
+		// expect
+		assertThatThrownBy(() -> testContainer.storeService.findByIdAndUsername(storeId, username))
+				.isInstanceOf(StoreNotFoundException.class)
+				.hasMessage("매장을 찾을 수 없습니다.");
+	}
+
+	@Test
 	void Should_Create_When_ValidStoreCreate() {
 		// given
 		final StoreCreate storeCreate = StoreCreate.builder()
