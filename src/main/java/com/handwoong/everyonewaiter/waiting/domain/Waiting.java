@@ -40,7 +40,7 @@ public class Waiting extends AggregateRoot {
 			final WaitingGenerator waitingGenerator,
 			final UuidHolder uuidHolder
 	) {
-		waitingValidator.validate(waitingRegister.storeId());
+		waitingValidator.validate(waitingRegister.storeId(), waitingRegister.phoneNumber());
 		final WaitingGenerateInfo waitingInfo = waitingGenerator.generate(waitingRegister.storeId());
 		registerEvent(new WaitingRegisterEvent(waitingInfo, waitingRegister.phoneNumber()));
 

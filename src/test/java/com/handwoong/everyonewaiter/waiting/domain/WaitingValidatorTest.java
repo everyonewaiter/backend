@@ -6,6 +6,7 @@ import static com.handwoong.everyonewaiter.util.Fixtures.aUser;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.store.domain.StoreStatus;
@@ -39,9 +40,10 @@ class WaitingValidatorTest {
 		testContainer.setTimeHolder(LocalDateTime.of(2024, 2, 5, 18, 0, 0)); // 월요일 18시 0분
 
 		final StoreId storeId = new StoreId(1L);
+		final PhoneNumber phoneNumber = new PhoneNumber("01012345678");
 
 		// expect
-		assertThatCode(() -> testContainer.waitingValidator.validate(storeId))
+		assertThatCode(() -> testContainer.waitingValidator.validate(storeId, phoneNumber))
 				.doesNotThrowAnyException();
 	}
 
@@ -51,12 +53,14 @@ class WaitingValidatorTest {
 		final Username username = new Username("handwoong");
 		testContainer.setSecurityContextAuthentication(username);
 
+		final PhoneNumber phoneNumber = new PhoneNumber("01012345678");
+
 		final StoreId storeId = new StoreId(2L);
 		final Store store = aStore().id(storeId).option(aStoreOption().useWaiting(false).build()).build();
 		testContainer.storeRepository.save(store);
 
 		// expect
-		assertThatThrownBy(() -> testContainer.waitingValidator.validate(storeId))
+		assertThatThrownBy(() -> testContainer.waitingValidator.validate(storeId, phoneNumber))
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessage("웨이팅 기능을 사용하지 않는 매장입니다.");
 	}
@@ -67,12 +71,14 @@ class WaitingValidatorTest {
 		final Username username = new Username("handwoong");
 		testContainer.setSecurityContextAuthentication(username);
 
+		final PhoneNumber phoneNumber = new PhoneNumber("01012345678");
+
 		final StoreId storeId = new StoreId(1L);
 		final Store store = aStore().id(storeId).status(StoreStatus.CLOSE).build();
 		testContainer.storeRepository.save(store);
 
 		// expect
-		assertThatThrownBy(() -> testContainer.waitingValidator.validate(storeId))
+		assertThatThrownBy(() -> testContainer.waitingValidator.validate(storeId, phoneNumber))
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessage("매장이 영업중이 아닙니다.");
 	}
@@ -84,12 +90,14 @@ class WaitingValidatorTest {
 		testContainer.setSecurityContextAuthentication(username);
 		testContainer.setTimeHolder(LocalDateTime.of(2024, 2, 5, 22, 0, 0)); // 월요일 22시 0분
 
+		final PhoneNumber phoneNumber = new PhoneNumber("01012345678");
+
 		final StoreId storeId = new StoreId(1L);
 		final Store store = aStore().id(storeId).build();
 		testContainer.storeRepository.save(store);
 
 		// expect
-		assertThatThrownBy(() -> testContainer.waitingValidator.validate(storeId))
+		assertThatThrownBy(() -> testContainer.waitingValidator.validate(storeId, phoneNumber))
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessage("매장 영업 시간이 아닙니다.");
 	}
@@ -101,12 +109,14 @@ class WaitingValidatorTest {
 		testContainer.setSecurityContextAuthentication(username);
 		testContainer.setTimeHolder(LocalDateTime.of(2024, 2, 5, 15, 30, 0)); // 월요일 15시 30분
 
+		final PhoneNumber phoneNumber = new PhoneNumber("01012345678");
+
 		final StoreId storeId = new StoreId(1L);
 		final Store store = aStore().id(storeId).build();
 		testContainer.storeRepository.save(store);
 
 		// expect
-		assertThatThrownBy(() -> testContainer.waitingValidator.validate(storeId))
+		assertThatThrownBy(() -> testContainer.waitingValidator.validate(storeId, phoneNumber))
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessage("브레이크 타임에는 웨이팅을 등록할 수 없습니다.");
 	}
