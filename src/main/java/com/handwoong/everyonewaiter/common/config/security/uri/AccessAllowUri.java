@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum AccessAllowUri implements AllowUri {
 	ROOT("/"),
 	WAITING_CUSTOMER("/api/waiting/customer"),
+	WAITING_TURN("/api/waiting/turn"),
 	WAITING_CANCEL("/api/waiting/cancel"),
 	;
 
