@@ -18,6 +18,7 @@ import com.handwoong.everyonewaiter.util.TestContainer;
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingCancelRequest;
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingRegisterRequest;
 import com.handwoong.everyonewaiter.waiting.controller.response.WaitingCountResponse;
+import com.handwoong.everyonewaiter.waiting.controller.response.WaitingResponse;
 import com.handwoong.everyonewaiter.waiting.domain.Waiting;
 import com.handwoong.everyonewaiter.waiting.exception.WaitingNotFoundException;
 import java.time.LocalDateTime;
@@ -58,6 +59,21 @@ class WaitingControllerTest {
 		// then
 		assertThat(response.getStatusCode().value()).isEqualTo(200);
 		assertThat(result.data().count()).isEqualTo(1);
+	}
+
+	@Test
+	void Should_Find_When_StoreIdAndUniqueCode() {
+		// given
+		final UUID uniqueCode = testContainer.uuidHolder.generate();
+
+		// when
+		final ResponseEntity<ApiResponse<WaitingResponse>> response =
+				testContainer.waitingController.findByStoreIdAndUniqueCode(1L, uniqueCode);
+		final ApiResponse<WaitingResponse> result = Objects.requireNonNull(response.getBody());
+
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(200);
+		assertThat(result.data().id()).isEqualTo(1L);
 	}
 
 	@Test
