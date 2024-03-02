@@ -43,6 +43,38 @@ class WaitingServiceImplTest {
 
 		final Store store = aStore().build();
 		testContainer.storeRepository.save(store);
+
+		final Waiting waiting = aWaiting().build();
+		testContainer.waitingRepository.save(waiting);
+	}
+
+	@Test
+	void Should_1_When_Count() {
+		// given
+		final Username username = new Username("handwoong");
+		final StoreId storeId = new StoreId(1L);
+
+		// when
+		final int result = testContainer.waitingService.count(username, storeId);
+
+		// then
+		assertThat(result).isEqualTo(1);
+	}
+
+	@Test
+	void Should_Zero_When_Count() {
+		// given
+		final Waiting waiting = aWaiting().status(WaitingStatus.CANCEL).build();
+		testContainer.waitingRepository.save(waiting);
+
+		final Username username = new Username("handwoong");
+		final StoreId storeId = new StoreId(1L);
+
+		// when
+		final int result = testContainer.waitingService.count(username, storeId);
+
+		// then
+		assertThat(result).isZero();
 	}
 
 	@Test
@@ -52,7 +84,7 @@ class WaitingServiceImplTest {
 				.storeId(new StoreId(1L))
 				.adult(new WaitingAdult(2))
 				.children(new WaitingChildren(0))
-				.phoneNumber(new PhoneNumber("01012345678"))
+				.phoneNumber(new PhoneNumber("01011112222"))
 				.build();
 
 		// when
@@ -66,11 +98,8 @@ class WaitingServiceImplTest {
 	void Should_ThrowException_When_DuplicatePhoneNumber() {
 		// given
 		final PhoneNumber phoneNumber = new PhoneNumber("01012345678");
-		final Waiting waiting = aWaiting().phoneNumber(phoneNumber).build();
-		testContainer.waitingRepository.save(waiting);
-
 		final WaitingRegister waitingRegister = WaitingRegister.builder()
-				.phoneNumber(new PhoneNumber("01012345678"))
+				.phoneNumber(phoneNumber)
 				.build();
 
 		// expect
@@ -82,9 +111,6 @@ class WaitingServiceImplTest {
 	@Test
 	void Should_Cancel_When_ValidWaitingCancel() {
 		// given
-		final Waiting waiting = aWaiting().build();
-		testContainer.waitingRepository.save(waiting);
-
 		final StoreId storeId = new StoreId(1L);
 		final UUID uniqueCode = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 		final WaitingCancel waitingCancel = WaitingCancel.builder()
@@ -105,9 +131,6 @@ class WaitingServiceImplTest {
 	@Test
 	void Should_ThrowException_When_CancelStoreIdNotFound() {
 		// given
-		final Waiting waiting = aWaiting().build();
-		testContainer.waitingRepository.save(waiting);
-
 		final StoreId storeId = new StoreId(2L);
 		final UUID uniqueCode = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 		final WaitingCancel waitingCancel = WaitingCancel.builder()
@@ -124,9 +147,6 @@ class WaitingServiceImplTest {
 	@Test
 	void Should_ThrowException_When_CancelUniqueCodeNotFound() {
 		// given
-		final Waiting waiting = aWaiting().build();
-		testContainer.waitingRepository.save(waiting);
-
 		final StoreId storeId = new StoreId(1L);
 		final UUID uniqueCode = UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
 		final WaitingCancel waitingCancel = WaitingCancel.builder()

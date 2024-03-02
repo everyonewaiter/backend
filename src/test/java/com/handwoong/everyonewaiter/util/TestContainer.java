@@ -77,7 +77,8 @@ public class TestContainer {
 		this.waitingRepository = new FakeWaitingRepository();
 		this.waitingValidator = new WaitingValidator(userRepository, storeRepository, waitingRepository, timeHolder);
 		this.waitingGenerator = new WaitingGenerator(userRepository, storeRepository, waitingRepository);
-		this.waitingService = new WaitingServiceImpl(waitingRepository, waitingValidator, waitingGenerator, uuidHolder);
+		this.waitingService = new WaitingServiceImpl(
+				userRepository, storeRepository, waitingRepository, waitingValidator, waitingGenerator, uuidHolder);
 		this.waitingController = new WaitingController(waitingService);
 
 		this.categoryRepository = new FakeCategoryRepository();
