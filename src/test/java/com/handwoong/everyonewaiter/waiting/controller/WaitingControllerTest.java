@@ -17,9 +17,11 @@ import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.util.TestContainer;
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingCancelRequest;
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingRegisterRequest;
+import com.handwoong.everyonewaiter.waiting.controller.response.WaitingCountResponse;
 import com.handwoong.everyonewaiter.waiting.domain.Waiting;
 import com.handwoong.everyonewaiter.waiting.exception.WaitingNotFoundException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +46,18 @@ class WaitingControllerTest {
 
 		final Waiting waiting = aWaiting().phoneNumber(new PhoneNumber("01011112222")).build();
 		testContainer.waitingRepository.save(waiting);
+	}
+
+	@Test
+	void Should_1_When_Count() {
+		// given
+		// when
+		final ResponseEntity<ApiResponse<WaitingCountResponse>> response = testContainer.waitingController.count(1L);
+		final ApiResponse<WaitingCountResponse> result = Objects.requireNonNull(response.getBody());
+
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(200);
+		assertThat(result.data().count()).isEqualTo(1);
 	}
 
 	@Test
