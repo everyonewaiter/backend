@@ -1,5 +1,9 @@
 == 웨이팅
 
+=== count 조회
+
+operation::waiting-controller-test/should_1_-when_-count[snippets='http-request,path-parameters,request-headers,http-response,response-fields']
+
 === 등록
 
 operation::waiting-controller-test/should_-register_-when_-valid-request[snippets='http-request,request-headers,request-fields,http-response,response-fields']

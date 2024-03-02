@@ -8,7 +8,9 @@ import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSn
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER_TYPE;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreResponseSnippet.CUD_RESPONSE;
 import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingRequestSnippet.CANCEL_REQUEST;
+import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingRequestSnippet.PATH_PARAM_STORE_ID;
 import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingRequestSnippet.REGISTER_REQUEST;
+import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingResponseSnippet.WAITING_COUNT_RESPONSE;
 import static com.handwoong.everyonewaiter.waiting.domain.WaitingAdult.MAX_ADULT_MESSAGE;
 import static com.handwoong.everyonewaiter.waiting.domain.WaitingAdult.MIN_ADULT_MESSAGE;
 import static com.handwoong.everyonewaiter.waiting.domain.WaitingChildren.MAX_CHILDREN_MESSAGE;
@@ -20,6 +22,7 @@ import com.handwoong.everyonewaiter.common.dto.ApiResponse.ResultCode;
 import com.handwoong.everyonewaiter.medium.TestHelper;
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingCancelRequest;
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingRegisterRequest;
+import com.handwoong.everyonewaiter.waiting.controller.response.WaitingCountResponse;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
@@ -31,6 +34,33 @@ import org.springframework.test.context.jdbc.Sql;
 
 @Sql({"classpath:sql/user.sql", "classpath:sql/store.sql", "classpath:sql/waiting.sql"})
 class WaitingControllerTest extends TestHelper {
+
+	@Test
+	void Should_1_When_Count() {
+		// given
+		final String token = userAccessToken;
+
+		// when
+		final ExtractableResponse<Response> response = count(token);
+		final TypeRef<ApiResponse<WaitingCountResponse>> typeRef = new TypeRef<>() {
+		};
+		final ApiResponse<WaitingCountResponse> result = response.body().as(typeRef);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(200);
+		assertThat(result.resultCode()).isEqualTo(ResultCode.SUCCESS);
+		assertThat(result.data().count()).isEqualTo(1);
+	}
+
+	private ExtractableResponse<Response> count(final String token) {
+		return RestAssured
+				.given(getSpecification()).log().all()
+				.header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_TYPE + " " + token)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.filter(getFilter().document(AUTHORIZATION_HEADER, PATH_PARAM_STORE_ID, WAITING_COUNT_RESPONSE))
+				.when().get("/api/waiting/stores/{storeId}", 2L)
+				.then().log().all().extract();
+	}
 
 	@Test
 	void Should_Register_When_ValidRequest() {

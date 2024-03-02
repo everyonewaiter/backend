@@ -1,6 +1,7 @@
 package com.handwoong.everyonewaiter.waiting.domain;
 
 import com.handwoong.everyonewaiter.common.application.port.TimeHolder;
+import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.store.application.port.StoreRepository;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
@@ -8,6 +9,8 @@ import com.handwoong.everyonewaiter.user.application.port.UserRepository;
 import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.infrastructure.SecurityUtils;
+import com.handwoong.everyonewaiter.waiting.application.port.WaitingRepository;
+import com.handwoong.everyonewaiter.waiting.exception.AlreadyExistsPhoneNumberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,10 +20,18 @@ public class WaitingValidator {
 
 	private final UserRepository userRepository;
 	private final StoreRepository storeRepository;
+	private final WaitingRepository waitingRepository;
 	private final TimeHolder timeHolder;
 
-	public void validate(final StoreId storeId) {
+	public void validate(final StoreId storeId, final PhoneNumber phoneNumber) {
+		validate(phoneNumber);
 		validate(getStore(storeId, getUser()));
+	}
+
+	private void validate(final PhoneNumber phoneNumber) {
+		if (waitingRepository.existsByPhoneNumber(phoneNumber)) {
+			throw new AlreadyExistsPhoneNumberException("이미 웨이팅에 등록되어 있는 휴대폰 번호입니다.", phoneNumber.toString());
+		}
 	}
 
 	private void validate(final Store store) {
