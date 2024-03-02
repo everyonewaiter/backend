@@ -48,7 +48,7 @@ class UserTest {
 
 	@ParameterizedTest(name = "회원 상태 {index} : {0}")
 	@EnumSource(mode = Mode.EXCLUDE, names = {"ACTIVE"})
-	void Should_False_When_StatusNotMatched(final UserStatus status) {
+	void Should_True_When_StatusNotMatched(final UserStatus status) {
 		// given
 		final User user = aUser().status(UserStatus.ACTIVE).build();
 
@@ -61,7 +61,7 @@ class UserTest {
 
 	@ParameterizedTest(name = "회원 상태 {index} : {0}")
 	@EnumSource
-	void Should_True_When_StatusMatched(final UserStatus status) {
+	void Should_False_When_StatusMatched(final UserStatus status) {
 		// given
 		final User user = aUser().status(status).build();
 
