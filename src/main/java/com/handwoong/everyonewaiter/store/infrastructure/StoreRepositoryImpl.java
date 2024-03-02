@@ -38,11 +38,18 @@ public class StoreRepositoryImpl implements StoreRepository {
 	}
 
 	@Override
-	public Store findByIdAndUserIdOrElseThrow(final StoreId storeId, final UserId userId) {
-		return storeJpaRepository.findByIdAndUserId(storeId.value(), userId.value())
+	public Store findByIdOrElseThrow(final StoreId id) {
+		return storeJpaRepository.findById(id.value())
+				.orElseThrow(() -> new StoreNotFoundException("매장을 찾을 수 없습니다.", "storeId : [" + id + "]"))
+				.toModel();
+	}
+
+	@Override
+	public Store findByIdAndUserIdOrElseThrow(final StoreId id, final UserId userId) {
+		return storeJpaRepository.findByIdAndUserId(id.value(), userId.value())
 				.orElseThrow(() ->
 						new StoreNotFoundException("매장을 찾을 수 없습니다.",
-								"storeId : [" + storeId + "] userId : [" + userId + "]"))
+								"storeId : [" + id + "] userId : [" + userId + "]"))
 				.toModel();
 	}
 

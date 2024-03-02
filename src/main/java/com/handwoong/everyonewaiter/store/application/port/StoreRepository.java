@@ -11,7 +11,9 @@ public interface StoreRepository {
 
 	Store save(Store store);
 
-	Store findByIdAndUserIdOrElseThrow(StoreId storeId, UserId userId);
+	Store findByIdOrElseThrow(StoreId id);
+
+	Store findByIdAndUserIdOrElseThrow(StoreId id, UserId userId);
 
 	void delete(Store store);
 }

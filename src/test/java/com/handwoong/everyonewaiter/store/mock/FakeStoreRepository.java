@@ -34,14 +34,21 @@ public class FakeStoreRepository implements StoreRepository {
 	}
 
 	@Override
-	public Store findByIdAndUserIdOrElseThrow(final StoreId storeId, final UserId userId) {
-		return Optional.ofNullable(database.get(storeId.value()))
+	public Store findByIdOrElseThrow(final StoreId id) {
+		return Optional.ofNullable(database.get(id.value()))
+				.orElseThrow(() ->
+						new StoreNotFoundException("매장을 찾을 수 없습니다.", "storeId : [" + id + "]"));
+	}
+
+	@Override
+	public Store findByIdAndUserIdOrElseThrow(final StoreId id, final UserId userId) {
+		return Optional.ofNullable(database.get(id.value()))
 				.stream()
 				.filter(store -> store.getUserId().equals(userId))
 				.findAny()
 				.orElseThrow(() ->
 						new StoreNotFoundException("매장을 찾을 수 없습니다.",
-								"storeId : [" + storeId + "] userId : [" + userId + "]"));
+								"storeId : [" + id + "] userId : [" + userId + "]"));
 	}
 
 	@Override
