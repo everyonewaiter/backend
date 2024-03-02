@@ -2,7 +2,11 @@
 
 === count 조회
 
-operation::waiting-controller-test/should_1_-when_-count[snippets='http-request,path-parameters,request-headers,http-response,response-fields']
+operation::waiting-controller-test/should_1_-when_-count[snippets='http-request,query-parameters,request-headers,http-response,response-fields']
+
+=== unique code 조회
+
+operation::waiting-controller-test/should_-find_-when_-store-id-and-unique-code[snippets='http-request,query-parameters,http-response,response-fields']
 
 === 등록
 

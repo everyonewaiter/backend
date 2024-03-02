@@ -4,15 +4,19 @@ import static com.handwoong.everyonewaiter.medium.RestDocsUtils.constraints;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.snippet.Snippet;
 
 public class WaitingRequestSnippet {
 
-	public static final Snippet PATH_PARAM_STORE_ID = pathParameters(
-			parameterWithName("storeId").description("매장 ID")
+	public static final Snippet QUERY_PARAM_STORE_ID = queryParameters(
+			parameterWithName("store").description("매장 ID")
+	);
+	public static final Snippet QUERY_PARAM_STORE_ID_AND_UNIQUE_CODE = queryParameters(
+			parameterWithName("store").description("매장 ID"),
+			parameterWithName("code").description("웨이팅 고유 UUID")
 	);
 	public static final Snippet REGISTER_REQUEST = requestFields(
 			fieldWithPath("storeId")

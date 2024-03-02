@@ -78,6 +78,19 @@ class WaitingServiceImplTest {
 	}
 
 	@Test
+	void Should_Find_When_StoreIdAndUniqueCode() {
+		// given
+		final StoreId storeId = new StoreId(1L);
+		final UUID uniqueCode = testContainer.uuidHolder.generate();
+
+		// when
+		final Waiting waiting = testContainer.waitingService.findByStoreIdAndUniqueCode(storeId, uniqueCode);
+
+		// then
+		assertThat(waiting.getId().value()).isEqualTo(1L);
+	}
+
+	@Test
 	void Should_Register_When_ValidWaitingRegister() {
 		// given
 		final WaitingRegister waitingRegister = WaitingRegister.builder()

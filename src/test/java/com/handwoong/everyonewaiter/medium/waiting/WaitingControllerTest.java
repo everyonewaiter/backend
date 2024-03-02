@@ -8,9 +8,11 @@ import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSn
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER_TYPE;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreResponseSnippet.CUD_RESPONSE;
 import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingRequestSnippet.CANCEL_REQUEST;
-import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingRequestSnippet.PATH_PARAM_STORE_ID;
+import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingRequestSnippet.QUERY_PARAM_STORE_ID;
+import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingRequestSnippet.QUERY_PARAM_STORE_ID_AND_UNIQUE_CODE;
 import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingRequestSnippet.REGISTER_REQUEST;
 import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingResponseSnippet.WAITING_COUNT_RESPONSE;
+import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingResponseSnippet.WAITING_RESPONSE;
 import static com.handwoong.everyonewaiter.waiting.domain.WaitingAdult.MAX_ADULT_MESSAGE;
 import static com.handwoong.everyonewaiter.waiting.domain.WaitingAdult.MIN_ADULT_MESSAGE;
 import static com.handwoong.everyonewaiter.waiting.domain.WaitingChildren.MAX_CHILDREN_MESSAGE;
@@ -23,6 +25,7 @@ import com.handwoong.everyonewaiter.medium.TestHelper;
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingCancelRequest;
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingRegisterRequest;
 import com.handwoong.everyonewaiter.waiting.controller.response.WaitingCountResponse;
+import com.handwoong.everyonewaiter.waiting.controller.response.WaitingResponse;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
@@ -57,8 +60,35 @@ class WaitingControllerTest extends TestHelper {
 				.given(getSpecification()).log().all()
 				.header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_TYPE + " " + token)
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
-				.filter(getFilter().document(AUTHORIZATION_HEADER, PATH_PARAM_STORE_ID, WAITING_COUNT_RESPONSE))
-				.when().get("/api/waiting/stores/{storeId}", 2L)
+				.filter(getFilter().document(AUTHORIZATION_HEADER, QUERY_PARAM_STORE_ID, WAITING_COUNT_RESPONSE))
+				.queryParam("store", 2L)
+				.when().get("/api/waiting/count")
+				.then().log().all().extract();
+	}
+
+	@Test
+	void Should_Find_When_StoreIdAndUniqueCode() {
+		// given
+		// when
+		final ExtractableResponse<Response> response = findByStoreIdAndUniqueCode();
+		final TypeRef<ApiResponse<WaitingResponse>> typeRef = new TypeRef<>() {
+		};
+		final ApiResponse<WaitingResponse> result = response.body().as(typeRef);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(200);
+		assertThat(result.resultCode()).isEqualTo(ResultCode.SUCCESS);
+		assertThat(result.data().id()).isEqualTo(1L);
+	}
+
+	private ExtractableResponse<Response> findByStoreIdAndUniqueCode() {
+		return RestAssured
+				.given(getSpecification()).log().all()
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.filter(getFilter().document(QUERY_PARAM_STORE_ID_AND_UNIQUE_CODE, WAITING_RESPONSE))
+				.queryParam("store", 2L)
+				.queryParam("code", "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+				.when().get("/api/waiting/customer")
 				.then().log().all().extract();
 	}
 

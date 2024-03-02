@@ -8,17 +8,20 @@ import com.handwoong.everyonewaiter.waiting.controller.port.WaitingService;
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingCancelRequest;
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingRegisterRequest;
 import com.handwoong.everyonewaiter.waiting.controller.response.WaitingCountResponse;
+import com.handwoong.everyonewaiter.waiting.controller.response.WaitingResponse;
+import com.handwoong.everyonewaiter.waiting.domain.Waiting;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingId;
 import jakarta.validation.Valid;
 import java.net.URI;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,11 +31,20 @@ public class WaitingController {
 
 	private final WaitingService waitingService;
 
-	@GetMapping("/stores/{storeId}")
-	public ResponseEntity<ApiResponse<WaitingCountResponse>> count(@PathVariable("storeId") final Long storeId) {
+	@GetMapping("/count")
+	public ResponseEntity<ApiResponse<WaitingCountResponse>> count(@RequestParam("store") final Long storeId) {
 		final Username username = SecurityUtils.getAuthenticationUsername();
 		final int count = waitingService.count(username, new StoreId(storeId));
 		return ResponseEntity.ok(ApiResponse.success(WaitingCountResponse.from(count)));
+	}
+
+	@GetMapping("/customer")
+	public ResponseEntity<ApiResponse<WaitingResponse>> findByStoreIdAndUniqueCode(
+			@RequestParam("store") final Long storeId,
+			@RequestParam("code") final UUID uniqueCode
+	) {
+		final Waiting waiting = waitingService.findByStoreIdAndUniqueCode(new StoreId(storeId), uniqueCode);
+		return ResponseEntity.ok(ApiResponse.success(WaitingResponse.from(waiting)));
 	}
 
 	@PostMapping

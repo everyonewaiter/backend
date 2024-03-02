@@ -16,6 +16,7 @@ import com.handwoong.everyonewaiter.waiting.domain.WaitingStatus;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingValidator;
 import com.handwoong.everyonewaiter.waiting.dto.WaitingCancel;
 import com.handwoong.everyonewaiter.waiting.dto.WaitingRegister;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,11 @@ public class WaitingServiceImpl implements WaitingService {
 		final User user = userRepository.findByUsernameOrElseThrow(username);
 		final Store store = storeRepository.findByIdAndUserIdOrElseThrow(storeId, user.getId());
 		return waitingRepository.countByAfterStoreOpen(store.getId(), WaitingStatus.WAIT, store.getLastOpenedAt());
+	}
+
+	@Override
+	public Waiting findByStoreIdAndUniqueCode(final StoreId storeId, final UUID uniqueCode) {
+		return waitingRepository.findByStoreIdAndUniqueCodeOrElseThrow(storeId, uniqueCode);
 	}
 
 	@Override
