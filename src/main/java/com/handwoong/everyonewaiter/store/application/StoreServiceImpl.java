@@ -30,9 +30,9 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public Store findByIdAndUsername(final StoreId storeId, final Username username) {
+	public Store findByIdAndUsername(final StoreId id, final Username username) {
 		final User user = userRepository.findByUsernameOrElseThrow(username);
-		return storeRepository.findByIdAndUserIdOrElseThrow(storeId, user.getId());
+		return storeRepository.findByIdAndUserIdOrElseThrow(id, user.getId());
 	}
 
 	@Override
@@ -62,8 +62,8 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	@Transactional
-	public void delete(final Username username, final StoreId storeId) {
-		final Store store = findByIdAndUsername(storeId, username);
+	public void delete(final Username username, final StoreId id) {
+		final Store store = findByIdAndUsername(id, username);
 		storeRepository.delete(store);
 	}
 }
