@@ -17,6 +17,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.EnumSource.Mode;
 
 class WaitingTest {
 
@@ -80,5 +83,30 @@ class WaitingTest {
 		// then
 		assertThat(canceledWaiting.getStatus()).isEqualTo(WaitingStatus.CANCEL);
 		assertThat(canceledWaiting.getNotificationType()).isEqualTo(WaitingNotificationType.CANCEL);
+	}
+
+	@Test
+	void Should_False_When_StatusWait() {
+		// given
+		final Waiting waiting = aWaiting().status(WaitingStatus.WAIT).build();
+
+		// when
+		final boolean result = waiting.isNotWait();
+
+		// then
+		assertThat(result).isFalse();
+	}
+
+	@ParameterizedTest(name = "웨이팅 상태 {index} : {0}")
+	@EnumSource(mode = Mode.EXCLUDE, names = {"WAIT"})
+	void Should_True_When_StatusNotWait(final WaitingStatus status) {
+		// given
+		final Waiting waiting = aWaiting().status(status).build();
+
+		// when
+		final boolean result = waiting.isNotWait();
+
+		// then
+		assertThat(result).isTrue();
 	}
 }

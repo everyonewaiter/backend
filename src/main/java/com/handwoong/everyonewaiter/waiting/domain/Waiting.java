@@ -71,4 +71,8 @@ public class Waiting extends AggregateRoot {
 				.timestamp(timestamp)
 				.build();
 	}
+
+	public boolean isNotWait() {
+		return status != WAIT;
+	}
 }
