@@ -9,6 +9,7 @@ import com.handwoong.everyonewaiter.waiting.controller.request.WaitingCancelRequ
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingRegisterRequest;
 import com.handwoong.everyonewaiter.waiting.controller.response.WaitingCountResponse;
 import com.handwoong.everyonewaiter.waiting.controller.response.WaitingResponse;
+import com.handwoong.everyonewaiter.waiting.controller.response.WaitingTurnResponse;
 import com.handwoong.everyonewaiter.waiting.domain.Waiting;
 import com.handwoong.everyonewaiter.waiting.domain.WaitingId;
 import jakarta.validation.Valid;
@@ -45,6 +46,15 @@ public class WaitingController {
 	) {
 		final Waiting waiting = waitingService.findByStoreIdAndUniqueCode(new StoreId(storeId), uniqueCode);
 		return ResponseEntity.ok(ApiResponse.success(WaitingResponse.from(waiting)));
+	}
+
+	@GetMapping("/turn")
+	public ResponseEntity<ApiResponse<WaitingTurnResponse>> turn(
+			@RequestParam("store") final Long storeId,
+			@RequestParam("code") final UUID uniqueCode
+	) {
+		final int turn = waitingService.turn(new StoreId(storeId), uniqueCode);
+		return ResponseEntity.ok(ApiResponse.success(WaitingTurnResponse.from(turn)));
 	}
 
 	@PostMapping

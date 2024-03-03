@@ -13,6 +13,7 @@ import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingRequest
 import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingRequestSnippet.REGISTER_REQUEST;
 import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingResponseSnippet.WAITING_COUNT_RESPONSE;
 import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingResponseSnippet.WAITING_RESPONSE;
+import static com.handwoong.everyonewaiter.medium.waiting.snippet.WaitingResponseSnippet.WAITING_TURN_RESPONSE;
 import static com.handwoong.everyonewaiter.waiting.domain.WaitingAdult.MAX_ADULT_MESSAGE;
 import static com.handwoong.everyonewaiter.waiting.domain.WaitingAdult.MIN_ADULT_MESSAGE;
 import static com.handwoong.everyonewaiter.waiting.domain.WaitingChildren.MAX_CHILDREN_MESSAGE;
@@ -26,6 +27,7 @@ import com.handwoong.everyonewaiter.waiting.controller.request.WaitingCancelRequ
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingRegisterRequest;
 import com.handwoong.everyonewaiter.waiting.controller.response.WaitingCountResponse;
 import com.handwoong.everyonewaiter.waiting.controller.response.WaitingResponse;
+import com.handwoong.everyonewaiter.waiting.controller.response.WaitingTurnResponse;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
@@ -39,7 +41,7 @@ import org.springframework.test.context.jdbc.Sql;
 class WaitingControllerTest extends TestHelper {
 
 	@Test
-	void Should_1_When_Count() {
+	void Should_3_When_Count() {
 		// given
 		final String token = userAccessToken;
 
@@ -52,7 +54,7 @@ class WaitingControllerTest extends TestHelper {
 		// then
 		assertThat(response.statusCode()).isEqualTo(200);
 		assertThat(result.resultCode()).isEqualTo(ResultCode.SUCCESS);
-		assertThat(result.data().count()).isEqualTo(1);
+		assertThat(result.data().count()).isEqualTo(3);
 	}
 
 	private ExtractableResponse<Response> count(final String token) {
@@ -93,10 +95,55 @@ class WaitingControllerTest extends TestHelper {
 	}
 
 	@Test
+	void Should_2_When_Turn() {
+		// given
+		final String uniqueCode = "dddddddd-dddd-dddd-dddd-dddddddddddd";
+
+		// when
+		final ExtractableResponse<Response> response = turn(uniqueCode);
+		final TypeRef<ApiResponse<WaitingTurnResponse>> typeRef = new TypeRef<>() {
+		};
+		final ApiResponse<WaitingTurnResponse> result = response.body().as(typeRef);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(200);
+		assertThat(result.resultCode()).isEqualTo(ResultCode.SUCCESS);
+		assertThat(result.data().turn()).isEqualTo(2);
+	}
+
+	@Test
+	void Should_Minus1_When_TurnStatusNotWait() {
+		// given
+		final String uniqueCode = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb";
+
+		// when
+		final ExtractableResponse<Response> response = turn(uniqueCode);
+		final TypeRef<ApiResponse<WaitingTurnResponse>> typeRef = new TypeRef<>() {
+		};
+		final ApiResponse<WaitingTurnResponse> result = response.body().as(typeRef);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(200);
+		assertThat(result.resultCode()).isEqualTo(ResultCode.SUCCESS);
+		assertThat(result.data().turn()).isEqualTo(-1);
+	}
+
+	private ExtractableResponse<Response> turn(final String uniqueCode) {
+		return RestAssured
+				.given(getSpecification()).log().all()
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.filter(getFilter().document(QUERY_PARAM_STORE_ID_AND_UNIQUE_CODE, WAITING_TURN_RESPONSE))
+				.queryParam("store", 2L)
+				.queryParam("code", uniqueCode)
+				.when().get("/api/waiting/turn")
+				.then().log().all().extract();
+	}
+
+	@Test
 	void Should_Register_When_ValidRequest() {
 		// given
 		final String token = userAccessToken;
-		final WaitingRegisterRequest request = new WaitingRegisterRequest(2L, 4, 2, "01011112222");
+		final WaitingRegisterRequest request = new WaitingRegisterRequest(2L, 4, 2, "01012345678");
 
 		// when
 		final ExtractableResponse<Response> response = register(token, request);
@@ -113,7 +160,7 @@ class WaitingControllerTest extends TestHelper {
 	void Should_RegisterStatus400_When_ExistsPhoneNumber() {
 		// given
 		final String token = userAccessToken;
-		final WaitingRegisterRequest request = new WaitingRegisterRequest(2L, 4, 2, "01012345678");
+		final WaitingRegisterRequest request = new WaitingRegisterRequest(2L, 4, 2, "01011112222");
 
 		// when
 		final ExtractableResponse<Response> response = register(token, request);
