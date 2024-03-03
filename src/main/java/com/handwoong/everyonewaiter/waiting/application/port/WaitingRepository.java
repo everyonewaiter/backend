@@ -15,5 +15,7 @@ public interface WaitingRepository {
 
 	int countByAfterStoreOpen(StoreId storeId, WaitingStatus status, LocalDateTime lastOpenedAt);
 
+	int countByBeforeCreatedAt(StoreId storeId, LocalDateTime createdAt);
+
 	Waiting findByStoreIdAndUniqueCodeOrElseThrow(StoreId storeId, UUID uniqueCode);
 }

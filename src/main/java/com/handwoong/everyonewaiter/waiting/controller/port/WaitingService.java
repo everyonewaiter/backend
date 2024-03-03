@@ -14,6 +14,8 @@ public interface WaitingService {
 
 	Waiting findByStoreIdAndUniqueCode(StoreId storeId, UUID uniqueCode);
 
+	int turn(StoreId storeId, UUID uniqueCode);
+
 	WaitingId register(WaitingRegister waitingRegister);
 
 	void cancel(WaitingCancel waitingCancel);

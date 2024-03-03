@@ -19,7 +19,10 @@ import com.handwoong.everyonewaiter.waiting.controller.request.WaitingCancelRequ
 import com.handwoong.everyonewaiter.waiting.controller.request.WaitingRegisterRequest;
 import com.handwoong.everyonewaiter.waiting.controller.response.WaitingCountResponse;
 import com.handwoong.everyonewaiter.waiting.controller.response.WaitingResponse;
+import com.handwoong.everyonewaiter.waiting.controller.response.WaitingTurnResponse;
 import com.handwoong.everyonewaiter.waiting.domain.Waiting;
+import com.handwoong.everyonewaiter.waiting.domain.WaitingId;
+import com.handwoong.everyonewaiter.waiting.domain.WaitingStatus;
 import com.handwoong.everyonewaiter.waiting.exception.WaitingNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -74,6 +77,45 @@ class WaitingControllerTest {
 		// then
 		assertThat(response.getStatusCode().value()).isEqualTo(200);
 		assertThat(result.data().id()).isEqualTo(1L);
+	}
+
+	@Test
+	void Should_2_When_Turn() {
+		// given
+		for (long i = 1; i <= 2; i++) {
+			final Waiting waiting = aWaiting().id(new WaitingId(i)).build();
+			testContainer.waitingRepository.save(waiting);
+		}
+
+		final UUID uniqueCode = UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
+		final Waiting waiting = aWaiting().id(new WaitingId(3L)).uniqueCode(uniqueCode).build();
+		testContainer.waitingRepository.save(waiting);
+
+		// when
+		final ResponseEntity<ApiResponse<WaitingTurnResponse>> response =
+				testContainer.waitingController.turn(1L, uniqueCode);
+		final ApiResponse<WaitingTurnResponse> result = Objects.requireNonNull(response.getBody());
+
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(200);
+		assertThat(result.data().turn()).isEqualTo(2);
+	}
+
+	@Test
+	void Should_Minus1_When_TurnStatusNotWait() {
+		// given
+		final UUID uniqueCode = testContainer.uuidHolder.generate();
+		final Waiting waiting = aWaiting().status(WaitingStatus.CANCEL).build();
+		testContainer.waitingRepository.save(waiting);
+
+		// when
+		final ResponseEntity<ApiResponse<WaitingTurnResponse>> response =
+				testContainer.waitingController.turn(1L, uniqueCode);
+		final ApiResponse<WaitingTurnResponse> result = Objects.requireNonNull(response.getBody());
+
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(200);
+		assertThat(result.data().turn()).isEqualTo(-1);
 	}
 
 	@Test

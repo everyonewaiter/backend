@@ -8,6 +8,10 @@ operation::waiting-controller-test/should_1_-when_-count[snippets='http-request,
 
 operation::waiting-controller-test/should_-find_-when_-store-id-and-unique-code[snippets='http-request,query-parameters,http-response,response-fields']
 
+=== 내 순서 조회
+
+operation::waiting-controller-test/should_2_-when_-turn[snippets='http-request,query-parameters,http-response,response-fields']
+
 === 등록
 
 operation::waiting-controller-test/should_-register_-when_-valid-request[snippets='http-request,request-headers,request-fields,http-response,response-fields']

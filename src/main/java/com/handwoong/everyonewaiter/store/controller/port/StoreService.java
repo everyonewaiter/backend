@@ -12,7 +12,7 @@ public interface StoreService {
 
 	List<Store> findAllByUsername(Username username);
 
-	Store findByIdAndUsername(StoreId storeId, Username username);
+	Store findByIdAndUsername(StoreId id, Username username);
 
 	StoreId create(Username username, StoreCreate storeCreate);
 
@@ -20,5 +20,5 @@ public interface StoreService {
 
 	void update(Username username, StoreOptionUpdate storeOptionUpdate);
 
-	void delete(Username username, StoreId storeId);
+	void delete(Username username, StoreId id);
 }
