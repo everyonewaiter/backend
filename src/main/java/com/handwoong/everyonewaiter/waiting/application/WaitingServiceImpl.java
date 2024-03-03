@@ -46,6 +46,15 @@ public class WaitingServiceImpl implements WaitingService {
 	}
 
 	@Override
+	public int turn(final StoreId storeId, final UUID uniqueCode) {
+		final Waiting waiting = findByStoreIdAndUniqueCode(storeId, uniqueCode);
+		if (waiting.isNotWait()) {
+			return -1;
+		}
+		return waitingRepository.countByBeforeCreatedAt(storeId, waiting.getTimestamp().getCreatedAt());
+	}
+
+	@Override
 	@Transactional
 	public WaitingId register(final WaitingRegister waitingRegister) {
 		final Waiting waiting = new Waiting(waitingRegister, waitingValidator, waitingGenerator, uuidHolder);

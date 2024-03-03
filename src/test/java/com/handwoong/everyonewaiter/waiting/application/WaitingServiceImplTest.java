@@ -91,6 +91,42 @@ class WaitingServiceImplTest {
 	}
 
 	@Test
+	void Should_2_When_Turn() {
+		// given
+		final StoreId storeId = new StoreId(1L);
+		for (long i = 1; i <= 2; i++) {
+			final Waiting waiting = aWaiting().id(new WaitingId(i)).build();
+			testContainer.waitingRepository.save(waiting);
+		}
+
+		final UUID uniqueCode = UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
+		final Waiting waiting = aWaiting().id(new WaitingId(3L)).uniqueCode(uniqueCode).build();
+		testContainer.waitingRepository.save(waiting);
+
+		// when
+		final int result = testContainer.waitingService.turn(storeId, uniqueCode);
+
+		// then
+		assertThat(result).isEqualTo(2);
+	}
+
+	@Test
+	void Should_Minus1_When_TurnStatusNotWait() {
+		// given
+		final StoreId storeId = new StoreId(1L);
+		final UUID uniqueCode = testContainer.uuidHolder.generate();
+
+		final Waiting waiting = aWaiting().status(WaitingStatus.CANCEL).build();
+		testContainer.waitingRepository.save(waiting);
+
+		// when
+		final int result = testContainer.waitingService.turn(storeId, uniqueCode);
+
+		// then
+		assertThat(result).isEqualTo(-1);
+	}
+
+	@Test
 	void Should_Register_When_ValidWaitingRegister() {
 		// given
 		final WaitingRegister waitingRegister = WaitingRegister.builder()
