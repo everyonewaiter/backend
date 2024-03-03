@@ -61,6 +61,20 @@ public class WaitingRepositoryImpl implements WaitingRepository {
 	}
 
 	@Override
+	public int countByBeforeCreatedAt(final StoreId storeId, final LocalDateTime createdAt) {
+		return Math.toIntExact(
+				queryFactory.select(waitingEntity.count())
+						.from(waitingEntity)
+						.where(
+								storeIdEq(storeId),
+								statusEq(WaitingStatus.WAIT),
+								beforeCreatedAt(createdAt)
+						)
+						.fetchFirst()
+		);
+	}
+
+	@Override
 	public Waiting findByStoreIdAndUniqueCodeOrElseThrow(final StoreId storeId, final UUID uniqueCode) {
 		return Optional.ofNullable(
 						queryFactory.selectFrom(waitingEntity)
@@ -87,6 +101,10 @@ public class WaitingRepositoryImpl implements WaitingRepository {
 
 	private BooleanExpression afterCreatedAt(final LocalDateTime timestamp) {
 		return Objects.isNull(timestamp) ? null : waitingEntity.createdAt.after(timestamp);
+	}
+
+	private BooleanExpression beforeCreatedAt(final LocalDateTime timestamp) {
+		return Objects.isNull(timestamp) ? null : waitingEntity.createdAt.before(timestamp);
 	}
 
 	private BooleanExpression phoneNumberEq(final PhoneNumber phoneNumber) {

@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 public class FakeWaitingRepository implements WaitingRepository {
@@ -53,9 +52,22 @@ public class FakeWaitingRepository implements WaitingRepository {
 	}
 
 	@Override
+	public int countByBeforeCreatedAt(final StoreId storeId, final LocalDateTime createdAt) {
+		return Math.toIntExact(
+				database.values()
+						.stream()
+						.filter(waiting -> waiting.getStoreId().equals(storeId))
+						.filter(waiting -> waiting.getStatus().equals(WaitingStatus.WAIT))
+						.filter(waiting -> waiting.getTimestamp().getCreatedAt().isBefore(createdAt))
+						.count()
+		);
+	}
+
+	@Override
 	public Waiting findByStoreIdAndUniqueCodeOrElseThrow(final StoreId storeId, final UUID uniqueCode) {
-		return Optional.ofNullable(database.get(storeId.value()))
+		return database.values()
 				.stream()
+				.filter(waiting -> waiting.getStoreId().equals(storeId))
 				.filter(waiting -> waiting.getUniqueCode().equals(uniqueCode))
 				.findAny()
 				.orElseThrow(() ->

@@ -17,6 +17,12 @@ public class WaitingResponseSnippet {
 			COMMON_API_RESPONSE_DATA,
 			fieldWithPath("data.count").type(JsonFieldType.NUMBER).description("웨이팅 수")
 	);
+	public static final Snippet WAITING_TURN_RESPONSE = responseFields(
+			COMMON_API_RESPONSE_RESULT_CODE,
+			COMMON_API_RESPONSE_MESSAGE.optional(),
+			COMMON_API_RESPONSE_DATA,
+			fieldWithPath("data.turn").type(JsonFieldType.NUMBER).description("내 순서 '-1'은 완료 또는 취소인 경우")
+	);
 	public static final Snippet WAITING_RESPONSE = responseFields(
 			COMMON_API_RESPONSE_RESULT_CODE,
 			COMMON_API_RESPONSE_MESSAGE.optional(),
