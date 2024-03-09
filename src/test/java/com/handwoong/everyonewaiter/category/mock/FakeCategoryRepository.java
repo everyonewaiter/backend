@@ -4,7 +4,9 @@ import com.handwoong.everyonewaiter.category.application.port.CategoryRepository
 import com.handwoong.everyonewaiter.category.domain.Category;
 import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.exception.CategoryNotFoundException;
+import com.handwoong.everyonewaiter.store.domain.StoreId;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,6 +29,14 @@ public class FakeCategoryRepository implements CategoryRepository {
 	public Category findByIdOrElseThrow(final CategoryId id) {
 		return Optional.ofNullable(database.get(id.value()))
 				.orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다.", "id : [" + id + "]"));
+	}
+
+	@Override
+	public List<Category> findAllByStoreId(final StoreId storeId) {
+		return database.values()
+				.stream()
+				.filter(category -> category.getStoreId().equals(storeId))
+				.toList();
 	}
 
 	private Category create(final Long id, final Category category) {
