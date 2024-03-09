@@ -1,5 +1,9 @@
 == 카테고리
 
+=== 목록 조회
+
+operation::category-controller-test/should_-three-categories_-when_-find-store-categories[snippets='http-request,query-parameters,http-response,response-fields']
+
 === 등록
 
 operation::category-controller-test/should_-create_-when_-valid-request[snippets='http-request,request-headers,request-fields,http-response,response-fields']
