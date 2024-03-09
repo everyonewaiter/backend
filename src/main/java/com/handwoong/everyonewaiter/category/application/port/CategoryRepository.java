@@ -12,4 +12,6 @@ public interface CategoryRepository {
 	Category findByIdOrElseThrow(CategoryId id);
 
 	List<Category> findAllByStoreId(StoreId storeId);
+
+	void delete(Category category);
 }
