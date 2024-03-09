@@ -7,6 +7,7 @@ import static com.handwoong.everyonewaiter.category.domain.CategoryName.CATEGORY
 import static com.handwoong.everyonewaiter.medium.RestDocsUtils.getFilter;
 import static com.handwoong.everyonewaiter.medium.RestDocsUtils.getSpecification;
 import static com.handwoong.everyonewaiter.medium.category.snippet.CategoryRequestSnippet.CREATE_REQUEST;
+import static com.handwoong.everyonewaiter.medium.category.snippet.CategoryRequestSnippet.QUERY_PARAM_CATEGORY_ID_AND_STORE_ID;
 import static com.handwoong.everyonewaiter.medium.category.snippet.CategoryRequestSnippet.QUERY_PARAM_STORE_ID;
 import static com.handwoong.everyonewaiter.medium.category.snippet.CategoryRequestSnippet.UPDATE_REQUEST;
 import static com.handwoong.everyonewaiter.medium.category.snippet.CategoryResponseSnippet.CATEGORIES_RESPONSE;
@@ -260,6 +261,30 @@ class CategoryControllerTest extends TestHelper {
 				.body(request)
 				.filter(getFilter().document(AUTHORIZATION_HEADER, UPDATE_REQUEST, CUD_RESPONSE))
 				.when().put("/api/categories")
+				.then().log().all().extract();
+	}
+
+	@Test
+	void Should_Delete_When_ValidRequest() {
+		// given
+		final String token = userAccessToken;
+
+		// when
+		final ExtractableResponse<Response> response = delete(token);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(200);
+	}
+
+	private ExtractableResponse<Response> delete(final String token) {
+		return RestAssured
+				.given(getSpecification()).log().all()
+				.header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_TYPE + " " + token)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.filter(getFilter().document(AUTHORIZATION_HEADER, QUERY_PARAM_CATEGORY_ID_AND_STORE_ID, CUD_RESPONSE))
+				.queryParam("category", 1L)
+				.queryParam("store", 2L)
+				.when().delete("/api/categories")
 				.then().log().all().extract();
 	}
 }

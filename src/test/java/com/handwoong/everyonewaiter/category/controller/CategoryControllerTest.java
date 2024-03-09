@@ -149,4 +149,41 @@ class CategoryControllerTest {
 				.isInstanceOf(StoreNotFoundException.class)
 				.hasMessage("매장을 찾을 수 없습니다.");
 	}
+
+	@Test
+	void Should_Status200_When_Delete() {
+		// given
+		// when
+		final ResponseEntity<ApiResponse<Void>> response = testContainer.categoryController.delete(1L, 1L);
+
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(200);
+	}
+
+	@Test
+	void Should_Status400_When_DeleteUserNotFound() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("notfound"));
+
+		// expect
+		assertThatThrownBy(() -> testContainer.categoryController.delete(1L, 1L))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_Status400_When_DeleteStoreNotFound() {
+		// expect
+		assertThatThrownBy(() -> testContainer.categoryController.delete(1L, 10L))
+				.isInstanceOf(StoreNotFoundException.class)
+				.hasMessage("매장을 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_Status400_When_DeleteCategoryNotFound() {
+		// expect
+		assertThatThrownBy(() -> testContainer.categoryController.delete(10L, 1L))
+				.isInstanceOf(CategoryNotFoundException.class)
+				.hasMessage("카테고리를 찾을 수 없습니다.");
+	}
 }
