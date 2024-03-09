@@ -8,7 +8,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.handwoong.everyonewaiter.category.controller.request.CategoryCreateRequest;
 import com.handwoong.everyonewaiter.category.controller.request.CategoryUpdateRequest;
+import com.handwoong.everyonewaiter.category.controller.response.CategoryResponses;
 import com.handwoong.everyonewaiter.category.domain.Category;
+import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.exception.CategoryNotFoundException;
 import com.handwoong.everyonewaiter.common.dto.ApiResponse;
 import com.handwoong.everyonewaiter.store.domain.Store;
@@ -17,6 +19,7 @@ import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.exception.UserNotFoundException;
 import com.handwoong.everyonewaiter.util.TestContainer;
+import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +42,31 @@ class CategoryControllerTest {
 
 		final Category category = aCategory().build();
 		testContainer.categoryRepository.save(category);
+	}
+
+	@Test
+	void Should_TwoCategories_When_FindStoreCategories() {
+		// given
+		final Category category = aCategory().id(new CategoryId(2L)).build();
+		testContainer.categoryRepository.save(category);
+
+		// when
+		final ResponseEntity<ApiResponse<CategoryResponses>> response = testContainer.categoryController.categories(1L);
+		final CategoryResponses result = Objects.requireNonNull(response.getBody()).data();
+
+		// then
+		assertThat(result.categories()).hasSize(2);
+	}
+
+	@Test
+	void Should_Zero_When_FindStoreCategories() {
+		// given
+		// when
+		final ResponseEntity<ApiResponse<CategoryResponses>> response = testContainer.categoryController.categories(5L);
+		final CategoryResponses result = Objects.requireNonNull(response.getBody()).data();
+
+		// then
+		assertThat(result.categories()).isEmpty();
 	}
 
 	@Test
