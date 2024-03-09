@@ -1,6 +1,7 @@
 package com.handwoong.everyonewaiter.category.domain;
 
 import com.handwoong.everyonewaiter.category.dto.CategoryCreate;
+import com.handwoong.everyonewaiter.category.dto.CategoryDelete;
 import com.handwoong.everyonewaiter.category.dto.CategoryUpdate;
 import com.handwoong.everyonewaiter.common.domain.AggregateRoot;
 import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
@@ -39,5 +40,10 @@ public class Category extends AggregateRoot {
 				.name(categoryUpdate.name())
 				.icon(categoryUpdate.icon())
 				.build();
+	}
+
+	public void delete(final CategoryDelete categoryDelete, final CategoryValidator categoryValidator) {
+		categoryValidator.validate(categoryDelete.storeId());
+		registerEvent(categoryDelete);
 	}
 }

@@ -4,8 +4,10 @@ import static com.handwoong.everyonewaiter.util.Fixtures.aCategory;
 import static com.handwoong.everyonewaiter.util.Fixtures.aStore;
 import static com.handwoong.everyonewaiter.util.Fixtures.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 import com.handwoong.everyonewaiter.category.dto.CategoryCreate;
+import com.handwoong.everyonewaiter.category.dto.CategoryDelete;
 import com.handwoong.everyonewaiter.category.dto.CategoryUpdate;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
@@ -74,5 +76,19 @@ class CategoryTest {
 		// then
 		assertThat(result.getName()).isEqualTo(categoryName);
 		assertThat(result.getIcon()).isEqualTo(categoryIcon);
+	}
+
+	@Test
+	void Should_Validate_When_Delete() {
+		// given
+		final CategoryDelete categoryDelete = CategoryDelete.builder()
+				.id(new CategoryId(1L))
+				.storeId(new StoreId(1L))
+				.build();
+		final Category category = aCategory().build();
+
+		// expect
+		assertThatCode(() -> category.delete(categoryDelete, testContainer.categoryValidator))
+				.doesNotThrowAnyException();
 	}
 }

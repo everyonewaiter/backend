@@ -11,7 +11,9 @@ import com.handwoong.everyonewaiter.category.domain.CategoryIcon;
 import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.domain.CategoryName;
 import com.handwoong.everyonewaiter.category.dto.CategoryCreate;
+import com.handwoong.everyonewaiter.category.dto.CategoryDelete;
 import com.handwoong.everyonewaiter.category.dto.CategoryUpdate;
+import com.handwoong.everyonewaiter.category.exception.CategoryNotFoundException;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.store.exception.StoreNotFoundException;
@@ -166,5 +168,65 @@ class CategoryServiceImplTest {
 
 		// then
 		assertThat(categories).isEmpty();
+	}
+
+	@Test
+	void Should_Delete_When_ValidCategoryDelete() {
+		// given
+		final StoreId storeId = new StoreId(1L);
+		final CategoryDelete categoryDelete = CategoryDelete.builder()
+				.id(new CategoryId(1L))
+				.storeId(storeId)
+				.build();
+
+		// when
+		testContainer.categoryService.delete(categoryDelete);
+		final List<Category> result = testContainer.categoryRepository.findAllByStoreId(storeId);
+
+		// then
+		assertThat(result).isEmpty();
+	}
+
+	@Test
+	void Should_ThrowException_When_DeleteUserNotFound() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("username"));
+		final CategoryDelete categoryDelete = CategoryDelete.builder()
+				.id(new CategoryId(1L))
+				.storeId(new StoreId(1L))
+				.build();
+
+		// expect
+		assertThatThrownBy(() -> testContainer.categoryService.delete(categoryDelete))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_ThrowException_When_DeleteStoreNotFound() {
+		// given
+		final CategoryDelete categoryDelete = CategoryDelete.builder()
+				.id(new CategoryId(1L))
+				.storeId(new StoreId(10L))
+				.build();
+
+		// expect
+		assertThatThrownBy(() -> testContainer.categoryService.delete(categoryDelete))
+				.isInstanceOf(StoreNotFoundException.class)
+				.hasMessage("매장을 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_ThrowException_When_DeleteCategoryNotFound() {
+		// given
+		final CategoryDelete categoryDelete = CategoryDelete.builder()
+				.id(new CategoryId(10L))
+				.storeId(new StoreId(1L))
+				.build();
+
+		// expect
+		assertThatThrownBy(() -> testContainer.categoryService.delete(categoryDelete))
+				.isInstanceOf(CategoryNotFoundException.class)
+				.hasMessage("카테고리를 찾을 수 없습니다.");
 	}
 }

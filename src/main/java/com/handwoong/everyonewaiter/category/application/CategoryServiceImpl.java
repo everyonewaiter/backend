@@ -6,6 +6,7 @@ import com.handwoong.everyonewaiter.category.domain.Category;
 import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.domain.CategoryValidator;
 import com.handwoong.everyonewaiter.category.dto.CategoryCreate;
+import com.handwoong.everyonewaiter.category.dto.CategoryDelete;
 import com.handwoong.everyonewaiter.category.dto.CategoryUpdate;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import java.util.List;
@@ -40,5 +41,13 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public List<Category> findAllByStoreId(final StoreId storeId) {
 		return categoryRepository.findAllByStoreId(storeId);
+	}
+
+	@Override
+	@Transactional
+	public void delete(final CategoryDelete categoryDelete) {
+		final Category category = categoryRepository.findByIdOrElseThrow(categoryDelete.id());
+		category.delete(categoryDelete, categoryValidator);
+		categoryRepository.delete(category);
 	}
 }

@@ -40,4 +40,9 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 				.map(CategoryEntity::toModel)
 				.toList();
 	}
+
+	@Override
+	public void delete(final Category category) {
+		categoryJpaRepository.delete(CategoryEntity.from(category));
+	}
 }

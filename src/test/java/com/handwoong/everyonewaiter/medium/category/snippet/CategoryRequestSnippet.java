@@ -14,6 +14,10 @@ public class CategoryRequestSnippet {
 	public static final Snippet QUERY_PARAM_STORE_ID = queryParameters(
 			parameterWithName("store").description("매장 ID")
 	);
+	public static final Snippet QUERY_PARAM_CATEGORY_ID_AND_STORE_ID = queryParameters(
+			parameterWithName("category").description("카테고리 ID"),
+			parameterWithName("store").description("매장 ID")
+	);
 	public static final Snippet CREATE_REQUEST = requestFields(
 			fieldWithPath("storeId")
 					.type(JsonFieldType.NUMBER)

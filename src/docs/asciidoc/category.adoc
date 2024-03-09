@@ -11,3 +11,7 @@ operation::category-controller-test/should_-create_-when_-valid-request[snippets
 === 수정
 
 operation::category-controller-test/should_-update_-when_-valid-request[snippets='http-request,request-headers,request-fields,http-response,response-fields']
+
+=== 삭제
+
+operation::category-controller-test/should_-delete_-when_-valid-request[snippets='http-request,request-headers,query-parameters,http-response,response-fields']

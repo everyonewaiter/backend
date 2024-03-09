@@ -39,6 +39,11 @@ public class FakeCategoryRepository implements CategoryRepository {
 				.toList();
 	}
 
+	@Override
+	public void delete(final Category category) {
+		database.remove(category.getId().value());
+	}
+
 	private Category create(final Long id, final Category category) {
 		return Category.builder()
 				.id(new CategoryId(id))
