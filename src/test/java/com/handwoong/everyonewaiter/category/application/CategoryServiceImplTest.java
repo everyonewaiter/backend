@@ -19,6 +19,7 @@ import com.handwoong.everyonewaiter.user.domain.User;
 import com.handwoong.everyonewaiter.user.domain.Username;
 import com.handwoong.everyonewaiter.user.exception.UserNotFoundException;
 import com.handwoong.everyonewaiter.util.TestContainer;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -142,5 +143,28 @@ class CategoryServiceImplTest {
 		assertThatThrownBy(() -> testContainer.categoryService.update(categoryUpdate))
 				.isInstanceOf(StoreNotFoundException.class)
 				.hasMessage("매장을 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_TwoCategories_When_FindAllByStoreId() {
+		// given
+		final Category category = aCategory().id(new CategoryId(2L)).build();
+		testContainer.categoryRepository.save(category);
+
+		// when
+		final List<Category> categories = testContainer.categoryService.findAllByStoreId(new StoreId(1L));
+
+		// then
+		assertThat(categories).hasSize(2);
+	}
+
+	@Test
+	void Should_Zero_When_FindAllByStoreId() {
+		// given
+		// when
+		final List<Category> categories = testContainer.categoryService.findAllByStoreId(new StoreId(10L));
+
+		// then
+		assertThat(categories).isEmpty();
 	}
 }
