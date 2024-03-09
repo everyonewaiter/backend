@@ -1,9 +1,14 @@
 package com.handwoong.everyonewaiter.category.infrastructure;
 
+import static com.handwoong.everyonewaiter.category.infrastructure.QCategoryEntity.categoryEntity;
+
 import com.handwoong.everyonewaiter.category.application.port.CategoryRepository;
 import com.handwoong.everyonewaiter.category.domain.Category;
 import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.exception.CategoryNotFoundException;
+import com.handwoong.everyonewaiter.store.domain.StoreId;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +16,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class CategoryRepositoryImpl implements CategoryRepository {
 
+	private final JPAQueryFactory queryFactory;
 	private final CategoryJpaRepository categoryJpaRepository;
 
 	@Override
@@ -23,5 +29,15 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 		return categoryJpaRepository.findById(id.value())
 				.orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다.", "id : [" + id + "]"))
 				.toModel();
+	}
+
+	@Override
+	public List<Category> findAllByStoreId(final StoreId storeId) {
+		return queryFactory.selectFrom(categoryEntity)
+				.where(categoryEntity.storeId.eq(storeId.value()))
+				.fetch()
+				.stream()
+				.map(CategoryEntity::toModel)
+				.toList();
 	}
 }

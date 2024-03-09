@@ -7,7 +7,9 @@ import static com.handwoong.everyonewaiter.category.domain.CategoryName.CATEGORY
 import static com.handwoong.everyonewaiter.medium.RestDocsUtils.getFilter;
 import static com.handwoong.everyonewaiter.medium.RestDocsUtils.getSpecification;
 import static com.handwoong.everyonewaiter.medium.category.snippet.CategoryRequestSnippet.CREATE_REQUEST;
+import static com.handwoong.everyonewaiter.medium.category.snippet.CategoryRequestSnippet.QUERY_PARAM_STORE_ID;
 import static com.handwoong.everyonewaiter.medium.category.snippet.CategoryRequestSnippet.UPDATE_REQUEST;
+import static com.handwoong.everyonewaiter.medium.category.snippet.CategoryResponseSnippet.CATEGORIES_RESPONSE;
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER;
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER_KEY;
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER_TYPE;
@@ -16,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.handwoong.everyonewaiter.category.controller.request.CategoryCreateRequest;
 import com.handwoong.everyonewaiter.category.controller.request.CategoryUpdateRequest;
+import com.handwoong.everyonewaiter.category.controller.response.CategoryResponses;
 import com.handwoong.everyonewaiter.common.dto.ApiResponse;
 import com.handwoong.everyonewaiter.common.dto.ApiResponse.ResultCode;
 import com.handwoong.everyonewaiter.medium.TestHelper;
@@ -31,6 +34,30 @@ import org.springframework.test.context.jdbc.Sql;
 
 @Sql({"classpath:sql/user.sql", "classpath:sql/store.sql", "classpath:sql/category.sql"})
 class CategoryControllerTest extends TestHelper {
+
+	@Test
+	void Should_ThreeCategories_When_FindStoreCategories() {
+		// given
+		// when
+		final ExtractableResponse<Response> response = categories();
+		final TypeRef<ApiResponse<CategoryResponses>> typeRef = new TypeRef<>() {
+		};
+		final ApiResponse<CategoryResponses> result = response.body().as(typeRef);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(200);
+		assertThat(result.data().categories()).hasSize(3);
+	}
+
+	private ExtractableResponse<Response> categories() {
+		return RestAssured
+				.given(getSpecification()).log().all()
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.filter(getFilter().document(QUERY_PARAM_STORE_ID, CATEGORIES_RESPONSE))
+				.queryParam("store", 2L)
+				.when().get("/api/categories/list")
+				.then().log().all().extract();
+	}
 
 	@Test
 	void Should_Create_When_ValidRequest() {

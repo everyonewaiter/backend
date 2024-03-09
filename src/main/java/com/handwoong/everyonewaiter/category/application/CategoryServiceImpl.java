@@ -7,6 +7,8 @@ import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.domain.CategoryValidator;
 import com.handwoong.everyonewaiter.category.dto.CategoryCreate;
 import com.handwoong.everyonewaiter.category.dto.CategoryUpdate;
+import com.handwoong.everyonewaiter.store.domain.StoreId;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,5 +35,10 @@ public class CategoryServiceImpl implements CategoryService {
 		final Category category = categoryRepository.findByIdOrElseThrow(categoryUpdate.id());
 		final Category updatedCategory = category.update(categoryUpdate, categoryValidator);
 		categoryRepository.save(updatedCategory);
+	}
+
+	@Override
+	public List<Category> findAllByStoreId(final StoreId storeId) {
+		return categoryRepository.findAllByStoreId(storeId);
 	}
 }

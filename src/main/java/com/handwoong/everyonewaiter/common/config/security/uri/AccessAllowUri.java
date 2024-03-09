@@ -10,6 +10,7 @@ public enum AccessAllowUri implements AllowUri {
 	WAITING_CUSTOMER("/api/waiting/customer"),
 	WAITING_TURN("/api/waiting/turn"),
 	WAITING_CANCEL("/api/waiting/cancel"),
+	CATEGORIES("/api/categories/list"),
 	;
 
 	private final String uri;
