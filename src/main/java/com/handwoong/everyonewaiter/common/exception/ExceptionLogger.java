@@ -12,8 +12,7 @@ public class ExceptionLogger {
 	private static final String MESSAGE_FORMAT = "[%s] %s %s %s";
 
 	public static void warn(final HttpStatus status, final String path, final String message) {
-		final String logMessage = String.format(
-				MESSAGE_FORMAT, status.name(), path, status.value(), message);
+		final String logMessage = String.format(MESSAGE_FORMAT, status.name(), path, status.value(), message);
 		log.warn(logMessage);
 	}
 
@@ -34,8 +33,7 @@ public class ExceptionLogger {
 			final String message,
 			final Exception exception
 	) {
-		final String logMessage = String.format(
-				MESSAGE_FORMAT, status.name(), path, status.value(), message);
+		final String logMessage = String.format(MESSAGE_FORMAT, status.name(), path, status.value(), message);
 		log.error(logMessage, exception);
 	}
 
@@ -43,11 +41,10 @@ public class ExceptionLogger {
 			final HttpStatus status,
 			final String path,
 			final String message,
-			final Exception exception,
 			final Object field
 	) {
 		final String logMessage = String.format(
 				MESSAGE_FORMAT, status.name(), path, status.value(), message + " - " + field);
-		log.error(logMessage, exception);
+		log.error(logMessage);
 	}
 }

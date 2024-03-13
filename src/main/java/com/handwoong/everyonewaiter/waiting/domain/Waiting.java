@@ -42,7 +42,7 @@ public class Waiting extends AggregateRoot {
 	) {
 		waitingValidator.validate(waitingRegister.storeId(), waitingRegister.phoneNumber());
 		final WaitingGenerateInfo waitingInfo = waitingGenerator.generate(waitingRegister.storeId());
-		registerEvent(new WaitingRegisterEvent(waitingInfo, waitingRegister.phoneNumber()));
+		final UUID generatedUniqueCode = uuidHolder.generate();
 
 		this.id = null;
 		this.storeId = waitingRegister.storeId();
@@ -52,12 +52,22 @@ public class Waiting extends AggregateRoot {
 		this.phoneNumber = waitingRegister.phoneNumber();
 		this.status = WAIT;
 		this.notificationType = WaitingNotificationType.REGISTER;
-		this.uniqueCode = uuidHolder.generate();
+		this.uniqueCode = generatedUniqueCode;
 		this.timestamp = null;
+
+		registerEvent(
+				new WaitingRegisterEvent(
+						waitingInfo,
+						waitingRegister.adult(),
+						waitingRegister.children(),
+						generatedUniqueCode,
+						waitingRegister.phoneNumber()
+				)
+		);
 	}
 
 	public Waiting cancel() {
-		registerEvent(new WaitingCancelEvent(storeId, WaitingNotificationType.CANCEL, phoneNumber));
+		registerEvent(new WaitingCancelEvent(storeId, number, phoneNumber));
 		return Waiting.builder()
 				.id(id)
 				.storeId(storeId)
