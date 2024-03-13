@@ -19,11 +19,13 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+@Profile("!test")
 @Component
 @RequiredArgsConstructor
 public class MessageSenderImpl implements MessageSender {
@@ -49,23 +51,6 @@ public class MessageSenderImpl implements MessageSender {
 				.uri(BASE_NAVER_URL + uri)
 				.body(alimTalkRequest)
 				.retrieve()
-				.onStatus(HttpStatusCode::isError, (request, response) -> {
-					final FailSendAlimTalkRequestException exception = new FailSendAlimTalkRequestException(
-							"알림톡 전송 요청에 실패하였습니다.",
-							request.getMethod(),
-							request.getURI(),
-							response.getStatusCode(),
-							response.getStatusText()
-					);
-					ExceptionLogger.error(
-							INTERNAL_SERVER_ERROR,
-							exception.getUri().getPath(),
-							exception.getMessage(),
-							exception,
-							exception.toString()
-					);
-					throw exception;
-				})
 				.body(AlimTalkResponse.class);
 	}
 
@@ -77,6 +62,22 @@ public class MessageSenderImpl implements MessageSender {
 					httpHeaders.set("x-ncp-apigw-timestamp", timestamp);
 					httpHeaders.set("x-ncp-iam-access-key", notificationConfig.getAccessKey());
 					httpHeaders.set("x-ncp-apigw-signature-v2", makeSignature(uri, timestamp));
+				})
+				.defaultStatusHandler(HttpStatusCode::isError, (request, response) -> {
+					final FailSendAlimTalkRequestException exception = new FailSendAlimTalkRequestException(
+							"알림톡 전송 요청에 실패하였습니다.",
+							request.getMethod(),
+							request.getURI(),
+							response.getStatusCode(),
+							response.getStatusText()
+					);
+					ExceptionLogger.error(
+							INTERNAL_SERVER_ERROR,
+							exception.getUri().getPath(),
+							exception.getMessage(),
+							exception.toString()
+					);
+					throw exception;
 				})
 				.build();
 	}
