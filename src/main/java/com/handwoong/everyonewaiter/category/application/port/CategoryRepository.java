@@ -14,4 +14,6 @@ public interface CategoryRepository {
 	List<Category> findAllByStoreId(StoreId storeId);
 
 	void delete(Category category);
+
+	boolean existsByIdAndStoreId(CategoryId id, StoreId storeId);
 }
