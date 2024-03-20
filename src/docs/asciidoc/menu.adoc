@@ -1,0 +1,5 @@
+== 메뉴
+
+=== 등록
+
+operation::menu-controller-test/should_-create_-when_-valid-request[snippets='http-request,request-headers,request-fields,http-response,response-fields']
