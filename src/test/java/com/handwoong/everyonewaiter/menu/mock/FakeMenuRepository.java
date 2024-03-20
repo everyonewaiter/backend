@@ -3,6 +3,7 @@ package com.handwoong.everyonewaiter.menu.mock;
 import com.handwoong.everyonewaiter.menu.application.port.MenuRepository;
 import com.handwoong.everyonewaiter.menu.domain.Menu;
 import com.handwoong.everyonewaiter.menu.domain.MenuId;
+import com.handwoong.everyonewaiter.menu.exception.MenuNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -19,6 +20,15 @@ public class FakeMenuRepository implements MenuRepository {
 		final Menu newMenu = create(id, menu);
 		database.put(id, newMenu);
 		return newMenu;
+	}
+
+	@Override
+	public Menu findByIdOrElseThrow(final MenuId menuId) {
+		return database.values()
+				.stream()
+				.filter(menu -> menu.getId().equals(menuId))
+				.findAny()
+				.orElseThrow(() -> new MenuNotFoundException("메뉴를 찾을 수 없습니다.", menuId.toString()));
 	}
 
 	private Menu create(final Long id, final Menu menu) {
