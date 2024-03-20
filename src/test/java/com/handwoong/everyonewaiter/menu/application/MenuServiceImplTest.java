@@ -1,6 +1,7 @@
 package com.handwoong.everyonewaiter.menu.application;
 
 import static com.handwoong.everyonewaiter.util.Fixtures.aCategory;
+import static com.handwoong.everyonewaiter.util.Fixtures.aMenu;
 import static com.handwoong.everyonewaiter.util.Fixtures.aMenuOptionGroup;
 import static com.handwoong.everyonewaiter.util.Fixtures.aStore;
 import static com.handwoong.everyonewaiter.util.Fixtures.aUser;
@@ -10,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.handwoong.everyonewaiter.category.domain.Category;
 import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.exception.CategoryNotFoundException;
+import com.handwoong.everyonewaiter.menu.domain.Menu;
 import com.handwoong.everyonewaiter.menu.domain.MenuDescription;
 import com.handwoong.everyonewaiter.menu.domain.MenuId;
 import com.handwoong.everyonewaiter.menu.domain.MenuLabel;
@@ -19,6 +21,8 @@ import com.handwoong.everyonewaiter.menu.domain.MenuSpicy;
 import com.handwoong.everyonewaiter.menu.domain.MenuStatus;
 import com.handwoong.everyonewaiter.menu.domain.Money;
 import com.handwoong.everyonewaiter.menu.dto.MenuCreate;
+import com.handwoong.everyonewaiter.menu.dto.MenuUpdate;
+import com.handwoong.everyonewaiter.menu.exception.MenuNotFoundException;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import com.handwoong.everyonewaiter.store.exception.StoreNotFoundException;
@@ -50,10 +54,13 @@ class MenuServiceImplTest {
 
 		final Category category = aCategory().build();
 		testContainer.categoryRepository.save(category);
+
+		final Menu menu = aMenu().build();
+		testContainer.menuRepository.save(menu);
 	}
 
 	@Test
-	void Should_Create_When_Valid() {
+	void Should_Create_When_ValidMenuCreate() {
 		// given
 		final MenuCreate menuCreate = MenuCreate.builder()
 				.storeId(new StoreId(1L))
@@ -115,6 +122,95 @@ class MenuServiceImplTest {
 
 		// expect
 		assertThatThrownBy(() -> testContainer.menuService.create(menuCreate))
+				.isInstanceOf(CategoryNotFoundException.class)
+				.hasMessage("카테고리를 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_Update_When_ValidMenuUpdate() {
+		// given
+		final MenuId menuId = new MenuId(1L);
+		final MenuName menuName = new MenuName("소고기 스테이크 (수비드)");
+		final MenuUpdate menuUpdate = MenuUpdate.builder()
+				.menuId(menuId)
+				.storeId(new StoreId(1L))
+				.categoryId(new CategoryId(1L))
+				.name(menuName)
+				.description(new MenuDescription("부채살을 수비드 방식으로 조리하여 촉촉하고 부드러운 식감을 즐길수 있는 스테이크"))
+				.image("")
+				.price(new Money(29_900))
+				.spicy(new MenuSpicy(0))
+				.printBillInKitchen(true)
+				.status(MenuStatus.BASIC)
+				.label(MenuLabel.REPRESENT)
+				.optionGroups(new MenuOptionGroups(List.of(aMenuOptionGroup().build())))
+				.build();
+
+		// when
+		testContainer.menuService.update(menuUpdate);
+		final Menu updatedMenu = testContainer.menuRepository.findByIdOrElseThrow(menuId);
+
+		// then
+		assertThat(updatedMenu.getName()).isEqualTo(menuName);
+	}
+
+	@Test
+	void Should_ThrowException_When_UpdateUserNotFound() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("username"));
+		final MenuUpdate menuUpdate = MenuUpdate.builder()
+				.menuId(new MenuId(1L))
+				.storeId(new StoreId(1L))
+				.categoryId(new CategoryId(1L))
+				.build();
+
+		// expect
+		assertThatThrownBy(() -> testContainer.menuService.update(menuUpdate))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_ThrowException_When_UpdateMenuNotFound() {
+		// given
+		final MenuUpdate menuUpdate = MenuUpdate.builder()
+				.menuId(new MenuId(2L))
+				.storeId(new StoreId(1L))
+				.categoryId(new CategoryId(1L))
+				.build();
+
+		// expect
+		assertThatThrownBy(() -> testContainer.menuService.update(menuUpdate))
+				.isInstanceOf(MenuNotFoundException.class)
+				.hasMessage("메뉴를 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_ThrowException_When_UpdateStoreNotFound() {
+		// given
+		final MenuUpdate menuUpdate = MenuUpdate.builder()
+				.menuId(new MenuId(1L))
+				.storeId(new StoreId(2L))
+				.categoryId(new CategoryId(1L))
+				.build();
+
+		// expect
+		assertThatThrownBy(() -> testContainer.menuService.update(menuUpdate))
+				.isInstanceOf(StoreNotFoundException.class)
+				.hasMessage("매장을 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_ThrowException_When_UpdateCategoryNotFound() {
+		// given
+		final MenuUpdate menuUpdate = MenuUpdate.builder()
+				.menuId(new MenuId(1L))
+				.storeId(new StoreId(1L))
+				.categoryId(new CategoryId(2L))
+				.build();
+
+		// expect
+		assertThatThrownBy(() -> testContainer.menuService.update(menuUpdate))
 				.isInstanceOf(CategoryNotFoundException.class)
 				.hasMessage("카테고리를 찾을 수 없습니다.");
 	}
