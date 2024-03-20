@@ -6,6 +6,7 @@ import com.handwoong.everyonewaiter.menu.domain.Menu;
 import com.handwoong.everyonewaiter.menu.domain.MenuId;
 import com.handwoong.everyonewaiter.menu.domain.MenuValidator;
 import com.handwoong.everyonewaiter.menu.dto.MenuCreate;
+import com.handwoong.everyonewaiter.menu.dto.MenuUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,5 +25,13 @@ public class MenuServiceImpl implements MenuService {
 		final Menu menu = Menu.create(menuCreate, menuValidator);
 		final Menu createdMenu = menuRepository.save(menu);
 		return createdMenu.getId();
+	}
+
+	@Override
+	@Transactional
+	public void update(final MenuUpdate menuUpdate) {
+		final Menu menu = menuRepository.findByIdOrElseThrow(menuUpdate.menuId());
+		final Menu updatedMenu = menu.update(menuUpdate, menuValidator);
+		menuRepository.save(updatedMenu);
 	}
 }
