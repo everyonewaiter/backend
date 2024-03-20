@@ -16,6 +16,24 @@ import com.handwoong.everyonewaiter.category.domain.CategoryName;
 import com.handwoong.everyonewaiter.common.domain.DomainTimestamp;
 import com.handwoong.everyonewaiter.common.domain.PhoneNumber;
 import com.handwoong.everyonewaiter.common.mock.FakeUuidHolder;
+import com.handwoong.everyonewaiter.menu.domain.Menu;
+import com.handwoong.everyonewaiter.menu.domain.Menu.MenuBuilder;
+import com.handwoong.everyonewaiter.menu.domain.MenuDescription;
+import com.handwoong.everyonewaiter.menu.domain.MenuId;
+import com.handwoong.everyonewaiter.menu.domain.MenuLabel;
+import com.handwoong.everyonewaiter.menu.domain.MenuMultiSelectOptions;
+import com.handwoong.everyonewaiter.menu.domain.MenuName;
+import com.handwoong.everyonewaiter.menu.domain.MenuOptionGroup;
+import com.handwoong.everyonewaiter.menu.domain.MenuOptionGroup.MenuOptionGroupBuilder;
+import com.handwoong.everyonewaiter.menu.domain.MenuOptionGroupId;
+import com.handwoong.everyonewaiter.menu.domain.MenuOptionGroups;
+import com.handwoong.everyonewaiter.menu.domain.MenuOptionName;
+import com.handwoong.everyonewaiter.menu.domain.MenuSingleSelectOption;
+import com.handwoong.everyonewaiter.menu.domain.MenuSingleSelectOptionId;
+import com.handwoong.everyonewaiter.menu.domain.MenuSingleSelectOptions;
+import com.handwoong.everyonewaiter.menu.domain.MenuSpicy;
+import com.handwoong.everyonewaiter.menu.domain.MenuStatus;
+import com.handwoong.everyonewaiter.menu.domain.Money;
 import com.handwoong.everyonewaiter.store.domain.LandlineNumber;
 import com.handwoong.everyonewaiter.store.domain.Store;
 import com.handwoong.everyonewaiter.store.domain.Store.StoreBuilder;
@@ -154,5 +172,53 @@ public class Fixtures {
 				.storeId(new StoreId(1L))
 				.name(new CategoryName("스테이크"))
 				.icon(new CategoryIcon("drumstick"));
+	}
+
+	public static MenuBuilder aMenu() {
+		return Menu.builder()
+				.id(new MenuId(1L))
+				.storeId(new StoreId(1L))
+				.categoryId(new CategoryId(1L))
+				.name(new MenuName("수비드 소고기 스테이크"))
+				.description(new MenuDescription("부채살을 수비드 방식으로 조리하여 촉촉하고 부드러운 식감을 즐길수 있는 스테이크"))
+				.image("")
+				.price(new Money(29_900))
+				.spicy(new MenuSpicy(0))
+				.printBillInKitchen(true)
+				.status(MenuStatus.BASIC)
+				.label(MenuLabel.REPRESENT)
+				.optionGroups(new MenuOptionGroups(List.of(aMenuOptionGroup().build())));
+	}
+
+	public static MenuOptionGroupBuilder aMenuOptionGroup() {
+		return MenuOptionGroup.builder()
+				.id(new MenuOptionGroupId(1L))
+				.name(new MenuOptionName("맵기 조절"))
+				.singleSelectOptions(
+						new MenuSingleSelectOptions(
+								List.of(
+										MenuSingleSelectOption.builder()
+												.id(new MenuSingleSelectOptionId(1L))
+												.name(new MenuOptionName("안맵게"))
+												.price(new Money(0))
+												.isDefault(false)
+												.build(),
+										MenuSingleSelectOption.builder()
+												.id(new MenuSingleSelectOptionId(2L))
+												.name(new MenuOptionName("기본"))
+												.price(new Money(0))
+												.isDefault(true)
+												.build(),
+										MenuSingleSelectOption.builder()
+												.id(new MenuSingleSelectOptionId(3L))
+												.name(new MenuOptionName("맵게"))
+												.price(new Money(0))
+												.isDefault(false)
+												.build()
+								)
+						)
+				)
+				.multiSelectOptions(new MenuMultiSelectOptions(List.of()))
+				.useOptionPrice(false);
 	}
 }

@@ -7,8 +7,10 @@ import com.handwoong.everyonewaiter.category.domain.Category;
 import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.category.exception.CategoryNotFoundException;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -44,5 +46,22 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 	@Override
 	public void delete(final Category category) {
 		categoryJpaRepository.delete(CategoryEntity.from(category));
+	}
+
+	@Override
+	public boolean existsByIdAndStoreId(final CategoryId id, final StoreId storeId) {
+		return Objects.nonNull(
+				queryFactory.selectOne()
+						.from(categoryEntity)
+						.where(
+								categoryEntity.id.eq(id.value()),
+								storeIdEq(storeId)
+						)
+						.fetchFirst()
+		);
+	}
+
+	private BooleanExpression storeIdEq(final StoreId storeId) {
+		return Objects.isNull(storeId) ? null : categoryEntity.storeId.eq(storeId.value());
 	}
 }

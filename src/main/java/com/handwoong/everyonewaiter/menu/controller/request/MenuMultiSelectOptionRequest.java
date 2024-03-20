@@ -1,0 +1,27 @@
+package com.handwoong.everyonewaiter.menu.controller.request;
+
+import static com.handwoong.everyonewaiter.menu.domain.MenuOptionName.MENU_OPTION_NAME_EMPTY_MESSAGE;
+import static com.handwoong.everyonewaiter.menu.domain.MenuOptionName.MENU_OPTION_NAME_MAX_LENGTH;
+import static com.handwoong.everyonewaiter.menu.domain.MenuOptionName.MENU_OPTION_NAME_MAX_LENGTH_MESSAGE;
+
+import com.handwoong.everyonewaiter.menu.domain.MenuMultiSelectOption;
+import com.handwoong.everyonewaiter.menu.domain.MenuOptionName;
+import com.handwoong.everyonewaiter.menu.domain.Money;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record MenuMultiSelectOptionRequest(
+		@NotBlank(message = MENU_OPTION_NAME_EMPTY_MESSAGE)
+		@Size(max = MENU_OPTION_NAME_MAX_LENGTH, message = MENU_OPTION_NAME_MAX_LENGTH_MESSAGE)
+		String name,
+
+		long price
+) {
+
+	public MenuMultiSelectOption toDomain() {
+		return MenuMultiSelectOption.builder()
+				.name(new MenuOptionName(name))
+				.price(new Money(price))
+				.build();
+	}
+}

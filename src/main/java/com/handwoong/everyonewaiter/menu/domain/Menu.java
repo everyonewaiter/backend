@@ -2,6 +2,7 @@ package com.handwoong.everyonewaiter.menu.domain;
 
 import com.handwoong.everyonewaiter.category.domain.CategoryId;
 import com.handwoong.everyonewaiter.common.domain.AggregateRoot;
+import com.handwoong.everyonewaiter.menu.dto.MenuCreate;
 import com.handwoong.everyonewaiter.store.domain.StoreId;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,4 +23,21 @@ public class Menu extends AggregateRoot {
 	private final MenuStatus status;
 	private final MenuLabel label;
 	private final MenuOptionGroups optionGroups;
+
+	public static Menu create(final MenuCreate menuCreate, final MenuValidator menuValidator) {
+		menuValidator.validate(menuCreate.storeId(), menuCreate.categoryId());
+		return Menu.builder()
+				.storeId(menuCreate.storeId())
+				.categoryId(menuCreate.categoryId())
+				.name(menuCreate.name())
+				.description(menuCreate.description())
+				.image(menuCreate.image())
+				.price(menuCreate.price())
+				.spicy(menuCreate.spicy())
+				.printBillInKitchen(menuCreate.printBillInKitchen())
+				.status(menuCreate.status())
+				.label(menuCreate.label())
+				.optionGroups(menuCreate.optionGroups())
+				.build();
+	}
 }

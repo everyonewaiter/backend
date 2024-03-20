@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Profile("test")
 @Component
-public class MockMessageSender implements MessageSender {
+public class FakeMessageSender implements MessageSender {
 
 	@Override
 	public AlimTalkResponse sendAlimTalk(

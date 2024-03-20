@@ -44,6 +44,16 @@ public class FakeCategoryRepository implements CategoryRepository {
 		database.remove(category.getId().value());
 	}
 
+	@Override
+	public boolean existsByIdAndStoreId(final CategoryId id, final StoreId storeId) {
+		final long count = database.values()
+				.stream()
+				.filter(category -> category.getId().equals(id))
+				.filter(category -> category.getStoreId().equals(storeId))
+				.count();
+		return count != 0;
+	}
+
 	private Category create(final Long id, final Category category) {
 		return Category.builder()
 				.id(new CategoryId(id))
