@@ -9,4 +9,6 @@ public interface MenuService {
 	MenuId create(MenuCreate menuCreate);
 
 	void update(MenuUpdate menuUpdate);
+
+	void delete(MenuId id);
 }
