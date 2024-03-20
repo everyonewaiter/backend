@@ -9,6 +9,12 @@ import com.handwoong.everyonewaiter.category.mock.FakeCategoryRepository;
 import com.handwoong.everyonewaiter.common.mock.FakePasswordEncoder;
 import com.handwoong.everyonewaiter.common.mock.FakeTimeHolder;
 import com.handwoong.everyonewaiter.common.mock.FakeUuidHolder;
+import com.handwoong.everyonewaiter.menu.application.MenuServiceImpl;
+import com.handwoong.everyonewaiter.menu.application.port.MenuRepository;
+import com.handwoong.everyonewaiter.menu.controller.MenuController;
+import com.handwoong.everyonewaiter.menu.controller.port.MenuService;
+import com.handwoong.everyonewaiter.menu.domain.MenuValidator;
+import com.handwoong.everyonewaiter.menu.mock.FakeMenuRepository;
 import com.handwoong.everyonewaiter.store.application.StoreServiceImpl;
 import com.handwoong.everyonewaiter.store.application.port.StoreRepository;
 import com.handwoong.everyonewaiter.store.controller.StoreController;
@@ -60,6 +66,11 @@ public class TestContainer {
 	public final CategoryService categoryService;
 	public final CategoryController categoryController;
 
+	public final MenuRepository menuRepository;
+	public final MenuValidator menuValidator;
+	public final MenuService menuService;
+	public final MenuController menuController;
+
 	public TestContainer() {
 		this.passwordEncoder = new FakePasswordEncoder("encode");
 		this.timeHolder = new FakeTimeHolder();
@@ -85,6 +96,11 @@ public class TestContainer {
 		this.categoryValidator = new CategoryValidator(userRepository, storeRepository);
 		this.categoryService = new CategoryServiceImpl(categoryRepository, categoryValidator);
 		this.categoryController = new CategoryController(categoryService);
+
+		this.menuRepository = new FakeMenuRepository();
+		this.menuValidator = new MenuValidator(userRepository, storeRepository, categoryRepository);
+		this.menuService = new MenuServiceImpl(menuRepository, menuValidator);
+		this.menuController = new MenuController(menuService);
 	}
 
 	public void setSecurityContextAuthentication(final Username username) {
