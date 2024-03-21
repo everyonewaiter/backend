@@ -6,6 +6,7 @@ import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSn
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER_KEY;
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER_TYPE;
 import static com.handwoong.everyonewaiter.medium.menu.snippet.MenuRequestSnippet.CREATE_REQUEST;
+import static com.handwoong.everyonewaiter.medium.menu.snippet.MenuRequestSnippet.PATH_PARAM_MENU_ID;
 import static com.handwoong.everyonewaiter.medium.menu.snippet.MenuRequestSnippet.UPDATE_REQUEST;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreResponseSnippet.CUD_RESPONSE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -129,6 +130,32 @@ class MenuControllerTest extends TestHelper {
 				.body(request)
 				.filter(getFilter().document(AUTHORIZATION_HEADER, UPDATE_REQUEST, CUD_RESPONSE))
 				.when().put("/api/menus")
+				.then().log().all().extract();
+	}
+
+	@Test
+	void Should_Delete_When_ValidRequest() {
+		// given
+		final String token = userAccessToken;
+
+		// when
+		final ExtractableResponse<Response> response = delete(token);
+		final TypeRef<ApiResponse<Void>> typeRef = new TypeRef<>() {
+		};
+		final ApiResponse<Void> result = response.body().as(typeRef);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(200);
+		assertThat(result.resultCode()).isEqualTo(ResultCode.SUCCESS);
+	}
+
+	private ExtractableResponse<Response> delete(final String token) {
+		return RestAssured
+				.given(getSpecification()).log().all()
+				.header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_TYPE + " " + token)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.filter(getFilter().document(AUTHORIZATION_HEADER, PATH_PARAM_MENU_ID, CUD_RESPONSE))
+				.when().delete("/api/menus/{id}", 1L)
 				.then().log().all().extract();
 	}
 }
