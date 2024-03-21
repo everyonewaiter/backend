@@ -31,6 +31,11 @@ public class FakeMenuRepository implements MenuRepository {
 				.orElseThrow(() -> new MenuNotFoundException("메뉴를 찾을 수 없습니다.", menuId.toString()));
 	}
 
+	@Override
+	public void delete(final Menu menu) {
+		database.remove(menu.getId().value());
+	}
+
 	private Menu create(final Long id, final Menu menu) {
 		return Menu.builder()
 				.id(new MenuId(id))

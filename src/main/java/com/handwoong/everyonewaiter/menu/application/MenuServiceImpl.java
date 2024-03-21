@@ -34,4 +34,12 @@ public class MenuServiceImpl implements MenuService {
 		final Menu updatedMenu = menu.update(menuUpdate, menuValidator);
 		menuRepository.save(updatedMenu);
 	}
+
+	@Override
+	@Transactional
+	public void delete(final MenuId id) {
+		final Menu menu = menuRepository.findByIdOrElseThrow(id);
+		menuValidator.validate(menu.getStoreId(), menu.getCategoryId());
+		menuRepository.delete(menu);
+	}
 }

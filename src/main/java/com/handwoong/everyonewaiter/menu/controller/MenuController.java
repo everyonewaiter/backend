@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +35,12 @@ public class MenuController {
 	@PutMapping
 	public ResponseEntity<ApiResponse<Void>> update(@RequestBody @Valid final MenuUpdateRequest request) {
 		menuService.update(request.toDomain());
+		return ResponseEntity.ok(ApiResponse.success());
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<ApiResponse<Void>> delete(@PathVariable("id") final Long id) {
+		menuService.delete(new MenuId(id));
 		return ResponseEntity.ok(ApiResponse.success());
 	}
 }

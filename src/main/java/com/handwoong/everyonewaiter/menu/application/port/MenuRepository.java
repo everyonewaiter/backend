@@ -8,4 +8,6 @@ public interface MenuRepository {
 	Menu save(Menu menu);
 
 	Menu findByIdOrElseThrow(MenuId menuId);
+
+	void delete(Menu menu);
 }

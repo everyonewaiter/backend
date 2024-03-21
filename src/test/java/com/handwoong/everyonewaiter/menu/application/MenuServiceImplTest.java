@@ -6,6 +6,7 @@ import static com.handwoong.everyonewaiter.util.Fixtures.aMenuOptionGroup;
 import static com.handwoong.everyonewaiter.util.Fixtures.aStore;
 import static com.handwoong.everyonewaiter.util.Fixtures.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.handwoong.everyonewaiter.category.domain.Category;
@@ -213,5 +214,38 @@ class MenuServiceImplTest {
 		assertThatThrownBy(() -> testContainer.menuService.update(menuUpdate))
 				.isInstanceOf(CategoryNotFoundException.class)
 				.hasMessage("카테고리를 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_Delete_When_ValidMenuId() {
+		// given
+		final MenuId menuId = new MenuId(1L);
+
+		// expect
+		assertThatCode(() -> testContainer.menuService.delete(menuId))
+				.doesNotThrowAnyException();
+	}
+
+	@Test
+	void Should_ThrowException_When_DeleteUserNotFound() {
+		// given
+		testContainer.setSecurityContextAuthentication(new Username("username"));
+		final MenuId menuId = new MenuId(1L);
+
+		// expect
+		assertThatThrownBy(() -> testContainer.menuService.delete(menuId))
+				.isInstanceOf(UserNotFoundException.class)
+				.hasMessage("사용자를 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_ThrowException_When_DeleteMenuNotFound() {
+		// given
+		final MenuId menuId = new MenuId(2L);
+
+		// expect
+		assertThatThrownBy(() -> testContainer.menuService.delete(menuId))
+				.isInstanceOf(MenuNotFoundException.class)
+				.hasMessage("메뉴를 찾을 수 없습니다.");
 	}
 }

@@ -24,4 +24,9 @@ public class MenuRepositoryImpl implements MenuRepository {
 				.orElseThrow(() -> new MenuNotFoundException("메뉴를 찾을 수 없습니다.", menuId.toString()))
 				.toModel();
 	}
+
+	@Override
+	public void delete(final Menu menu) {
+		menuJpaRepository.delete(MenuEntity.from(menu));
+	}
 }
