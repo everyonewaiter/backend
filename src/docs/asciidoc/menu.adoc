@@ -7,3 +7,7 @@ operation::menu-controller-test/should_-create_-when_-valid-request[snippets='ht
 === 수정
 
 operation::menu-controller-test/should_-update_-when_-valid-request[snippets='http-request,request-headers,request-fields,http-response,response-fields']
+
+=== 삭제
+
+operation::menu-controller-test/should_-delete_-when_-valid-request[snippets='http-request,request-headers,http-response,response-fields']
