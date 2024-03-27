@@ -5,6 +5,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.snippet.Snippet;
@@ -13,6 +14,9 @@ public class MenuRequestSnippet {
 
 	public static final Snippet PATH_PARAM_MENU_ID = pathParameters(
 			parameterWithName("id").description("메뉴 ID")
+	);
+	public static final Snippet QUERY_PARAM_STORE_ID = queryParameters(
+			parameterWithName("store").description("매장 ID")
 	);
 	public static final Snippet CREATE_REQUEST = requestFields(
 			fieldWithPath("storeId")

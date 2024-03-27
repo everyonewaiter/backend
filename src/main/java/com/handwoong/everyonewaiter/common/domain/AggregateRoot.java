@@ -13,6 +13,11 @@ public abstract class AggregateRoot {
 
 	private final List<Object> domainEvents = new ArrayList<>();
 
+	protected <T extends AggregateRoot, U> void registerEvent(final T instance, final U event) {
+		Assert.notNull(event, "Domain event must not be null");
+		instance.registerEvent(event);
+	}
+
 	protected <T> T registerEvent(final T event) {
 		Assert.notNull(event, "Domain event must not be null");
 		this.domainEvents.add(event);

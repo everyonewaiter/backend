@@ -67,8 +67,7 @@ public class Waiting extends AggregateRoot {
 	}
 
 	public Waiting cancel() {
-		registerEvent(new WaitingCancelEvent(storeId, number, phoneNumber));
-		return Waiting.builder()
+		final Waiting waiting = Waiting.builder()
 				.id(id)
 				.storeId(storeId)
 				.adult(adult)
@@ -80,6 +79,8 @@ public class Waiting extends AggregateRoot {
 				.uniqueCode(uniqueCode)
 				.timestamp(timestamp)
 				.build();
+		registerEvent(waiting, new WaitingCancelEvent(storeId, number, phoneNumber));
+		return waiting;
 	}
 
 	public boolean isNotWait() {

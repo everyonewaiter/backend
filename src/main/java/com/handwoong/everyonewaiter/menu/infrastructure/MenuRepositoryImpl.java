@@ -1,9 +1,14 @@
 package com.handwoong.everyonewaiter.menu.infrastructure;
 
+import static com.handwoong.everyonewaiter.menu.infrastructure.QMenuEntity.menuEntity;
+
 import com.handwoong.everyonewaiter.menu.application.port.MenuRepository;
 import com.handwoong.everyonewaiter.menu.domain.Menu;
 import com.handwoong.everyonewaiter.menu.domain.MenuId;
 import com.handwoong.everyonewaiter.menu.exception.MenuNotFoundException;
+import com.handwoong.everyonewaiter.store.domain.StoreId;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +16,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class MenuRepositoryImpl implements MenuRepository {
 
+	private final JPAQueryFactory queryFactory;
 	private final MenuJpaRepository menuJpaRepository;
 
 	@Override
@@ -28,5 +34,15 @@ public class MenuRepositoryImpl implements MenuRepository {
 	@Override
 	public void delete(final Menu menu) {
 		menuJpaRepository.delete(MenuEntity.from(menu));
+	}
+
+	@Override
+	public List<Menu> findAllByStoreId(final StoreId storeId) {
+		return queryFactory.selectFrom(menuEntity)
+				.where(menuEntity.storeId.eq(storeId.value()))
+				.fetch()
+				.stream()
+				.map(MenuEntity::toModel)
+				.toList();
 	}
 }

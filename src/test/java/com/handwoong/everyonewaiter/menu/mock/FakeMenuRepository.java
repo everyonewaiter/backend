@@ -4,7 +4,9 @@ import com.handwoong.everyonewaiter.menu.application.port.MenuRepository;
 import com.handwoong.everyonewaiter.menu.domain.Menu;
 import com.handwoong.everyonewaiter.menu.domain.MenuId;
 import com.handwoong.everyonewaiter.menu.exception.MenuNotFoundException;
+import com.handwoong.everyonewaiter.store.domain.StoreId;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -34,6 +36,14 @@ public class FakeMenuRepository implements MenuRepository {
 	@Override
 	public void delete(final Menu menu) {
 		database.remove(menu.getId().value());
+	}
+
+	@Override
+	public List<Menu> findAllByStoreId(final StoreId storeId) {
+		return database.values()
+				.stream()
+				.filter(menu -> menu.getStoreId().equals(storeId))
+				.toList();
 	}
 
 	private Menu create(final Long id, final Menu menu) {

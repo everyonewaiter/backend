@@ -14,6 +14,8 @@ import com.handwoong.everyonewaiter.menu.controller.request.MenuCreateRequest;
 import com.handwoong.everyonewaiter.menu.controller.request.MenuOptionGroupRequest;
 import com.handwoong.everyonewaiter.menu.controller.request.MenuSingleSelectOptionRequest;
 import com.handwoong.everyonewaiter.menu.controller.request.MenuUpdateRequest;
+import com.handwoong.everyonewaiter.menu.controller.response.MenuResponse;
+import com.handwoong.everyonewaiter.menu.controller.response.MenuResponses;
 import com.handwoong.everyonewaiter.menu.domain.Menu;
 import com.handwoong.everyonewaiter.menu.domain.MenuLabel;
 import com.handwoong.everyonewaiter.menu.domain.MenuStatus;
@@ -26,6 +28,7 @@ import com.handwoong.everyonewaiter.user.exception.UserNotFoundException;
 import com.handwoong.everyonewaiter.util.TestContainer;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -317,5 +320,17 @@ class MenuControllerTest {
 		assertThatThrownBy(() -> testContainer.menuController.delete(2L))
 				.isInstanceOf(MenuNotFoundException.class)
 				.hasMessage("메뉴를 찾을 수 없습니다.");
+	}
+
+	@Test
+	void Should_FindMenus_When_ValidStoreId() {
+		// given
+		// when
+		final ResponseEntity<ApiResponse<MenuResponses>> response = testContainer.menuController.findAllByStore(1L);
+		final List<MenuResponse> result = Objects.requireNonNull(response.getBody()).data().menus();
+
+		// then
+		assertThat(response.getStatusCode().value()).isEqualTo(200);
+		assertThat(result).hasSize(1);
 	}
 }

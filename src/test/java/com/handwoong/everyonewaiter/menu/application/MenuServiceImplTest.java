@@ -248,4 +248,28 @@ class MenuServiceImplTest {
 				.isInstanceOf(MenuNotFoundException.class)
 				.hasMessage("메뉴를 찾을 수 없습니다.");
 	}
+
+	@Test
+	void Should_FindMenus_When_ValidStoreId() {
+		// given
+		final StoreId storeId = new StoreId(1L);
+
+		// when
+		final List<Menu> menus = testContainer.menuService.findAllByStoreId(storeId);
+
+		// then
+		assertThat(menus).hasSize(1);
+	}
+
+	@Test
+	void Should_EmptyMenus_When_NotFoundMenusByStoreId() {
+		// given
+		final StoreId storeId = new StoreId(2L);
+
+		// when
+		final List<Menu> menus = testContainer.menuService.findAllByStoreId(storeId);
+
+		// then
+		assertThat(menus).isEmpty();
+	}
 }

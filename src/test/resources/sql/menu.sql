@@ -18,4 +18,29 @@ INSERT INTO menu_single_select_option (id, menu_option_group_id, created_at, is_
                                        price, updated_at)
 VALUES (3, 1, '2023-01-01 12:00:00.000000', false, '맵게', 0, '2023-01-01 12:00:00.000000');
 
+INSERT INTO menu (print_bill_in_kitchen, spicy, category_id, created_at, id, price, store_id,
+                  updated_at, name, description, image, label, status)
+VALUES (true, 2, 2, '2023-01-01 12:00:00.000000', 2, 17900, 2, '2023-01-01 12:00:00.000000',
+        '새우품은 빠네 로제 파스타', '', '', 'BASIC', 'BASIC');
+
+INSERT INTO menu_option_group (id, menu_id, created_at, name, updated_at, use_option_price)
+VALUES (2, 2, '2023-01-01 12:00:00.000000', '맵기 조절', '2023-01-01 12:00:00.000000', false);
+
+INSERT INTO menu_single_select_option (id, menu_option_group_id, created_at, is_default, name,
+                                       price, updated_at)
+VALUES (4, 2, '2023-01-01 12:00:00.000000', false, '안맵게', 0, '2023-01-01 12:00:00.000000');
+INSERT INTO menu_single_select_option (id, menu_option_group_id, created_at, is_default, name,
+                                       price, updated_at)
+VALUES (5, 2, '2023-01-01 12:00:00.000000', true, '기본', 0, '2023-01-01 12:00:00.000000');
+INSERT INTO menu_single_select_option (id, menu_option_group_id, created_at, is_default, name,
+                                       price, updated_at)
+VALUES (6, 2, '2023-01-01 12:00:00.000000', false, '맵게', 0, '2023-01-01 12:00:00.000000');
+
+INSERT INTO menu_option_group (id, menu_id, created_at, name, updated_at, use_option_price)
+VALUES (3, 2, '2023-01-01 12:00:00.000000', '선택 옵션', '2023-01-01 12:00:00.000000', true);
+
+INSERT INTO menu_single_select_option (id, menu_option_group_id, created_at, is_default, name,
+                                       price, updated_at)
+VALUES (7, 3, '2023-01-01 12:00:00.000000', false, '빵 제외', -2000, '2023-01-01 12:00:00.000000');
+
 SET FOREIGN_KEY_CHECKS = 1;
