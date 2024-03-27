@@ -11,3 +11,7 @@ operation::menu-controller-test/should_-update_-when_-valid-request[snippets='ht
 === 삭제
 
 operation::menu-controller-test/should_-delete_-when_-valid-request[snippets='http-request,request-headers,http-response,response-fields']
+
+=== 목록 조회
+
+operation::menu-controller-test/should_-find-menus_-when_-valid-store-id[snippets='http-request,query-parameters,http-response,response-fields']
