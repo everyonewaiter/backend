@@ -7,6 +7,8 @@ import com.handwoong.everyonewaiter.menu.domain.MenuId;
 import com.handwoong.everyonewaiter.menu.domain.MenuValidator;
 import com.handwoong.everyonewaiter.menu.dto.MenuCreate;
 import com.handwoong.everyonewaiter.menu.dto.MenuUpdate;
+import com.handwoong.everyonewaiter.store.domain.StoreId;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,5 +43,10 @@ public class MenuServiceImpl implements MenuService {
 		final Menu menu = menuRepository.findByIdOrElseThrow(id);
 		menuValidator.validate(menu.getStoreId(), menu.getCategoryId());
 		menuRepository.delete(menu);
+	}
+
+	@Override
+	public List<Menu> findAllByStoreId(final StoreId storeId) {
+		return menuRepository.findAllByStoreId(storeId);
 	}
 }
