@@ -7,7 +7,9 @@ import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSn
 import static com.handwoong.everyonewaiter.medium.common.snippet.CommonRequestSnippet.AUTHORIZATION_HEADER_TYPE;
 import static com.handwoong.everyonewaiter.medium.menu.snippet.MenuRequestSnippet.CREATE_REQUEST;
 import static com.handwoong.everyonewaiter.medium.menu.snippet.MenuRequestSnippet.PATH_PARAM_MENU_ID;
+import static com.handwoong.everyonewaiter.medium.menu.snippet.MenuRequestSnippet.QUERY_PARAM_STORE_ID;
 import static com.handwoong.everyonewaiter.medium.menu.snippet.MenuRequestSnippet.UPDATE_REQUEST;
+import static com.handwoong.everyonewaiter.medium.menu.snippet.MenuResponseSnippet.MENUS_RESPONSE;
 import static com.handwoong.everyonewaiter.medium.store.snippet.StoreResponseSnippet.CUD_RESPONSE;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,6 +20,7 @@ import com.handwoong.everyonewaiter.menu.controller.request.MenuCreateRequest;
 import com.handwoong.everyonewaiter.menu.controller.request.MenuOptionGroupRequest;
 import com.handwoong.everyonewaiter.menu.controller.request.MenuSingleSelectOptionRequest;
 import com.handwoong.everyonewaiter.menu.controller.request.MenuUpdateRequest;
+import com.handwoong.everyonewaiter.menu.controller.response.MenuResponses;
 import com.handwoong.everyonewaiter.menu.domain.MenuLabel;
 import com.handwoong.everyonewaiter.menu.domain.MenuStatus;
 import io.restassured.RestAssured;
@@ -156,6 +159,31 @@ class MenuControllerTest extends TestHelper {
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.filter(getFilter().document(AUTHORIZATION_HEADER, PATH_PARAM_MENU_ID, CUD_RESPONSE))
 				.when().delete("/api/menus/{id}", 1L)
+				.then().log().all().extract();
+	}
+
+	@Test
+	void Should_FindMenus_When_ValidStoreId() {
+		// given
+		// when
+		final ExtractableResponse<Response> response = findAllByStore();
+		final TypeRef<ApiResponse<MenuResponses>> typeRef = new TypeRef<>() {
+		};
+		final ApiResponse<MenuResponses> result = response.body().as(typeRef);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(200);
+		assertThat(result.resultCode()).isEqualTo(ResultCode.SUCCESS);
+		assertThat(result.data().menus()).hasSize(2);
+	}
+
+	private ExtractableResponse<Response> findAllByStore() {
+		return RestAssured
+				.given(getSpecification()).log().all()
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.filter(getFilter().document(QUERY_PARAM_STORE_ID, MENUS_RESPONSE))
+				.queryParam("store", 2L)
+				.when().get("/api/menus/list")
 				.then().log().all().extract();
 	}
 }
